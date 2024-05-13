@@ -1,42 +1,136 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+@import url('https://fonts.googleapis.com/css2?family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap');
+@import './piatti/styles/variables.scss';
+@import './piatti/styles/global.scss';
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+div#root {
+  display: contents;
+  .layout-container {
+    background-color: $claro;
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+.sidebar {
+  
+  .sidebar_container {
+    position: fixed;
+    left: 0;
+    width: $menu-width;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__logo {
+    margin: 1rem;
+    width: -webkit-fill-available;
+    position: relative;
+    z-index: 3;
+    height: 13vh;
+    border-bottom: 0.01px solid white;
+  }
+
+  &__nav {
+    margin-top: -60px;
+  }
+
+  &__list {
+    top: 0rem;
+    position: relative;
+    z-index: 2;
+    padding: 0;
+
+    
+    @each $id, $image in $menu-item-normal {
+      li##{$id} button .menu_item__logo {
+        background-image: $image;
+        height: 1.5rem;
+        width: 1.9rem;
+        background-repeat: no-repeat;
+      }
+    }
+
+    @each $id, $image in $menu-item-selected{
+      li##{$id}.selected .menu_item__logo {
+        background-image: $image;
+      }
+    }
+    li.menu_item {
+      list-style: none;
+      height: 3.6rem;
+      display: flex;
+      align-items: center;
+
+      button {
+        background-color: $primary-color;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        padding-left: 2rem;
+        height: inherit;
+        width: 100%;
+        border: none;
+        cursor: pointer;
+      }
+
+        
+
+      &__logo {
+        height: 1.5rem;
+        width: 1.9rem;
+        background-repeat: no-repeat;
+      }
+    }
+
+    li.menu_item .empty {
+      height: 10vh;
+    }
+
+    li.menu_item.previous, li.menu_item.next, li.menu_item.selected {
+      background-color: $claro;
+    }
+    
+    li.menu_item.previous .empty, li.menu_item.previous button,
+    li.menu_item.next .empty, li.menu_item.next button {
+      background-color: $primary-color;
+      height: inherit;
+      width: 100%;
+      
+    }
+
+    li.menu_item.previous .empty, li.menu_item.previous button {
+      border-radius: 0 0 3rem;
+    }
+
+    li.menu_item.next .empty, li.menu_item.next button {
+      border-radius: 0 3rem 0 0;
+    }
+    
+
+    li.menu_item.selected {
+        border-radius: 3rem 0 0 3rem;
+        button {
+          background: var(--claro);
+          border-radius: 3rem 0 0 3rem;
+        }
+    }
   }
 }
 
-.card {
-  padding: 2em;
-}
 
-.read-the-docs {
-  color: #888;
+
+
+.content {
+  position: fixed;
+  width: calc(100% - $menu-width - 7vw);
+  background-color: #F4F5FA;
+  border-radius: 38px 38px 38px 0px;
+  left: $menu-width;
+  right: calc(-1 * $menu-width);
+  padding: 2rem 3vw;
+  top: 1vh;
+  bottom: 1vh;
+  overflow-y: scroll;
 }

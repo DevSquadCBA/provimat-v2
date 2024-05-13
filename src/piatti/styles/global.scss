@@ -1,0 +1,32 @@
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--verde-clarito) var(--claro);
+}
+
+HTML {
+    cursor: pointer;
+}
+
+body {
+    background: $primary-color;
+    margin: 0 auto;
+    display: flex;
+    cursor: default;
+    font-family: $primary-font;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+div#root {
+    display: contents;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    border-style: none;
+}

@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap');
+
+// COLOR
+$primary-color: #0d3831;
+$secondary-color:#e85300;
+$disabled: #89A9A4;
+$rojo: #E02D39;
+$verde-clarito: #4CB3A0;
+$verde-clarito2: #497B73;
+$claro: #F4F5FA;
+$verde-manzana: #86bc33;
+
+//Sales status colors
+$initiated: #4CB3A0 ;
+$inTransit: #03a9f4;
+$waitingDelivery:#ff9800 ;
+$waitingCustomer: #ffeb3b;
+$waitingPayment: #ff5722;
+$finished: #2962ff;
+$canceled: #d50000; 
+
+//Provider status colors
+$provider-out-of-stock: #E54444;
+$provider-to-confirm:  #EED865;
+$provider-initiated: #276CA3;
+$provider-waiting-shipping: #3A99B2;
+$provider-in-transit:#49B886;
+$provider-finished: #86bc33;
+
+//FONTS
+$primary-font: 'Sofia Sans', sans-serif;
+
+// SIZES
+$menu-width: 240px;
+
+// IMAGES
+
+$menu-item-normal: (
+    clients: url('src/assets/sidebar/logoclientes.svg'),
+    providers: url('src/assets/sidebar/logoproveedores.svg'),
+    products: url('src/assets/sidebar/logoproductos.svg'),
+    sales: url('src/assets/sidebar/logopresupuestos.svg'), 
+);
+
+$menu-item-selected: (
+    clients: url('src/assets/sidebar/logoclientesselect.svg'),
+    providers: url('src/assets/sidebar/logoproveedoresselect.svg'),
+    products: url('src/assets/sidebar/logoproductosselect.svg'),
+    sales: url('src/assets/sidebar/logopresupuestosselect.svg'), 
+);
