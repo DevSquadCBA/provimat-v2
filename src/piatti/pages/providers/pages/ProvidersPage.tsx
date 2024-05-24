@@ -1,4 +1,8 @@
+import { LayoutContainerTable } from "@/piatti/layout/LayoutContainerTable";
+import { ProvidersTable } from "../components/ProvidersTable";
 
 export function ProvidersPage() {
-    return <>soy proovedores</>
+    return <LayoutContainerTable>
+            <ProvidersTable></ProvidersTable>
+        </LayoutContainerTable>
 }

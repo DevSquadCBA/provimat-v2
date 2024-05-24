@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit/react";
 import { MenuView } from "@/interfaces/interfaces";
-
 const initialState: MenuView = {
     selectedView: "clients",
     previous:"empty",
