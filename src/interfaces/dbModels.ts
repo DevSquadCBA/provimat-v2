@@ -9,7 +9,7 @@ export type IClient = {
     whatsapp?: string,
     province?: string,
     localidad?: string,
-    direction?: string,
+    address?: string,
     deleted?: boolean,
     updatedAt?: string | number | Date;
     createdAt?: string | number | Date;
@@ -38,7 +38,7 @@ export type IProvider = {
     email: string,
     province: string,
     locality: string,
-    direction: string,
+    address: string,
     phone: string,
     voucherType: string,
     daysDelays: number,

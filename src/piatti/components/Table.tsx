@@ -5,6 +5,7 @@ import { InputText } from 'primereact/inputtext';
 import { Column } from 'primereact/column';
 import { FilterMatchMode } from 'primereact/api';
 import { useState } from 'react';
+import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
 
 type Props ={
@@ -19,6 +20,7 @@ type Props ={
 
 export function Table({columns, data}:Props) {
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
+    const [selectedQty, setSelectedQty] = useState<number>(30);
     const [filters, setFilters] = useState<DataTableFilterMeta>({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS,  },
         name: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -30,13 +32,22 @@ export function Table({columns, data}:Props) {
         setFilters(_filters);
         setGlobalFilterValue(value);
     };
+    const onQtyChange = (e: DropdownChangeEvent) => {
+        const value = e.target.value;
+        setSelectedQty(Number(value));
+    }
     const renderHeader = () => {
         return (
-            <div className="flex justify-content-end">
-                <IconField iconPosition="left">
-                    <InputIcon className="pi pi-search" />
-                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
-                </IconField>
+            <div className='flex justify-content-between'>
+                <div className="flex justify-content-start">
+                    <Dropdown options={[30,50,100,500,1000]} value={selectedQty} onChange={onQtyChange} />
+                </div>
+                <div className="flex justify-content-end">
+                    <IconField iconPosition="left">
+                        <InputIcon className="pi pi-search" />
+                        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Buscar Cliente" />
+                    </IconField>
+                </div>
             </div>
         );
     };
@@ -48,7 +59,7 @@ export function Table({columns, data}:Props) {
                 sortOrder={1} 
                 selectionMode="single" 
                 value={data} 
-                paginator rows={30} 
+                paginator rows={selectedQty} 
                 dataKey={key} 
                 tableStyle={{ minWidth: '50rem' }} 
                 header={header} 
@@ -60,9 +71,6 @@ export function Table({columns, data}:Props) {
                     key={column.field} 
                     field={column.field} 
                     header={column.header} 
-                    filter={column.filter ? true : false}
-                    filterPlaceholder={column.filter ? column.filter : ''}
-                    filterField={column.field}
                 />)}
         </DataTable>;
 }

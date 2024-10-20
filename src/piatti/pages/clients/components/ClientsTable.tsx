@@ -22,7 +22,7 @@ export function ClientsTable() {
         })();
     }, [dispatch]);
     const columns = [
-        { isKey: true, field: 'clientId', header: 'Id' },
+        { isKey: true, field: 'id', header: 'Id' },
         { isKey: false, field: 'name', header: 'Nombre' , filter: 'Buscar por nombre'},
         { isKey: false, field: 'email', header: 'Email' },
         { isKey: false, field: 'phone', header: 'Telefono' },

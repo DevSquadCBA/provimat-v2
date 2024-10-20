@@ -2,7 +2,7 @@ import { EntityList } from "@/interfaces/enums";
 import { API_URL } from "../piatti/config/config";
 class Client {
     all = async ()=>{
-        const response = await fetch(`${API_URL}/clients`, {headers: {
+        const response = await fetch(`${API_URL}/client`, {headers: {
             'Content-Type': 'application/json',
             'entity': EntityList.muebles
         }});
