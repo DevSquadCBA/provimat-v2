@@ -22,13 +22,11 @@ export function ClientsTable() {
         })();
     }, [dispatch]);
     const columns = [
-        { isKey: true, field: 'id', header: 'Id' },
-        { isKey: false, field: 'name', header: 'Nombre' , filter: 'Buscar por nombre'},
-        { isKey: false, field: 'email', header: 'Email' },
-        { isKey: false, field: 'phone', header: 'Telefono' },
-        { isKey: false, field: 'address', header: 'Direccion' },
-        { isKey: false, field: 'createdAt', header: 'Fecha de creacion' },
-        { isKey: false, field: 'updatedAt', header: 'Fecha de actualizacion' }
+        { isKey: true,  order: false, field: 'clientId', header: 'Id' },
+        { isKey: false, order: false, field: 'name', header: 'Nombre' , filter: 'Buscar por nombre'},
+        { isKey: false, order: false, field: 'active', header: 'Presupuestos Activos' },
+        { isKey: false, order: false, field: 'total', header: 'Nº de presupuestos' },
+        { isKey: false, order: true, field: 'lastModification', header: 'Ultima actualización' }
     ]
 
     return <Table key={'clients'} data={clients} columns={columns} />;

@@ -11,6 +11,7 @@ import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 type Props ={
     columns: {
         isKey: boolean
+        order?: boolean
         field: string
         header: string
         filter?: string
@@ -53,10 +54,11 @@ export function Table({columns, data}:Props) {
     };
     const header = renderHeader();
     const key = columns.find((column)=>column.isKey)?.field;
+    const order = columns.find((column)=>column.order)?.field;
     return <DataTable 
                 key="tabla" 
-                sortField={key} 
-                sortOrder={1} 
+                sortField={order} 
+                sortOrder={-1} 
                 selectionMode="single" 
                 value={data} 
                 paginator rows={selectedQty} 
