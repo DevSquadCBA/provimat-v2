@@ -11,6 +11,8 @@ export type IClient = {
     localidad?: string,
     direction?: string,
     deleted?: boolean,
+    updatedAt?: string | number | Date;
+    createdAt?: string | number | Date;
 }
 
 export type IProduct = {

@@ -12,9 +12,9 @@ export type LocalData = {
     providers : IProvider[],
     sales : ISale[],
     salesProducts : ISaleProduct[],
-    productLastUpdated: Date,
-    providerLastUpdated: Date,
-    clientLastUpdated: Date,
-    saleLastUpdated: Date,
-    saleProductLastUpdated: Date
+    productLastUpdated: number,
+    providerLastUpdated: number,
+    clientLastUpdated: number,
+    saleLastUpdated: number,
+    saleProductLastUpdated: number
 }

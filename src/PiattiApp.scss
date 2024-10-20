@@ -2,7 +2,6 @@
 @import './piatti/styles/variables.scss';
 @import './piatti/styles/global.scss';
 
-
 div#root {
   display: contents;
   .layout-container {
@@ -41,7 +40,6 @@ div#root {
     position: relative;
     z-index: 2;
     padding: 0;
-
     
     @each $id, $image in $menu-item-normal {
       li##{$id} button .menu_item__logo {
@@ -49,6 +47,7 @@ div#root {
         height: 1.5rem;
         width: 1.9rem;
         background-repeat: no-repeat;
+        margin-right: 1rem
       }
     }
 
@@ -62,7 +61,7 @@ div#root {
       height: 3.6rem;
       display: flex;
       align-items: center;
-
+      
       button {
         background-color: $primary-color;
         display: flex;
@@ -73,10 +72,9 @@ div#root {
         width: 100%;
         border: none;
         cursor: pointer;
+        color: var(--primary-text-color);
       }
-
         
-
       &__logo {
         height: 1.5rem;
         width: 1.9rem;
@@ -114,6 +112,7 @@ div#root {
         button {
           background: var(--claro);
           border-radius: 3rem 0 0 3rem;
+          color: var(--primary-text-black);
         }
     }
   }

@@ -1,6 +1,6 @@
 import { setSelectedView} from "@/reducers/sidebarSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {reducers} from '@/store';
+import { reducers } from '@/store';
 import { MenuView } from "@/interfaces/interfaces";
 import logo from '@/assets/sidebar/SIP.svg';
 import { useNavigate } from "react-router-dom";
@@ -30,7 +30,6 @@ export function Sidebar() {
     }
 
     const setClass = ({selectedView, previous, next}:MenuView, id:string) => {
-        console.log(selectedView)
         if(selectedView==id) return 'selected';
         if(previous==id) return 'previous';
         if(next==id) return 'next';

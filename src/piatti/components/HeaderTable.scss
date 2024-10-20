@@ -1,0 +1,25 @@
+.header-table{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-direction: column;
+    padding-bottom: var(--aire);
+    gap: var(--aire);
+    .user-content{
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+        align-items: flex-end;
+        flex-direction: column;
+    }
+    .titles-and-buttons{
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        flex-direction: row;
+        .title{
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+    }
+}

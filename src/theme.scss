@@ -1,0 +1,44 @@
+$primaryColor: #497B73 !default;
+$primaryLightColor: #4CB3A0 !default;
+$primaryDarkColor: #0D3831 !default;
+$primaryDarkerColor: #071d19 !default;
+$primaryTextColor: #ffffff !default;
+$secondaryTextColor: #000 !default;
+$fontFamily: 'Sofia Sans', sans-serif !default;
+
+:root{
+  --primary-color: #{$primaryColor}!important; 
+  --primary-dark-color: #{$primaryDarkColor}!important;
+  --primary-light-color: #{$primaryLightColor}!important;
+  --primary-darker-color: #{$primaryDarkerColor}!important;
+  --primary-text-color: #{$primaryTextColor}!important;
+  --secondary-text-color: #{$secondaryTextColor}!important;
+  --font-family: #{$fontFamily};
+  --aire: 1rem;
+}
+
+.p-button:focus,
+.p-inputtext:focus,
+.p-dropdown:focus{
+  border-color: var(--primary-color);
+}
+
+.p-button {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-dark-color) !important;
+  color: var(--primary-text-color) !important;
+}
+
+.p-button:not(:disabled):hover {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color) ;
+}
+
+.p-inputtext {
+  border-color: var(--primary-dark-color) !important;
+}
+
+.p-panel {
+  border-color: var(--primary-color) !important;
+}
