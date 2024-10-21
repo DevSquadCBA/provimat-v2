@@ -45,6 +45,18 @@ $rounded-radius: 2rem;
   border-color: var(--primary-dark-color) !important;
 }
 
-.p-panel {
+.p-panel{
   border-color: var(--primary-color) !important;
+}
+.p-inputwrapper-focus,.p-inputtext:enabled:focus {
+  box-shadow: 0 0 0 0.2rem var(--primary-light-color); 
+  border-color: var(--primary-light-color);
+}
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight.p-focus{
+  background: var(--primary-light-color);
+  color: var(--primary-text-color);
+}
+
+.p-dropdown:not(.p-disabled):hover {
+  border-color: var(--primary-light-color);
 }
