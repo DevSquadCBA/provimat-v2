@@ -15,7 +15,20 @@ class Client {
     }
 }
 
+class Provider {
+    all = async ()=>{
+        const response = await fetch(`${API_URL}/provider`, {headers: {
+            'Content-Type': 'application/json',
+            'entity': EntityList.muebles
+        }});
+        const data = await response.json();
+        if(data.statusCode && data.statusCode !== 200) throw new Error(data.message);
+        return data;
+    }
+}
+
 
 export default class API {
     static Client: Client = new Client();
+    static Provider: Provider = new Provider();
 }

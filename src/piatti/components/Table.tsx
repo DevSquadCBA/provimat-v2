@@ -10,6 +10,7 @@ import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import './Table.scss';
 
 type Props ={
+    placeholder?: string
     columns: {
         isKey: boolean
         order?: boolean
@@ -20,7 +21,7 @@ type Props ={
     data: DataTableValueArray,
 }
 
-export function Table({columns, data}:Props) {
+export function Table({columns, data, placeholder}:Props) {
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
     const [selectedQty, setSelectedQty] = useState<number>(30);
     const [filters, setFilters] = useState<DataTableFilterMeta>({
@@ -47,7 +48,7 @@ export function Table({columns, data}:Props) {
                 <div className="flex justify-content-end">
                     <IconField iconPosition="left">
                         <InputIcon className="pi pi-search" />
-                        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Buscar Cliente" />
+                        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder={placeholder} />
                     </IconField>
                 </div>
             </div>
@@ -70,7 +71,8 @@ export function Table({columns, data}:Props) {
                 filterLocale='es'
                 >
             {columns.map((column) => 
-                <Column sortable 
+                <Column 
+                    sortable={column.header? true : false}
                     key={column.field} 
                     field={column.field} 
                     header={column.header} 

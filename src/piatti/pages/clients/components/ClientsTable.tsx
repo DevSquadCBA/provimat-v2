@@ -29,5 +29,5 @@ export function ClientsTable() {
         { isKey: false, order: true, field: 'lastModification', header: 'Ultima actualización' }
     ]
 
-    return <Table key={'clients'} data={clients} columns={columns} />;
+    return <Table key={'clients'} data={clients} columns={columns} placeholder="Buscar cliente"/>;
 }
