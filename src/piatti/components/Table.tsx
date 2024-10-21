@@ -7,6 +7,7 @@ import { FilterMatchMode } from 'primereact/api';
 import { useState } from 'react';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
+import './Table.scss';
 
 type Props ={
     columns: {

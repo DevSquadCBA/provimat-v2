@@ -29,6 +29,5 @@ export function convertToVerboseDay(date: string|null): string|null {
         }
     }
     const d = getDiferences(new Date(), new Date(date));
-    console.log(d);
     return getVerbose(parseInt(d));
 }
