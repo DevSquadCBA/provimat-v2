@@ -1,0 +1,13 @@
+.tableButtons{
+    position: absolute;
+    top: 30px;
+}
+
+.header-table .titles-and-buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    height: fit-content;
+    flex-direction: column-reverse;
+    align-content: space-between;
+}

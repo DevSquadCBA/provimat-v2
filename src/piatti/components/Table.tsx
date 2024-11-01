@@ -1,10 +1,10 @@
-import { DataTable, DataTableFilterMeta, DataTableFilterMetaData, DataTableOperatorFilterMetaData, DataTableValueArray } from 'primereact/datatable';
+import { DataTable, DataTableFilterMeta, DataTableFilterMetaData, DataTableOperatorFilterMetaData, DataTableRowClickEvent, DataTableValueArray } from 'primereact/datatable';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { Column } from 'primereact/column';
 import { FilterMatchMode } from 'primereact/api';
-import { useState } from 'react';
+import {  useState } from 'react';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
 import './Table.scss';
@@ -19,9 +19,10 @@ type Props ={
         filter?: string
     }[]
     data: DataTableValueArray,
+    onRowClick?: (e:DataTableRowClickEvent) => void
 }
 
-export function Table({columns, data, placeholder}:Props) {
+export function Table({columns, data, placeholder, onRowClick}:Props) {
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
     const [selectedQty, setSelectedQty] = useState<number>(30);
     const [filters, setFilters] = useState<DataTableFilterMeta>({
@@ -69,6 +70,7 @@ export function Table({columns, data, placeholder}:Props) {
                 header={header} 
                 filters={filters}
                 filterLocale='es'
+                onRowClick={onRowClick}
                 >
             {columns.map((column) => 
                 <Column 
