@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import {  useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setClients } from "@/reducers/localDataReducer";
 import API from "@/services/API";
 import { IClient } from '@/interfaces/dbModels';
 import { Table } from '@/piatti/components/Table';
+import { DataTableRowClickEvent } from "primereact/datatable";
 
 interface RootState {
     localData: {
@@ -11,7 +12,15 @@ interface RootState {
     }
 }
 
+
 export function ClientsTable() {
+    const handleClickEvent = (event: DataTableRowClickEvent) => {
+        if (event.data && 'clientId' in event.data) {
+            const clientId = event.data.clientId;
+            console.log(clientId);
+            window.location.href = `clientes/historial/${clientId}`;
+        }
+    }
     const dispatch = useDispatch();
     const clients = useSelector((state:RootState)=>state.localData.clients);
 
@@ -29,5 +38,5 @@ export function ClientsTable() {
         { isKey: false, order: true, field: 'lastModification', header: 'Ultima actualización' }
     ]
 
-    return <Table key={'clients'} data={clients} columns={columns} />;
+    return <Table key={'clients'} data={clients} columns={columns} placeholder="Buscar cliente" onRowClick={handleClickEvent}/>;
 }

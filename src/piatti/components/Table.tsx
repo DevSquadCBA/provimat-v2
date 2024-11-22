@@ -1,15 +1,16 @@
-import { DataTable, DataTableFilterMeta, DataTableFilterMetaData, DataTableOperatorFilterMetaData, DataTableValueArray } from 'primereact/datatable';
+import { DataTable, DataTableFilterMeta, DataTableFilterMetaData, DataTableOperatorFilterMetaData, DataTableRowClickEvent, DataTableValueArray } from 'primereact/datatable';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { Column } from 'primereact/column';
 import { FilterMatchMode } from 'primereact/api';
-import { useState } from 'react';
+import {  useState } from 'react';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
 import './Table.scss';
 
 type Props ={
+    placeholder?: string
     columns: {
         isKey: boolean
         order?: boolean
@@ -18,9 +19,10 @@ type Props ={
         filter?: string
     }[]
     data: DataTableValueArray,
+    onRowClick?: (e:DataTableRowClickEvent) => void
 }
 
-export function Table({columns, data}:Props) {
+export function Table({columns, data, placeholder, onRowClick}:Props) {
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
     const [selectedQty, setSelectedQty] = useState<number>(30);
     const [filters, setFilters] = useState<DataTableFilterMeta>({
@@ -47,7 +49,7 @@ export function Table({columns, data}:Props) {
                 <div className="flex justify-content-end">
                     <IconField iconPosition="left">
                         <InputIcon className="pi pi-search" />
-                        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Buscar Cliente" />
+                        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder={placeholder} />
                     </IconField>
                 </div>
             </div>
@@ -68,9 +70,11 @@ export function Table({columns, data}:Props) {
                 header={header} 
                 filters={filters}
                 filterLocale='es'
+                onRowClick={onRowClick}
                 >
             {columns.map((column) => 
-                <Column sortable 
+                <Column 
+                    sortable={column.header? true : false}
                     key={column.field} 
                     field={column.field} 
                     header={column.header} 

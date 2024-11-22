@@ -1,3 +1,8 @@
+import { LayoutContainerTable } from "@/piatti/layout/LayoutContainerTable"
+import { ProductsTable } from "../components/ProductsTable"
+
 export function ProductsPage() {
-    return <>soy productos</>
+    return <LayoutContainerTable title="Listado de Productos" tableComponents={<></>}>
+            <ProductsTable></ProductsTable>
+        </LayoutContainerTable>
 }
