@@ -27,3 +27,20 @@ export type UserData = {
     role: string|null,
     token: string|null
 }
+export type IHistorySales ={
+    distinctProviders: number;
+    grandTotal: number;
+    client: IClient,
+    products: {
+        id: number,
+        name: string,
+        providerId: number,
+        provider: {
+            id: number,
+            name: string
+        },
+        SaleProduct: ISaleProduct & { createdAt: string, updatedAt: string }
+    },
+    createdAt: string|null,
+    updatedAt: string 
+} & Partial<ISale>
