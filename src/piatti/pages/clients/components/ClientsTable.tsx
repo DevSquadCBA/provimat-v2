@@ -18,9 +18,9 @@ interface RootState {
 export function ClientsTable() {
     const navigate = useNavigate();
     const handleClickEvent = (event: DataTableRowClickEvent) => {
-        if (event.data && 'clientId' in event.data) {
-            const clientId = event.data.clientId;
-            navigate(`clientes/historial/${clientId}`);
+        if (event.data && 'id' in event.data) {
+            const clientId = event.data.id;
+            navigate(`/clientes/historial/${clientId}`);
         }
     }
     const dispatch = useDispatch();
