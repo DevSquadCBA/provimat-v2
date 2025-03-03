@@ -1,3 +1,5 @@
+import { UserData } from "@/interfaces/interfaces";
+
 export function convertToVerboseDay(date: string|null): string|null {
     if (!date) {
         return null;
@@ -30,4 +32,30 @@ export function convertToVerboseDay(date: string|null): string|null {
     }
     const d = getDiferences(new Date(), new Date(date));
     return getVerbose(parseInt(d));
+}
+
+export function decodeJWTToken(token: string):UserData{
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return {...JSON.parse(jsonPayload),token};
+}
+
+export function getUserData():UserData|null{
+    const token = localStorage.getItem('token');
+    if (!token) {
+        return null;
+    }
+    console.log('token',token);
+    return decodeJWTToken(token);
+}
+
+export function setToken(token: string) {
+    localStorage.setItem('token', token);
+}
+
+export function removeToken() {
+    localStorage.removeItem('token');
 }

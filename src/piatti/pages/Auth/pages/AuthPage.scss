@@ -1,0 +1,93 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    .background{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        object-fit: cover;
+        z-index: 1;
+        flex-direction: column;
+        width: 75%;
+        .background-image{
+            width: 433px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+    }
+    .form{
+        background-color: var(--primary-background-color);
+        width: 25%;
+        height: 98vh;
+        margin: 2rem 0;
+        border-radius: var(--rounded-radius) var(--rounded-radius) var(--rounded-radius) 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .form-container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items:center;
+            width: 60%;
+            .logo{
+                width: 70%
+            }
+            .form-input-group{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: 100%;
+                margin: 1rem 0;
+                gap: 1rem;
+                align-items: end;
+                .p-input-icon-left{
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                }
+                .p-input-icon-left i {
+                    position: absolute;
+                    left: 15px; // Ajusta según necesites
+                    font-size: 1.2rem;
+                    color: #555;
+                    z-index: 2;
+                }
+                .p-inputtext{
+                    padding-left: 2.5rem !important;
+                    border-radius: var(--rounded-radius) !important;
+                    width: 100% !important;
+                    margin: 0px !important;
+                }
+                .button-container{
+                    flex-direction: row;
+                    display: flex;
+                    width: 100%;
+                    align-items: end;
+                    justify-content:end;
+                    gap:1rem;
+                    max-height: 10vh;
+                    .p-inline-message{
+                        max-width: 45%;
+                        max-height: 80%;
+                        
+                        span{
+                            font-size: 0.8rem;
+                        }
+                    }
+                    .p-button{
+                        width: 50%;
+                        display: flex;
+                        justify-content: center;
+                        border-radius: var(--rounded-radius);
+                    }         
+                }
+            }
+        }
+    }
+}

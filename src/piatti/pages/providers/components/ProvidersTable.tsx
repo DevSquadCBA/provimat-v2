@@ -2,8 +2,10 @@ import { IProvider } from "@/interfaces/dbModels";
 import { Table } from "@/piatti/components/Table";
 import { setProviders } from "@/reducers/localDataReducer";
 import API from "@/services/API";
+import { getUserData, removeToken } from "@/services/common";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 interface RootState {
     localData: {
@@ -12,15 +14,29 @@ interface RootState {
 }
 
 export function ProvidersTable() {
+    const navigate = useNavigate();
+
     const dispatch = useDispatch();
     const providers = useSelector((state:RootState)=>state.localData.providers);
 
     useEffect(() => {
         (async () => {
-            const response = await API.Provider.all();
-            dispatch(setProviders(response));
+            try{
+                const userData = getUserData();
+                if (!userData ||!userData.token) {
+                    removeToken();
+                    navigate('/');
+                    return;
+                }
+                const response = await API.Provider.all(userData.token);
+                dispatch(setProviders(response));
+            }catch(e){
+                removeToken();
+                navigate('/');
+            }
+            
         })();
-    }, [dispatch]);
+    }, [dispatch, navigate]);
 
     const columns = [
         { isKey: true,  order: false, field: 'id', header: 'ID' },
