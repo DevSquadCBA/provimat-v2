@@ -3,21 +3,24 @@ import SIP_main  from '@/assets/SIP_main.svg';
 import logo from '@/assets/Piatti_puerta_logo.svg';
 import { InputText } from "primereact/inputtext";
 import { Button } from 'primereact/button';
-import { useState } from "react";
+import {  useState } from "react";
 import API from "@/services/API";
 import { Message } from "primereact/message";
+import { useNavigate } from "react-router-dom";
+import { setToken } from "@/services/common";
 export function AuthPage() {
     const [loginSended, setLoginSended] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [wrongCredentials, setWrongCredentials] = useState(false);
+    const navigate = useNavigate();
     const handleLogin = async ()=>{
         setLoginSended(true);
         try{
             const token = await API.Auth.login({username, password });
             console.log('token',token)
-            localStorage.setItem('token', token);
-            window.location.href = `/clientes`;
+            setToken(token);
+            navigate("/clientes");          
             setLoginSended(false);
             setWrongCredentials(false);
         }catch(e:unknown){

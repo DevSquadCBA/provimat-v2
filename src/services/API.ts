@@ -7,15 +7,15 @@ const entity = EntityList.muebles
 
 function redirectToLogin(){
     localStorage.removeItem('token');
-    window.location.href = `/`;
+   throw new Error('Unauthorized');
 }
 
 class Client {
-    all = async ()=>{
+    all = async (token:string|null)=>{
         const response = await fetch(`${API_URL}/clients`, {headers: {
             'Content-Type': 'application/json',
             'entity': entity,
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
         }});
         const data = await response.json();
         if(data.statusCode == 401) return redirectToLogin();
@@ -23,11 +23,11 @@ class Client {
         const transformedData = data.map((e:ClientWithBudgetData)=>({...e, lastModification: convertToVerboseDay(e.lastModification)}));
         return transformedData
     }
-    get = async (id:string)=>{
+    get = async (id:string,token:string|null)=>{
         const response = await fetch(`${API_URL}/client/${id}`, {headers: {
             'Content-Type': 'application/json',
             'entity': entity,
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
         }});
         const data = await response.json();
         if(data.statusCode == 401) return redirectToLogin();
@@ -38,11 +38,11 @@ class Client {
 }
 
 class Provider {
-    all = async ()=>{
+    all = async (token:string|null)=>{
         const response = await fetch(`${API_URL}/provider`, {headers: {
             'Content-Type': 'application/json',
             'entity': entity,
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
         }});
         const data = await response.json();
         if(data.statusCode == 401) return redirectToLogin();
@@ -51,11 +51,11 @@ class Provider {
     }
 }
 class Product {
-    all = async ()=>{
+    all = async (token:string|null)=>{
         const response = await fetch(`${API_URL}/products`, {headers: {
             'Content-Type': 'application/json',
             'entity': entity,
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
         }});
         const data = await response.json();
         if(data.statusCode == 401) return redirectToLogin();
@@ -69,11 +69,11 @@ class Product {
 
 
 class User {
-    all = async ()=>{
+    all = async (token:string|null)=>{
         const response = await fetch(`${API_URL}/users`, {headers: {
             'Content-Type': 'application/json',
             'entity': entity,
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
         }});
         const data = await response.json();
         if(data.statusCode == 401) return redirectToLogin();

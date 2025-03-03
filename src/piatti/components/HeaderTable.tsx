@@ -1,5 +1,6 @@
 import { ReactNode } from "react"
 import './HeaderTable.scss';
+import { UserComponent } from "./UserComponent";
 
 type Props = {
     title: string,
@@ -10,8 +11,7 @@ export function HeaderTable({title,tableComponents} : Props) {
     return (
         <div className="header-table">
             <div className="user-content ">
-                <div>Romera Juan Carlos</div>
-                <div>Admin</div>
+               <UserComponent/>
             </div>
             <div className="titles-and-buttons">
                 <div className="title">

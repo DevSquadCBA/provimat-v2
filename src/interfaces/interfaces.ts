@@ -19,3 +19,11 @@ export type LocalData = {
     saleLastUpdated: number,
     saleProductLastUpdated: number
 }
+
+export type UserData = {
+    username: string|null,
+    email: string|null,
+    id: number|null,
+    role: string|null,
+    token: string|null
+}

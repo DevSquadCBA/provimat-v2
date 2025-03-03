@@ -4,14 +4,17 @@ import { localDataSlice } from './reducers/localDataReducer';
 
 export type reducers = {
     sideBar: typeof sidebarSlice
+    localData: typeof localDataSlice
+
 }
 
 export const store = configureStore({
     reducer:{
         sideBar: sidebarSlice.reducer,
-        localData: localDataSlice.reducer
-    }
-})
+        localData: localDataSlice.reducer,
+    },
+});
+
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
