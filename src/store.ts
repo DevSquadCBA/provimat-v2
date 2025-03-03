@@ -5,7 +5,6 @@ import { localDataSlice } from './reducers/localDataReducer';
 export type reducers = {
     sideBar: typeof sidebarSlice
     localData: typeof localDataSlice
-
 }
 
 export const store = configureStore({

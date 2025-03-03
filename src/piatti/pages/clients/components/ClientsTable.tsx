@@ -16,16 +16,15 @@ interface RootState {
 
 
 export function ClientsTable() {
+    const navigate = useNavigate();
     const handleClickEvent = (event: DataTableRowClickEvent) => {
         if (event.data && 'clientId' in event.data) {
             const clientId = event.data.clientId;
-            console.log(clientId);
-            window.location.href = `clientes/historial/${clientId}`;
+            navigate(`clientes/historial/${clientId}`);
         }
     }
     const dispatch = useDispatch();
     const clients = useSelector((state:RootState)=>state.localData.clients);
-    const navigate = useNavigate();
     
     useEffect(() => {
         (async () => {
@@ -40,6 +39,7 @@ export function ClientsTable() {
                 dispatch(setClients(response));
             }catch(e){
                 removeToken();
+                navigate('/');
             }
         })();
     }, [dispatch,navigate]);
