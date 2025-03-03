@@ -24,6 +24,9 @@ export function Sidebar() {
             case 'sales':
                 navigate(`/ventas`);
                 break;
+            case 'team':
+                navigate(`/equipo`);
+                break;
             default:
                 break;
         }
@@ -45,7 +48,8 @@ export function Sidebar() {
                         <li onClick={()=>handleClick('empty','providers','clients')}     id="clients"   className={`menu_item ${setClass(state, 'clients')}`}   ><button><div className="menu_item__logo"></div><span>Clientes</span></button></li>
                         <li onClick={()=>handleClick('clients','products','providers')}  id="providers" className={`menu_item ${setClass(state, 'providers')}`} ><button><div className="menu_item__logo"></div><span>Proveedores</span></button></li>
                         <li onClick={()=>handleClick('providers', 'sales','products')}   id="products"  className={`menu_item ${setClass(state, 'products')}`}  ><button><div className="menu_item__logo"></div><span>Productos</span></button></li>
-                        <li onClick={()=>handleClick('products', 'submenu', 'sales')}    id="sales"     className={`menu_item ${setClass(state, 'sales')}`}     ><button><div className="menu_item__logo"></div><span>Ventas</span></button></li>
+                        <li onClick={()=>handleClick('products', 'team', 'sales')}       id="sales"     className={`menu_item ${setClass(state, 'sales')}`}     ><button><div className="menu_item__logo"></div><span>Ventas</span></button></li>
+                        <li onClick={()=>handleClick('team', 'submenu', 'products')}     id="team"      className={`menu_item ${setClass(state, 'team')}`}      ><button><div className="menu_item__logo"></div><span>Equipo</span></button></li>
                         <li className={`menu_item ${setClass(state, 'submenu')}`} ><div className="empty"></div></li>
                     </ul>
                 </nav>

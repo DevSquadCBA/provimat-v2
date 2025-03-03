@@ -86,9 +86,24 @@ export type ISaleProduct = {
     details?: string|null
 }
 
-
 export type IProductToAdd = {
     id: number,
     quantity: number,
     details?: string|null
+}
+
+
+export type IUser = {
+    name: string,
+    email: string,
+    phone: string,
+    whatsapp: string,
+    address: string,
+    role: IRol
+}
+
+export type IRol = {
+    id: number,
+    name: string
+    description: string
 }

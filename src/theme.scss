@@ -1,4 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap');
+@import 'primeicons/primeicons.css';
+
+@font-face {
+  font-family: 'primeicons';
+  src: url('~primeicons/fonts/primeicons.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 $primaryColor: #1F5D53 !default;
 $primaryLightColor: #4CB3A0 !default;

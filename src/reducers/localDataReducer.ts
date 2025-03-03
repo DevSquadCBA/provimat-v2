@@ -6,6 +6,7 @@ const initialState: LocalData = {
     providers: [],
     sales: [],
     salesProducts: [],
+    team: [],
     productLastUpdated: new Date().getTime(),
     clientLastUpdated: new Date().getTime(),
     providerLastUpdated: new Date().getTime(),
@@ -28,6 +29,9 @@ export const localDataSlice = createSlice({
         },
         setSales: (state, action) => {
             state.sales = action.payload;
+        },
+        setTeam: (state, action) => {
+            state.team = action.payload;
         },
         setSalesProducts: (state, action) => {
             state.salesProducts = action.payload;
@@ -59,6 +63,7 @@ export const {
     setClients,
     setProviders,
     setSales,
+    setTeam,
     setSalesProducts,
     setProductLastUpdated,
     setClientLastUpdated,

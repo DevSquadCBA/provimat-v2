@@ -1,4 +1,4 @@
-import { IProduct, IClient,IProvider, ISale, ISaleProduct } from "./dbModels"
+import { IProduct, IClient,IProvider, ISale, ISaleProduct, IUser } from "./dbModels"
 
 type MenuItems = 'empty'|'clients'| 'products' | 'providers' | 'sales' | 'submenu'
 export type MenuView = {
@@ -12,6 +12,7 @@ export type LocalData = {
     providers : IProvider[],
     sales : ISale[],
     salesProducts : ISaleProduct[],
+    team: IUser[],
     productLastUpdated: number,
     providerLastUpdated: number,
     clientLastUpdated: number,
