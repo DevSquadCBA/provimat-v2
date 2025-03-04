@@ -62,6 +62,28 @@ class Provider {
         if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
         return dataResponse;
     }
+    update = async(token:string|null,data:Partial<IProvider>)=>{
+        const response = await fetch(`${API_URL}/provider`, {headers: {
+            'Content-Type': 'application/json',
+            'entity': entity,
+            'Authorization': `Bearer ${token}`
+        }, method: 'PUT', body: JSON.stringify(data)});
+        const dataResponse = await response.json();
+        if(dataResponse.statusCode == 401) return redirectToLogin();
+        if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
+        return dataResponse;
+    }
+    delete = async(token:string|null,id:number)=>{
+        const response = await fetch(`${API_URL}/provider/${id}`, {headers: {
+            'Content-Type': 'application/json',
+            'entity': entity,
+            'Authorization': `Bearer ${token}`
+        }, method: 'DELETE'});
+        const dataResponse = await response.json();
+        if(dataResponse.statusCode == 401) return redirectToLogin();
+        if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
+        return dataResponse;
+    }
 }
 class Product {
     all = async (token:string|null)=>{

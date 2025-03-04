@@ -8,12 +8,17 @@ import API from "@/services/API";
 import { Message } from "primereact/message";
 import { useNavigate } from "react-router-dom";
 import { setToken } from "@/services/common";
+import { useDispatch } from "react-redux";
+import { hideAll } from "@/reducers/modalsSlice";
 export function AuthPage() {
     const [loginSended, setLoginSended] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [wrongCredentials, setWrongCredentials] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    // reiniciar casi todos los estados de la app
+    dispatch(hideAll());
     const handleLogin = async ()=>{
         setLoginSended(true);
         try{
