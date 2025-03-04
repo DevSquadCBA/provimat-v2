@@ -38,12 +38,18 @@ export const modalsSlice = createSlice({
                 ...state,
                 modalCreationVisible: action.payload.modalCreationVisible,
             };
+        },
+        hideAll(){
+            return {
+                ...initialState
+            }
         }
     },
 });
 
 export const { 
     changeState,
+    hideAll,
     changeVisibilityModalHistory,
     changeVisibilityModalCreation
  } = modalsSlice.actions;
