@@ -1,0 +1,35 @@
+.modal-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items:flex-start;
+    .active-sale{
+        display: flex;
+        flex-direction: column;
+        .delivery-date{
+            margin-bottom: 0.5rem;
+        }
+        .days-remaining{
+            margin-top: 0;
+        }
+    }
+    .modal-state{
+        display: flex;
+        align-items: center;
+        .circle-state{
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+        }
+        .text-state{
+            font-variant: all-petite-caps;
+            font-size: 1.6rem;
+            line-height: 0.8rem;
+        }
+    }
+}
+.modal-footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    
+}

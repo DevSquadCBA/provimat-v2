@@ -74,12 +74,23 @@ class Sale {
             'entity': entity,
             'Authorization': `Bearer ${token}`
         }});
+        const data = await response.json();
+        if(data.statusCode == 401) return redirectToLogin();
+        if(data.statusCode && data.statusCode !== 200) throw new Error(data.message);
+        return data;
+    }
+
+    history = async (id:number|undefined,token:string|null)=>{
+        const response = await fetch(`${API_URL}/client/${id}/sales/`, {headers: {
+            'Content-Type': 'application/json',
+            'entity': entity,
+            'Authorization': `Bearer ${token}`
+        }});
         console.log(token)
         const data = await response.json();
         if(data.statusCode == 401) return redirectToLogin();
         if(data.statusCode && data.statusCode !== 200) throw new Error(data.message);
         return data;
-        
     }
 }
 

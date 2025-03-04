@@ -44,7 +44,7 @@ export function ClientsTable() {
         })();
     }, [dispatch,navigate]);
     const columns = [
-        { isKey: true,  order: false, field: 'clientId', header: 'Id' },
+        { isKey: true,  order: false, field: 'id', header: 'Id' },
         { isKey: false, order: false, field: 'name', header: 'Nombre' , filter: 'Buscar por nombre'},
         { isKey: false, order: false, field: 'active', header: 'Presupuestos Activos' },
         { isKey: false, order: false, field: 'total', header: 'Nº de presupuestos' },

@@ -8,23 +8,20 @@ import {  useState } from 'react';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
 import './Table.scss';
+import { TableColumns } from '@/interfaces/interfaces';
 
 type Props ={
     placeholder?: string
-    columns: {
-        isKey: boolean
-        order?: boolean
-        field: string
-        header: string
-        filter?: string
-    }[]
+    columns:TableColumns[]
     data: DataTableValueArray,
-    onRowClick?: (e:DataTableRowClickEvent) => void
+    onRowClick?: (e:DataTableRowClickEvent) => void,
+    footer?: JSX.Element,
+    minimalQuantity?: number
 }
 
-export function Table({columns, data, placeholder, onRowClick}:Props) {
+export function Table({columns, data, placeholder, onRowClick, footer,minimalQuantity=30}:Props) {
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
-    const [selectedQty, setSelectedQty] = useState<number>(30);
+    const [selectedQty, setSelectedQty] = useState<number>(minimalQuantity);
     const [filters, setFilters] = useState<DataTableFilterMeta>({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS,  },
         name: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -71,6 +68,7 @@ export function Table({columns, data, placeholder, onRowClick}:Props) {
                 filters={filters}
                 filterLocale='es'
                 onRowClick={onRowClick}
+                footer={footer}
                 >
             {columns.map((column) => 
                 <Column 
@@ -78,6 +76,7 @@ export function Table({columns, data, placeholder, onRowClick}:Props) {
                     key={column.field} 
                     field={column.field} 
                     header={column.header} 
+                    dataType={column.dataType? column.dataType : 'text'}
                 />)}
         </DataTable>;
 }

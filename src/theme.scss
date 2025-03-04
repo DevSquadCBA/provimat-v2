@@ -31,7 +31,28 @@ $rounded-radius: 2rem;
   --font-family: #{$fontFamily};
   --aire: 1rem;
   --rounded-radius: #{$rounded-radius};
+
+  // Para pedidos
+  --presupuesto: #19E052;
+  --proforma:    #1986e0;
+  --comprobante: #1937e0;
+  --canceled:    #d50000;      // finished
+  // Para luego en comprobante
+  --in_order:         #E00096;
+  --in_provider:      #9B00E0;
+  --delayed_provider: #5200E0;
+  --finished:         #003FE0; // finished
+
+  // Para producto
+  --provider-unitianitated:    #EED865;
+  --provider-to-confirm:       #86bc33;
+  --provider-pending-shipping: #49B886;
+  --provider-out-of-stock:     #E54444;
+  --provider-shipping:         #3A99B2;
+  --provider-on_deposit:       #276CA3; //finished
+
 }
+
 
 .p-button:focus,
 .p-inputtext:focus,
@@ -69,4 +90,52 @@ $rounded-radius: 2rem;
 
 .p-dropdown:not(.p-disabled):hover {
   border-color: var(--primary-light-color);
+}
+.text-important{
+    color: var(--primary-dark-color);
+    font-weight: bolder!important;
+    font-variant: all-petite-caps;
+}
+.big-text{
+  font-size: 2rem;
+}
+.modal-header{
+  display: flex;
+  justify-content: space-between;
+}
+
+.circle-state{
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+.p-dialog{
+  min-width: 700px;
+  min-height: 600px;
+  .p-datatable-header{
+      display: none;
+  }
+  .p-dialog-header{
+      border-radius: var(--rounded-radius) var(--rounded-radius) 0 0;
+  }
+  .p-dialog-content{
+      padding: 0;
+  }
+  .p-dialog-footer{
+      border-radius: 0 0 var(--rounded-radius) var(--rounded-radius);
+      padding:  1rem 1rem;
+      .modal-container{
+          margin-left: 1rem;
+          margin-right: 1rem;
+      }
+  }
+}
+.state-selector{
+  border: 0px solid var(--primary-color)!important;
+  &_option{
+     min-width: 240px;
+    
+   }
 }
