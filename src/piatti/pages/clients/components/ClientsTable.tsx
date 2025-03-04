@@ -18,9 +18,9 @@ interface RootState {
 export function ClientsTable() {
     const navigate = useNavigate();
     const handleClickEvent = (event: DataTableRowClickEvent) => {
-        if (event.data && 'clientId' in event.data) {
-            const clientId = event.data.clientId;
-            navigate(`clientes/historial/${clientId}`);
+        if (event.data && 'id' in event.data) {
+            const clientId = event.data.id;
+            navigate(`/clientes/historial/${clientId}`);
         }
     }
     const dispatch = useDispatch();
@@ -44,7 +44,7 @@ export function ClientsTable() {
         })();
     }, [dispatch,navigate]);
     const columns = [
-        { isKey: true,  order: false, field: 'clientId', header: 'Id' },
+        { isKey: true,  order: false, field: 'id', header: 'Id' },
         { isKey: false, order: false, field: 'name', header: 'Nombre' , filter: 'Buscar por nombre'},
         { isKey: false, order: false, field: 'active', header: 'Presupuestos Activos' },
         { isKey: false, order: false, field: 'total', header: 'Nº de presupuestos' },

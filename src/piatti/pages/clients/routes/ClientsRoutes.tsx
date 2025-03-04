@@ -7,7 +7,7 @@ export function ClientsRoutes(){
         <Routes>
             <Route index element={<ClientsPage />} />
             <Route path="historial/:clientId" element={<HistoryClientPage />} />
-            <Route path="*" element={<Navigate to="/clientes" replace/>} />
+            <Route path="/*" element={<Navigate to="/clientes" replace/>} />
         </Routes>
     )
 }

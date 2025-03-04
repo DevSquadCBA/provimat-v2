@@ -67,6 +67,19 @@ class Product {
     }
 }
 
+class Sale {
+    history = async (id:number|undefined,token:string|null)=>{
+        const response = await fetch(`${API_URL}/client/${id}/sales/`, {headers: {
+            'Content-Type': 'application/json',
+            'entity': entity,
+            'Authorization': `Bearer ${token}`
+        }});
+        const data = await response.json();
+        if(data.statusCode == 401) return redirectToLogin();
+        if(data.statusCode && data.statusCode !== 200) throw new Error(data.message);
+        return data;
+    }
+}
 
 class User {
     all = async (token:string|null)=>{
@@ -96,6 +109,7 @@ export default class API {
     static Client: Client = new Client();
     static Provider: Provider = new Provider();
     static Product: Product = new Product();
+    static Sale: Sale = new Sale();
     static User:User = new User();
     static Auth:Auth = new Auth();
 }
