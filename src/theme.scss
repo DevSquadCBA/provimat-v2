@@ -64,6 +64,11 @@ $rounded-radius: 2rem;
   background-color: var(--primary-color) !important;
   border-color: var(--primary-dark-color) !important;
   color: var(--primary-text-color) !important;
+  .p-button-secondary{
+    background-color: var(--primary-light-color) !important;
+    border-color: var(--primary-dark-color) !important;
+    color: var(--primary-text-color) !important;
+  }
 }
 
 .p-button:not(:disabled):hover {
