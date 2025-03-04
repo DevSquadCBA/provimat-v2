@@ -2,10 +2,12 @@ import { IProduct, IClient,IProvider, ISale, ISaleProduct, IUser } from "./dbMod
 import { SaleStates } from "./enums"
 
 type MenuItems = 'empty'|'clients'| 'products' | 'providers' | 'sales' | 'submenu'
+type MenuSubItems = 'empty'|'presupuesto'|'proforma'|'comprobante'
 export type MenuView = {
     selectedView:MenuItems,
     previous:MenuItems,
-    next:MenuItems
+    next:MenuItems,
+    submenu: MenuSubItems
 }
 export type LocalData = {
     products : IProduct[],
