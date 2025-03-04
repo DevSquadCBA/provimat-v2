@@ -1,10 +1,12 @@
 import { IProduct, IClient,IProvider, ISale, ISaleProduct, IUser } from "./dbModels"
 
 type MenuItems = 'empty'|'clients'| 'products' | 'providers' | 'sales' | 'submenu'
+type MenuSubItems = 'empty'|'presupuesto'|'proforma'|'comprobante'
 export type MenuView = {
     selectedView:MenuItems,
     previous:MenuItems,
-    next:MenuItems
+    next:MenuItems,
+    submenu: MenuSubItems
 }
 export type LocalData = {
     products : IProduct[],

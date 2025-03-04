@@ -20,6 +20,7 @@ div#root {
     width: $menu-width;
     margin: 0;
     padding: 0;
+  
   }
 
   &__logo {
@@ -36,7 +37,7 @@ div#root {
   }
 
   &__list {
-    top: 0rem;
+    top: 2rem;
     position: relative;
     z-index: 2;
     padding: 0;
@@ -59,10 +60,9 @@ div#root {
     li.menu_item {
       list-style: none;
       height: 3.6rem;
-      display: flex;
       align-items: center;
       
-      button {
+      >button {
         background-color: $primary-color;
         display: flex;
         align-items: center;
@@ -73,6 +73,9 @@ div#root {
         border: none;
         cursor: pointer;
         color: var(--primary-text-color);
+        font-family: var(--font-family);
+        text-transform: uppercase;
+        font-weight: 300;
       }
         
       &__logo {
@@ -81,17 +84,20 @@ div#root {
         background-repeat: no-repeat;
       }
     }
-
+    li.menu_item#submenu {
+      display: none;
+    }
     li.menu_item .empty {
       height: 10vh;
     }
 
     li.menu_item.previous, li.menu_item.next, li.menu_item.selected {
       background-color: $claro;
+      color: var(--menu-selected-color);
     }
     
     li.menu_item.previous .empty, li.menu_item.previous button,
-    li.menu_item.next .empty, li.menu_item.next button {
+    li.menu_item.next .empty, li.menu_item.next>button {
       background-color: $primary-color;
       height: inherit;
       width: 100%;
@@ -102,10 +108,14 @@ div#root {
       border-radius: 0 0 3rem;
     }
 
-    li.menu_item.next .empty, li.menu_item.next button {
+    li.menu_item.next .empty, li.menu_item.next>button {
       border-radius: 0 3rem 0 0;
     }
     
+    /*ul.sidebar__submenu__list {
+    display: none;
+    border-radius: 0 3rem 0 0;
+   }*/      
 
     li.menu_item.selected {
         border-radius: 3rem 0 0 3rem;
@@ -114,6 +124,30 @@ div#root {
           border-radius: 3rem 0 0 3rem;
           color: var(--primary-text-black);
         }
+
+      &#sales + #submenu {
+        display: block;
+        margin-left: 2.5rem;
+        border-radius: 0 0 0 2rem;
+        height: max-content;
+      
+        ul.sidebar__submenu__list{
+          background-color: $primaryLightColor;
+          border-radius: 0 2rem 0 2rem;
+          
+
+          button {
+            background-color: transparent;
+            font-family: var(--font-family);
+            text-transform: uppercase;
+            font-weight: 200;
+            height: 2.5rem;
+            padding-left: 1.5rem;
+            color: var(--primary-text-color);
+            font-size: x-small;
+          }
+        }
+      }
     }
   }
 }
