@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { TeamPage } from "../pages/TeamPage";
 
-export function ProvidersRoutes(){
+export function TeamRoutes(){
     return (
         <Routes>
             <Route path="/" element={<TeamPage />} />

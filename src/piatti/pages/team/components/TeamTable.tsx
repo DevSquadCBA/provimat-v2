@@ -41,10 +41,9 @@ export function TeamTable() {
         { isKey: true,  order: false, field: 'id', header: 'ID' },
         { isKey: false, order: false, field: 'name', header: 'Nombre' },
         { isKey: false, order: false, field: 'email', header: 'Email' },
-        { isKey: false, order: false, field: 'role', header: 'Rol' },
-        { isKey: false, order: false, field: 'active', header: 'Activo' },
-        { isKey: false, order: true, field: 'lastModification', header: 'Ultima actualización' }
-    ]
+        { isKey: false, order: false, field: 'role.name', header: 'Rol' },
+    ];
+    
     const createNewModal:CreateModalProps = (
         {
             body: <></>,

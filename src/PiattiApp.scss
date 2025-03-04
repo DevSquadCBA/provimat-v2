@@ -87,7 +87,7 @@ div#root {
     li.menu_item#submenu {
       display: none;
     }
-    li.menu_item .empty {
+    li.menu_item .emptyAfter, li.menu_item .emptyBefore {
       height: 10vh;
     }
 
@@ -96,26 +96,22 @@ div#root {
       color: var(--menu-selected-color);
     }
     
-    li.menu_item.previous .empty, li.menu_item.previous button,
-    li.menu_item.next .empty, li.menu_item.next>button {
+    li.menu_item.previous .emptyBefore, li.menu_item.previous button,
+    li.menu_item.next .emptyAfter, li.menu_item.next>button {
       background-color: $primary-color;
       height: inherit;
       width: 100%;
       
     }
 
-    li.menu_item.previous .empty, li.menu_item.previous button {
+    li.menu_item.previous .emptyBefore, li.menu_item.previous button {
       border-radius: 0 0 3rem;
     }
 
-    li.menu_item.next .empty, li.menu_item.next>button {
+    li.menu_item.next .emptyAfter, li.menu_item.next>button {
       border-radius: 0 3rem 0 0;
     }
-    
-    /*ul.sidebar__submenu__list {
-    display: none;
-    border-radius: 0 3rem 0 0;
-   }*/      
+         
 
     li.menu_item.selected {
         border-radius: 3rem 0 0 3rem;

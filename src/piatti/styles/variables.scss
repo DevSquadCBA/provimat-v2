@@ -50,6 +50,7 @@ $menu-item-normal: (
     providers: url('src/assets/sidebar/logoproveedores.svg'),
     products: url('src/assets/sidebar/logoproductos.svg'),
     sales: url('src/assets/sidebar/logopresupuestos.svg'), 
+    team: url('src/assets/sidebar/logoteam.svg')
 );
 
 $menu-item-selected: (
@@ -57,5 +58,6 @@ $menu-item-selected: (
     providers: url('src/assets/sidebar/logoproveedoresselect.svg'),
     products: url('src/assets/sidebar/logoproductosselect.svg'),
     sales: url('src/assets/sidebar/logopresupuestosselect.svg'), 
+    team: url('src/assets/sidebar/logoteamselect.svg')
 );
 

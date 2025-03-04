@@ -108,7 +108,7 @@ class Sale {
 
 class User {
     all = async (token:string|null)=>{
-        const response = await fetch(`${API_URL}/users`, {headers: {
+        const response = await fetch(`${API_URL}/user`, {headers: {
             'Content-Type': 'application/json',
             'entity': entity,
             'Authorization': `Bearer ${token}`
