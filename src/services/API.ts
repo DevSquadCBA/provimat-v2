@@ -2,6 +2,7 @@ import { EntityList } from "@/interfaces/enums";
 import { API_URL } from "../piatti/config/config";
 import { convertToVerboseDay } from "./common";
 import { ClientWithBudgetData } from "@/interfaces/dto";
+import { IProvider } from "@/interfaces/dbModels";
 
 const entity = EntityList.muebles
 
@@ -48,6 +49,17 @@ class Provider {
         if(data.statusCode == 401) return redirectToLogin();
         if(data.statusCode && data.statusCode !== 200) throw new Error(data.message);
         return data;
+    }
+    create = async(token:string|null,data:Partial<IProvider>)=>{
+        const response = await fetch(`${API_URL}/provider`, {headers: {
+            'Content-Type': 'application/json',
+            'entity': entity,
+            'Authorization': `Bearer ${token}`
+        }, method: 'POST', body: JSON.stringify(data)});
+        const dataResponse = await response.json();
+        if(dataResponse.statusCode == 401) return redirectToLogin();
+        if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
+        return dataResponse;
     }
 }
 class Product {

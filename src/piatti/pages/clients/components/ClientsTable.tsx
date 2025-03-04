@@ -7,6 +7,7 @@ import { Table } from '@/piatti/components/Table';
 import { DataTableRowClickEvent } from "primereact/datatable";
 import { getUserData, removeToken } from "@/services/common";
 import { useNavigate } from "react-router-dom";
+import { CreateModalProps } from "@/interfaces/interfaces";
 
 interface RootState {
     localData: {
@@ -50,6 +51,13 @@ export function ClientsTable() {
         { isKey: false, order: false, field: 'total', header: 'Nº de presupuestos' },
         { isKey: false, order: true, field: 'lastModification', header: 'Ultima actualización' }
     ]
-
-    return <Table key={'clients'} data={clients} columns={columns} placeholder="Buscar cliente" onRowClick={handleClickEvent}/>;
+    const createNewModal:CreateModalProps = (
+        {
+            body: <></>,
+            header: <></>,
+            primaryButtonEvent: () => {},
+            footer: <></>
+        }
+    )
+    return <Table key={'clients'} data={clients} columns={columns} placeholder="cliente" onRowClick={handleClickEvent} newModalContent={createNewModal}/>;
 }

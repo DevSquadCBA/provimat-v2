@@ -62,3 +62,11 @@ export type StateOption = {
     value: SaleStates;
     weight: number;
 }
+
+export type CreateModalProps = {
+    header: JSX.Element,
+    body: JSX.Element
+    primaryButtonEvent: () => void,
+    resizable?: boolean,
+    footer?: JSX.Element,
+}

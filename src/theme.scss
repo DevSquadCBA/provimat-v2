@@ -137,3 +137,67 @@ $rounded-radius: 2rem;
     
    }
 }
+.create-modal{
+  .p-dialog-header{
+    padding: 0 2rem;
+    font-size: larger;
+    .p-dialog-header-icons{
+      align-self: center;
+    }
+  }
+  .modal-body{
+    padding: 0 2rem 1rem 2rem;
+    .p-inputtext{
+      min-width: 280px;
+      border-radius: var(--rounded-radius);
+    }
+  }
+}
+
+
+.flex{
+  display: flex;
+  &_row{
+      flex-direction: row;
+  }
+  &_column{
+      flex-direction: column;
+  }
+} 
+.justify-content-end{
+  justify-content: flex-end;
+}
+.space-between{
+  justify-content: space-between;
+}
+.space-around{
+  justify-content: space-around;
+}
+.justify-content-start{
+  justify-content: flex-start;
+}
+.align-items-center{
+  align-items: center;
+}
+.gap{
+  &_1{
+      gap: 1rem;
+  }
+  &_2{
+      gap: 2rem;
+  }
+  &_3{
+      gap: 3rem;
+  }
+}
+.mt{
+  &_1{
+      margin-top: 1rem;
+  }
+  &_2{
+      margin-top: 2rem;
+  }
+  &_3{
+      margin-top: 3rem;
+  }
+}

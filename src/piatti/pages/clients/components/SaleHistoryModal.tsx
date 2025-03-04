@@ -1,5 +1,5 @@
-import { IHistorySales, TableColumns } from "@/interfaces/interfaces"
-import { changeVisibility } from "@/reducers/modalsSlice";
+import { CreateModalProps, IHistorySales, TableColumns } from "@/interfaces/interfaces"
+import { changeVisibilityModalHistory } from "@/reducers/modalsSlice";
 import { reducers } from "@/store";
 import { Dialog } from "primereact/dialog";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +15,7 @@ type Props = {
     sale: IHistorySales
 }
 
-export function SaleHistory({sale}:Props) {
+export function SaleHistoryModal({sale}:Props) {
     const dispatch = useDispatch();
     const {modalHistoryVisible,stateSelected} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalHistoryVisible: boolean,modalHistorySale: null| IHistorySales, stateSelected: string});
     const finishedSale = (<p><span className="text-important">Plazo de entrega:</span> {moment(sale.deadline?.toString()).format('DD/MM/YYYY')}</p>)
@@ -81,12 +81,20 @@ export function SaleHistory({sale}:Props) {
         { isKey: false,  order: false, field: 'salePrice', header: 'Precio', dataType: 'numeric' },
     ]
     const formattedProducts = sale.products.map((product) => ({...product,salePrice: (<span>{(product.salePrice)}</span>)}));
+    const createNewModal:CreateModalProps = (
+            {
+                body: <></>,
+                header: <></>,
+                primaryButtonEvent: () => {},
+                footer: <></>
+            }
+        )
     return (
         <Dialog className="modal-history" header={headerElement} footer={footerElement}
              visible={modalHistoryVisible} 
              style={{ width: '50vw' }} 
-             onHide={() => {if (!modalHistoryVisible) return; dispatch(changeVisibility({modalHistoryVisible: false,modalHistorySale:null})); }}>
-            <Table columns={columns} data={formattedProducts} minimalQuantity={5}></Table>
+             onHide={() => {if (!modalHistoryVisible) return; dispatch(changeVisibilityModalHistory({modalHistoryVisible: false,modalHistorySale:null})); }}>
+            <Table columns={columns} data={formattedProducts} minimalQuantity={5} newModalContent={createNewModal}></Table>
         </Dialog>
     )
 }

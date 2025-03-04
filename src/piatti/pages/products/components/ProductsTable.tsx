@@ -4,6 +4,9 @@ import { setProducts } from "@/reducers/localDataReducer";
 import API from "@/services/API";
 import { IProduct, IProvider } from "@/interfaces/dbModels";
 import { Table } from "@/piatti/components/Table";
+import { getUserData, removeToken } from "@/services/common";
+import { useNavigate } from "react-router-dom";
+import { CreateModalProps } from "@/interfaces/interfaces";
 
 
 interface RootState {
@@ -15,15 +18,27 @@ interface RootState {
 type IProductWithProvider = IProduct & {provider: IProvider}
 
 export function ProductsTable() {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const products = useSelector((state:RootState)=>state.localData.products);
 
     useEffect(() => {
         (async () => {
-            const response = await API.Product.all();
-            dispatch(setProducts(response.map((e:IProductWithProvider)=>({...e, provider: e.provider.name}))));
+             try{
+                const userData = getUserData();
+                if (!userData ||!userData.token) {
+                    removeToken();
+                    navigate('/');
+                    return;
+                }
+                const response = await API.Product.all(userData.token);
+                dispatch(setProducts(response.map((e:IProductWithProvider)=>({...e, provider: e.provider.name}))));
+            }catch(e){
+                removeToken();
+                navigate('/');
+            }
         })();
-    }, [dispatch]);
+    }, [dispatch, navigate]);
 
     const columns = [
         { isKey: true,  order: false, field: 'id', header: 'ID' },
@@ -36,6 +51,14 @@ export function ProductsTable() {
         // { isKey: false, order: false, field: 'active', header: 'Activo' },
         // { isKey: false, order: true, field: 'lastModification', header: 'Ultima actualización' }
     ]
-    return <Table key={'products'} data={products} columns={columns} placeholder="Buscar producto"/>;
+    const createNewModal:CreateModalProps = (
+            {
+                body: <></>,
+                header: <></>,
+                primaryButtonEvent: () => {},
+                footer: <></>
+            }
+        )
+    return <Table key={'products'} data={products} columns={columns} placeholder="producto" newModalContent={createNewModal}/>;
 
 }

@@ -1,9 +1,12 @@
 import { IUser } from "@/interfaces/dbModels";
+import { CreateModalProps } from "@/interfaces/interfaces";
 import { Table } from "@/piatti/components/Table";
 import { setTeam} from '@/reducers/localDataReducer';
 import API from "@/services/API";
+import { getUserData, removeToken } from "@/services/common";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 
 interface RootState {
@@ -13,15 +16,27 @@ interface RootState {
 }
 
 export function TeamTable() {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const team = useSelector((state:RootState)=>state.localData.team);
 
     useEffect(() => {
         (async () => {
-            const response = await API.User.all();
-            dispatch(setTeam(response));
+            try{
+                const userData = getUserData();
+                if (!userData ||!userData.token) {
+                    removeToken();
+                    navigate('/');
+                    return;
+                }
+                const response = await API.User.all(userData.token);
+                dispatch(setTeam(response));
+            }catch(e){
+                removeToken();
+                navigate('/');
+            }
         })();
-    }, [dispatch]);
+    }, [dispatch,navigate]);
     const columns = [
         { isKey: true,  order: false, field: 'id', header: 'ID' },
         { isKey: false, order: false, field: 'name', header: 'Nombre' },
@@ -30,5 +45,13 @@ export function TeamTable() {
         { isKey: false, order: false, field: 'active', header: 'Activo' },
         { isKey: false, order: true, field: 'lastModification', header: 'Ultima actualización' }
     ]
-    return <Table key={'team'} data={team} columns={columns} placeholder="Buscar usuario"/>;
+    const createNewModal:CreateModalProps = (
+        {
+            body: <></>,
+            header: <></>,
+            primaryButtonEvent: () => {},
+            footer: <></>
+        }
+    )
+    return <Table key={'team'} data={team} columns={columns} placeholder="usuario" newModalContent={createNewModal}/>;
 }
