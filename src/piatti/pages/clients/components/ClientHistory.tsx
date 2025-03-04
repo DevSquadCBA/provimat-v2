@@ -1,5 +1,5 @@
 import { IClient } from "@/interfaces/dbModels"
-import { IHistorySales } from "@/interfaces/interfaces"
+import { CreateModalProps, IHistorySales } from "@/interfaces/interfaces"
 import { Table } from "@/piatti/components/Table"
 import { setSales } from "@/reducers/localDataReducer"
 import API from "@/services/API"
@@ -9,8 +9,8 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { reducers } from "@/store"
-import { SaleHistory } from "./SaleHistory"
-import { changeVisibility } from "@/reducers/modalsSlice"
+import { SaleHistoryModal } from "./SaleHistoryModal"
+import { changeVisibilityModalHistory } from "@/reducers/modalsSlice"
 import moment from "moment"
 import { Avatar } from "primereact/avatar"
 import { SaleStates } from "@/interfaces/enums"
@@ -28,7 +28,7 @@ export function ClientHistory({client}:Props) {
     const {modalHistoryVisible,modalHistorySale} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalHistoryVisible: boolean,modalHistorySale: null| IHistorySales, stateSelected: string});
     const handleClick = (event:DataTableRowClickEvent)=>{
         if (event.data && 'id' in event.data) {
-            dispatch(changeVisibility({modalHistoryVisible: true, modalHistorySale: event.data as IHistorySales}));
+            dispatch(changeVisibilityModalHistory({modalHistoryVisible: true, modalHistorySale: event.data as IHistorySales}));
         }
     }
     const dispatch = useDispatch();
@@ -69,11 +69,18 @@ export function ClientHistory({client}:Props) {
         { isKey: false, order: false, field: 'productsCount', header: 'Num Productos' },
         { isKey: false, order: false, field: 'granTotal', header: 'Total' },
     ]
+    const createNewModal:CreateModalProps = (
+            {
+                body: <></>,
+                header: <></>,
+                primaryButtonEvent: () => {},
+                footer: <></>
+            }
+        )
     return <> 
         {client &&
-            // <>Soy el historial de {client.name}</>
-            <Table key={'clientHistory'} data={sales} columns={columns} onRowClick={handleClick}></Table>
+            <Table key={'clientHistory'} data={sales} columns={columns} onRowClick={handleClick} placeholder="Venta" newModalContent={createNewModal}></Table>
         }
-        {(modalHistoryVisible && <SaleHistory sale={modalHistorySale!}></SaleHistory>)}
+        {(modalHistoryVisible && <SaleHistoryModal sale={modalHistorySale!}></SaleHistoryModal>)}
     </>
 }

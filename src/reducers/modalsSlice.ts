@@ -5,19 +5,21 @@ interface ModalsState {
     modalHistoryVisible: boolean;
     modalHistorySale: IHistorySales | null;
     stateSelected: string;
+    modalCreationVisible: boolean;
 }
 
 const initialState: ModalsState = {
-    modalHistoryVisible: false,
     modalHistorySale: null,
     stateSelected: '',
+    modalHistoryVisible: false,
+    modalCreationVisible: false
 };
 
 export const modalsSlice = createSlice({
     name: "modals",
     initialState,
     reducers: {
-        changeVisibility: (state, action: PayloadAction<{ modalHistoryVisible: boolean; modalHistorySale: IHistorySales | null }>) => {
+        changeVisibilityModalHistory: (state, action: PayloadAction<{ modalHistoryVisible: boolean; modalHistorySale: IHistorySales | null }>) => {
             return {
                 ...state,
                 modalHistoryVisible: action.payload.modalHistoryVisible,
@@ -31,9 +33,19 @@ export const modalsSlice = createSlice({
                 stateSelected: action.payload,
             };
         },
+        changeVisibilityModalCreation: (state, action: PayloadAction<{ modalCreationVisible: boolean }>) => {
+            return {
+                ...state,
+                modalCreationVisible: action.payload.modalCreationVisible,
+            };
+        }
     },
 });
 
-export const { changeVisibility, changeState } = modalsSlice.actions;
+export const { 
+    changeState,
+    changeVisibilityModalHistory,
+    changeVisibilityModalCreation
+ } = modalsSlice.actions;
 
 export default modalsSlice.reducer;

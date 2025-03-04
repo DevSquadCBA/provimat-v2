@@ -8,18 +8,26 @@ import {  useState } from 'react';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 
 import './Table.scss';
-import { TableColumns } from '@/interfaces/interfaces';
+import { CreateModalProps, TableColumns } from '@/interfaces/interfaces';
+import { Button } from 'primereact/button';
+import { reducers } from '@/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeVisibilityModalCreation } from '@/reducers/modalsSlice';
+import { CreateModal } from '../modals/creational/CreateModal';
 
 type Props ={
     placeholder?: string
     columns:TableColumns[]
     data: DataTableValueArray,
     onRowClick?: (e:DataTableRowClickEvent) => void,
+    newModalContent: CreateModalProps,
     footer?: JSX.Element,
     minimalQuantity?: number
 }
 
-export function Table({columns, data, placeholder, onRowClick, footer,minimalQuantity=30}:Props) {
+export function Table({columns, data, placeholder, onRowClick, footer,newModalContent, minimalQuantity=30}:Props) {
+    const {modalCreationVisible} = useSelector((state:reducers) => state.modalsSlice as unknown as {modalCreationVisible: boolean});
+    const dispatch = useDispatch();
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
     const [selectedQty, setSelectedQty] = useState<number>(minimalQuantity);
     const [filters, setFilters] = useState<DataTableFilterMeta>({
@@ -37,6 +45,9 @@ export function Table({columns, data, placeholder, onRowClick, footer,minimalQua
         const value = e.target.value;
         setSelectedQty(Number(value));
     }
+    const handleShowNewModal = ()=>{
+        dispatch(changeVisibilityModalCreation({modalCreationVisible: true}));
+    }
     const renderHeader = () => {
         return (
             <div className='flex justify-content-between'>
@@ -46,8 +57,9 @@ export function Table({columns, data, placeholder, onRowClick, footer,minimalQua
                 <div className="flex justify-content-end">
                     <IconField iconPosition="left">
                         <InputIcon className="pi pi-search" />
-                        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder={placeholder} />
+                        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder={'Buscar ' +placeholder} />
                     </IconField>
+                    <Button rounded icon="pi pi-plus" onClick={handleShowNewModal} label={"Agregar "+ placeholder}></Button>
                 </div>
             </div>
         );
@@ -55,7 +67,8 @@ export function Table({columns, data, placeholder, onRowClick, footer,minimalQua
     const header = renderHeader();
     const key = columns.find((column)=>column.isKey)?.field;
     const order = columns.find((column)=>column.order)?.field;
-    return <DataTable 
+    
+    return <><DataTable 
                 key="tabla" 
                 sortField={order} 
                 sortOrder={-1} 
@@ -78,5 +91,13 @@ export function Table({columns, data, placeholder, onRowClick, footer,minimalQua
                     header={column.header} 
                     dataType={column.dataType? column.dataType : 'text'}
                 />)}
-        </DataTable>;
+        </DataTable>
+        {modalCreationVisible &&
+            <CreateModal 
+                body={newModalContent.body}
+                header={newModalContent.header}
+                primaryButtonEvent={newModalContent.primaryButtonEvent}
+                footer={newModalContent.footer}
+            />}
+        </>
 }

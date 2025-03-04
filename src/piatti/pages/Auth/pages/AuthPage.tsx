@@ -18,7 +18,6 @@ export function AuthPage() {
         setLoginSended(true);
         try{
             const token = await API.Auth.login({username, password });
-            console.log('token',token)
             setToken(token);
             navigate("/clientes");          
             setLoginSended(false);
