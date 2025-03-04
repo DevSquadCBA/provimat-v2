@@ -3,6 +3,7 @@ import { CreateModalProps } from "@/interfaces/interfaces";
 import { Table } from "@/piatti/components/Table";
 import { setProviders } from "@/reducers/localDataReducer";
 import { changeVisibilityModalCreation } from "@/reducers/modalsSlice";
+import { showToast } from "@/reducers/toastSlice";
 import API from "@/services/API";
 import { getUserData, removeToken } from "@/services/common";
 import { Button } from "primereact/button";
@@ -60,8 +61,9 @@ export function ProvidersTable() {
         const form = (document.getElementById('createProviderForm') as HTMLFormElement);
         e.preventDefault();
         if (!form.reportValidity()) return;
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData);
+        const data = Object.fromEntries(
+            new FormData(form).entries()
+        );
         (async () => {
             try{
                 const userData = getUserData();
@@ -73,6 +75,7 @@ export function ProvidersTable() {
                 const response = await API.Provider.create(userData.token,data);
                 dispatch(setProviders([...providers, response]));
                 dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
+                dispatch(showToast({ severity: "success", summary: "Proveedor creado", detail: "Se ha creado el nuevo proveedor", life: 3000 }));
             }catch(e){
                 removeToken();
                 navigate('/');
@@ -85,21 +88,21 @@ export function ProvidersTable() {
         <div className="flex flex_column gap_2 mt_2">
             <div className="flex flex_row space-between">
                 <FloatLabel>
-                    <InputText id="name" required/>
+                    <InputText id="name" name="name" required/>
                     <label htmlFor="name">Nombre</label>
                 </FloatLabel>
                 <FloatLabel>
-                    <InputText id="daysDelays" required keyfilter={'int'}/>
+                    <InputText id="daysDelays" name="daysDelays" required keyfilter={'int'}/>
                     <label htmlFor="daysDelays">Días de demora habitual</label>
                 </FloatLabel>
             </div>
             <div className="flex flex_row space-between">
                 <FloatLabel>
-                    <InputText id="fantasyName" required/>
+                    <InputText id="fantasyName" name="fantasyName" required/>
                     <label htmlFor="fantasyName">Nombre Fantasía</label>
                 </FloatLabel>
                 <FloatLabel>
-                    <InputText id="cuit_cuil" required keyfilter={/^[0-9]*-*$/}/>
+                    <InputText id="cuit_cuil" name="cuit_cuil" required keyfilter={/^[0-9]*-*$/}/>
                     <label htmlFor="cuit_cuil">Cuit/Cuil</label>
                 </FloatLabel>
             </div>
@@ -108,27 +111,27 @@ export function ProvidersTable() {
         <div className="flex flex_column gap_2 mt_2">
             <div className="flex flex_row space-between">
                 <FloatLabel>
-                    <InputText id="phone"/>
+                    <InputText id="phone" name="phone"/>
                     <label htmlFor="phone">Teléfono</label>
                 </FloatLabel>
                 <FloatLabel>
-                    <InputText id="email" />
+                    <InputText id="email" name="email" />
                     <label htmlFor="email">Email</label>
                 </FloatLabel>
             </div>
             <div style={{ padding: "0 0"}}>
                 <FloatLabel>
-                    <InputText id="address" />
+                    <InputText id="address" name="address" />
                     <label htmlFor="address">Dirección</label>
                 </FloatLabel>
             </div>
             <div className="flex flex_row space-between">
                 <FloatLabel>
-                    <InputText id="province" />
+                    <InputText id="province" name="province" />
                     <label htmlFor="province">Provincia</label>
                 </FloatLabel>
                 <FloatLabel>
-                    <InputText id="locality" />
+                    <InputText id="locality" name="locality" />
                     <label htmlFor="locality">Localidad</label>
                 </FloatLabel>
             </div>
