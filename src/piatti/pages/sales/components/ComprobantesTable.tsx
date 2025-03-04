@@ -29,7 +29,6 @@ export function ComprobantesTable() {
                     return;
                 }
                 const response = await API.Sale.get('comprobante',userData.token);
-                console.log(response);
                 dispatch(setSales(response));
             }catch(e){
                 removeToken();

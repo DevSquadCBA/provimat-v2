@@ -22,7 +22,7 @@ export function Sidebar() {
                 navigate(`/productos`);
                 break;
             case 'sales':
-                navigate(`/ventas/presupuesto`);
+                navigate(`/ventas/presupuestos`);
                 break;
             case 'team':
                 navigate(`/equipo`);
@@ -32,16 +32,16 @@ export function Sidebar() {
         }
     }
     const handleSubmenuClick = (submenu:string) => {
-        dispatch(setSelectedView({selectedView:submenu,previous:'empty',next:'empty'}));
+        dispatch(setSelectedView({selectedView:'sales',previous:'products',next:'submenu', submenu:submenu}));
         switch(submenu) {
-            case 'presupuesto':
-                navigate(`/ventas/presupuesto`);
+            case 'presupuestos':
+                navigate(`/ventas/presupuestos`);
                 break;
-            case 'proforma':
-                navigate(`/ventas/proforma`);
+            case 'proformas':
+                navigate(`/ventas/proformas`);
                 break;
-            case 'comprobante':
-                navigate(`/ventas/comprobante`);
+            case 'comprobantes':
+                navigate(`/ventas/comprobantes`);
                 break;
             default:
                 break;
@@ -49,11 +49,12 @@ export function Sidebar() {
     }
 
     const setClass = ({selectedView, previous, next, submenu}:MenuView, id:string) => {
+        console.log(selectedView, previous, next, submenu);
         if(selectedView==id) return 'selected';
         if(previous==id) return 'previous';
         if(next==id) return 'next';
-        if(submenu==id) {
-            console.log('submenu',submenu);
+        if(submenu != 'empty') {
+            if(submenu==id) return 'selected';
         }
         return '';
     }
@@ -68,12 +69,12 @@ export function Sidebar() {
                         <li onClick={()=>handleClick('empty','providers','clients', 'empty' )}     id="clients"   className={`menu_item ${setClass(state, 'clients')}`}   ><button><div className="menu_item__logo"></div><span>Clientes</span></button></li>
                         <li onClick={()=>handleClick('clients','products','providers', 'empty')}   id="providers" className={`menu_item ${setClass(state, 'providers')}`} ><button><div className="menu_item__logo"></div><span>Proveedores</span></button></li>
                         <li onClick={()=>handleClick('providers', 'sales','products', 'empty')}    id="products"  className={`menu_item ${setClass(state, 'products')}`}  ><button><div className="menu_item__logo"></div><span>Productos</span></button></li>
-                        <li onClick={()=>handleClick('products', 'submenu', 'sales', 'presupuesto')}  id="sales"     className={`menu_item ${setClass(state, 'sales')}`}     ><button><div className="menu_item__logo"></div><span>Ventas</span></button></li>
+                        <li onClick={()=>handleClick('products', 'submenu', 'sales', 'presupuestos')}  id="sales"     className={`menu_item ${setClass(state, 'sales')}`}     ><button><div className="menu_item__logo"></div><span>Ventas</span></button></li>
                         <li id="submenu" className={`menu_item ${setClass(state, 'submenu')}`}  >
                             <ul className="sidebar__submenu__list" id="submenu"> 
-                                <li onClick={()=>handleSubmenuClick('presupuesto')}  id="presupuesto" className={`submenu_item ${setClass(state, 'presupuesto')}`} ><button><div className="submenu_item__logo"></div><span>Presupuesto</span></button></li>
-                                <li onClick={()=>handleSubmenuClick('proforma')}  id="proforma" className={`submenu_item ${setClass(state, 'proforma')}`} ><button><div className="submenu_item__logo"></div><span>Proforma</span></button></li>
-                                <li onClick={()=>handleSubmenuClick('comprobante')}  id="comprobante" className={`submenu_item ${setClass(state, 'comprobante')}`} ><button><div className="submenu_item__logo"></div><span>Comprobante</span></button></li>
+                                <li onClick={()=>handleSubmenuClick('presupuestos')}  id="presupuestos" className={`submenu_item ${setClass(state, 'presupuestos')}`} ><button><div className="submenu_item__logo"></div><span>Presupuesto</span></button></li>
+                                <li onClick={()=>handleSubmenuClick('proformas')}  id="proformas" className={`submenu_item ${setClass(state, 'proformas')}`} ><button><div className="submenu_item__logo"></div><span>Proforma</span></button></li>
+                                <li onClick={()=>handleSubmenuClick('comprobantes')}  id="comprobantes" className={`submenu_item ${setClass(state, 'comprobantes')}`} ><button><div className="submenu_item__logo"></div><span>Comprobante</span></button></li>
                             </ul>
                         </li>
                         <li onClick={()=>handleClick('sales', 'empty', 'team', 'empty')}     id="team"      className={`menu_item ${setClass(state, 'team')}`}      ><button><div className="menu_item__logo"></div><span>Equipo</span></button></li>

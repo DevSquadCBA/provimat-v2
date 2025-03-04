@@ -134,8 +134,6 @@ div#root {
         ul.sidebar__submenu__list{
           background-color: $primaryLightColor;
           border-radius: 0 2rem 0 2rem;
-          
-
           button {
             background-color: transparent;
             font-family: var(--font-family);
@@ -146,6 +144,15 @@ div#root {
             color: var(--primary-text-color);
             font-size: x-small;
           }
+
+          li.submenu_item:hover button{
+            cursor: pointer;
+            width: max-content;
+          }
+          
+          li.submenu_item.selected span{
+            color: var(--primary-dark-color);
+          }
         }
       }
     }
@@ -153,7 +160,11 @@ div#root {
 }
 
 
-
+button.updateToProforma, button.updateToComprobante {
+  padding: 0.2rem 0.7rem;
+  border-radius: 0.8rem;
+  font-variant-caps: all-small-caps;
+}
 
 .content {
   position: fixed;

@@ -15,6 +15,10 @@ export const store = configureStore({
         localData: localDataSlice.reducer,
         modalsSlice: modalsSlice.reducer
     },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
 });
 
 
