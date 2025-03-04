@@ -54,7 +54,7 @@ export function Table({columns, data, placeholder, onRowClick, footer,newModalCo
                 <div className="flex justify-content-start">
                     <Dropdown options={[30,50,100,500,1000]} value={selectedQty} onChange={onQtyChange} />
                 </div>
-                <div className="flex justify-content-end">
+                <div className="flex justify-content-end gap-2">
                     <IconField iconPosition="left">
                         <InputIcon className="pi pi-search" />
                         <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder={'Buscar ' +placeholder} />
