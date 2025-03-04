@@ -4,7 +4,7 @@ import { reducers } from "@/store";
 import { Dialog } from "primereact/dialog";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
-import { formatPrice, getWeightOfState} from "@/services/common";
+import { getWeightOfState} from "@/services/common";
 import { SaleStates } from "@/interfaces/enums";
 import '../style/SaleHistory.scss';
 import { Table } from "@/piatti/components/Table";
@@ -19,7 +19,7 @@ export function SaleHistory({sale}:Props) {
     const dispatch = useDispatch();
     const {modalHistoryVisible,stateSelected} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalHistoryVisible: boolean,modalHistorySale: null| IHistorySales, stateSelected: string});
     const finishedSale = (<p><span className="text-important">Plazo de entrega:</span> {moment(sale.deadline?.toString()).format('DD/MM/YYYY')}</p>)
-    const activeSale =   (<div className="active-sale">
+    const activeSale = (<div className="active-sale">
         <p className="delivery-date"><span className="text-important">Entregado:</span> {moment(sale.deadline?.toString()).format('DD/MM/YYYY')}</p>
         <p className="days-remaining"><span className="text-important">Días restantes:</span> {sale.estimatedDays?.toString()}</p>
     </div>)
@@ -36,7 +36,7 @@ export function SaleHistory({sale}:Props) {
     const footerElementTable = (
         <p className="modal-container">
             <span className="text-important big-text">Total:</span>
-            <span className="text-important big-text" style={{color: 'var(--secondaryTextColor)'}}>$ {formatPrice(sale.granTotal)}</span>
+            <span className="text-important big-text" style={{color: 'var(--secondaryTextColor)'}}> {(sale.granTotal)}</span>
         </p>
     )
     const handleSaveButton = () => {
@@ -80,7 +80,7 @@ export function SaleHistory({sale}:Props) {
         { isKey: false,  order: false, field: 'SaleProduct.quantity', header: 'Cantidad' },
         { isKey: false,  order: false, field: 'salePrice', header: 'Precio', dataType: 'numeric' },
     ]
-    const formattedProducts = sale.products.map((product) => ({...product,salePrice: (<span>$ {formatPrice(product.salePrice)}</span>)}));
+    const formattedProducts = sale.products.map((product) => ({...product,salePrice: (<span>{(product.salePrice)}</span>)}));
     return (
         <Dialog className="modal-history" header={headerElement} footer={footerElement}
              visible={modalHistoryVisible} 

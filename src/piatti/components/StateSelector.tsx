@@ -23,7 +23,7 @@ export function StateSelector({sale}:Props){
     const selectedStateTemplate = (option:StateOption) => {
         return (
             <div className="state-selector_option">
-                <Avatar className="circle-state" style={{ backgroundColor: getColorOfState(option.value as SaleStates) }} shape="circle"></Avatar>
+                <Avatar className="circle-state" style={{ backgroundColor: getColorOfState(option.value as SaleStates) || '#19E052' }} shape="circle"></Avatar>
                 <span className="text-state">{option.label}</span>
             </div>
         );

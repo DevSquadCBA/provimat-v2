@@ -3,7 +3,7 @@ import { IHistorySales } from "@/interfaces/interfaces"
 import { Table } from "@/piatti/components/Table"
 import { setSales } from "@/reducers/localDataReducer"
 import API from "@/services/API"
-import { getUserData, removeToken } from "@/services/common"
+import { formatPrice, getColorOfState, getTranslationOfState, getUserData, removeToken } from "@/services/common"
 import { DataTableRowClickEvent } from "primereact/datatable"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -11,6 +11,9 @@ import { useNavigate } from "react-router-dom"
 import { reducers } from "@/store"
 import { SaleHistory } from "./SaleHistory"
 import { changeVisibility } from "@/reducers/modalsSlice"
+import moment from "moment"
+import { Avatar } from "primereact/avatar"
+import { SaleStates } from "@/interfaces/enums"
 
 type Props = {
     client:IClient & { id: number } | undefined
@@ -25,15 +28,20 @@ export function ClientHistory({client}:Props) {
     const {modalHistoryVisible,modalHistorySale} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalHistoryVisible: boolean,modalHistorySale: null| IHistorySales, stateSelected: string});
     const handleClick = (event:DataTableRowClickEvent)=>{
         if (event.data && 'id' in event.data) {
-            const orderId = event.data.id;
-            console.log(orderId);
             dispatch(changeVisibility({modalHistoryVisible: true, modalHistorySale: event.data as IHistorySales}));
-            // show a modal with the ordeer
-            //navigate(`/ventas/${orderId}`);
         }
     }
     const dispatch = useDispatch();
-    const sales = useSelector((state:RootState)=>state.localData.sales);
+    const sales = useSelector((state:RootState)=>state.localData.sales)
+            .map(e=>({
+                    ...e,
+                    createdAt: moment(e.createdAt).format('DD/MM/YYYY'),
+                    granTotal: '$ '+ formatPrice(e.granTotal),
+                    stateFormatted: <div className="state-selector_option">
+                                    <Avatar className="circle-state" style={{ backgroundColor: getColorOfState(e.state as SaleStates) || '#19E052' }} shape="circle"></Avatar>
+                                    <span className="text-state">{getTranslationOfState(e.state||'')}</span>
+                                </div>,
+                }));
     
     useEffect(() => {
         (async()=>{
@@ -55,7 +63,7 @@ export function ClientHistory({client}:Props) {
     },[dispatch,navigate, client?.id]);
     const columns = [
         { isKey: true,  order: false, field: 'id', header: 'Referencia' },
-        { isKey: false, order: false, field: 'state', header: 'Estado' },
+        { isKey: false, order: false, field: 'stateFormatted', header: 'Estado' },
         { isKey: false, order: false, field: 'createdAt', header: 'Fecha de Inicio' },
         { isKey: false, order: false, field: 'distinctProviders', header: 'Proveedores involucrados' },
         { isKey: false, order: false, field: 'productsCount', header: 'Num Productos' },
