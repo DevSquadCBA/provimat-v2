@@ -6,6 +6,7 @@ import { getUserData, removeToken } from "@/services/common";
 import { ISale } from "@/interfaces/dbModels";
 import { Table } from "@/piatti/components/Table";
 import { useNavigate } from "react-router-dom";
+import { CreateModalProps } from "@/interfaces/interfaces";
 
 interface RootState {
     localData: {
@@ -44,12 +45,16 @@ export function ComprobantesTable() {
         { isKey: false, order: false, field: 'estimatedDays', header: 'Estado'},
         { isKey: false, order: false, field: 'createdAt', header: 'Fecha De Inicio'},
         { isKey: false, order: false, field: 'total', header: 'Total'},
-        
-
-         
-
-
     ]
-    return <Table key={'comprobante'} data={comprobantes} columns={columns} placeholder="Buscar comprobante" />;
+    const createNewModal:CreateModalProps = (
+            {
+                header: <h2>Nuevo Proveedor</h2>,
+                body: <></>,
+                primaryButtonEvent: () => {},
+                resizable: false,
+                footer: <div></div>
+            }
+        )
+    return <Table key={'comprobante'} data={comprobantes} columns={columns} placeholder="venta" newModalContent={createNewModal} />;
 }        
 
