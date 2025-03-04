@@ -8,6 +8,9 @@ import { DataTableRowClickEvent } from "primereact/datatable"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { reducers } from "@/store"
+import { SaleHistory } from "./SaleHistory"
+import { changeVisibility } from "@/reducers/modalsSlice"
 
 type Props = {
     client:IClient & { id: number } | undefined
@@ -19,10 +22,12 @@ interface RootState {
 }
 export function ClientHistory({client}:Props) {
     const navigate = useNavigate();
+    const {modalHistoryVisible,modalHistorySale} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalHistoryVisible: boolean,modalHistorySale: null| IHistorySales, stateSelected: string});
     const handleClick = (event:DataTableRowClickEvent)=>{
         if (event.data && 'id' in event.data) {
             const orderId = event.data.id;
             console.log(orderId);
+            dispatch(changeVisibility({modalHistoryVisible: true, modalHistorySale: event.data as IHistorySales}));
             // show a modal with the ordeer
             //navigate(`/ventas/${orderId}`);
         }
@@ -61,5 +66,6 @@ export function ClientHistory({client}:Props) {
             // <>Soy el historial de {client.name}</>
             <Table key={'clientHistory'} data={sales} columns={columns} onRowClick={handleClick}></Table>
         }
+        {(modalHistoryVisible && <SaleHistory sale={modalHistorySale!}></SaleHistory>)}
     </>
 }

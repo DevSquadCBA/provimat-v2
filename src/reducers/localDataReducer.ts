@@ -11,7 +11,7 @@ const initialState: LocalData = {
     clientLastUpdated: new Date().getTime(),
     providerLastUpdated: new Date().getTime(),
     saleLastUpdated: new Date().getTime(),
-    saleProductLastUpdated: new Date().getTime()
+    saleProductLastUpdated: new Date().getTime(),
 };
 
 export const localDataSlice = createSlice({
