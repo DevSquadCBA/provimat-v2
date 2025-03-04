@@ -1,3 +1,8 @@
+import { LayoutContainerTable } from "@/piatti/layout/LayoutContainerTable";
+import { ProformasTable } from "../components/ProformasTable";
 export function ProformasPage() {
-    return <>soy proformas</>
+
+    return <LayoutContainerTable title="Listado de Proformas" tableComponents={<></>}>
+        <ProformasTable></ProformasTable>
+    </LayoutContainerTable>
 }
