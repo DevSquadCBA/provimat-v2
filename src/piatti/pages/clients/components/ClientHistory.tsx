@@ -32,16 +32,18 @@ export function ClientHistory({client}:Props) {
         }
     }
     const dispatch = useDispatch();
-    const sales = useSelector((state:RootState)=>state.localData.sales)
-            .map(e=>({
+    let sales = useSelector((state:RootState)=>state.localData.sales)
+    console.log(sales);
+    if(sales)
+        sales = sales.map(e=>({
                     ...e,
                     createdAt: moment(e.createdAt).format('DD/MM/YYYY'),
-                    granTotal: '$ '+ formatPrice(e.granTotal),
+                    granTotal: '$ '+ formatPrice(e.total || 0),
                     stateFormatted: <div className="state-selector_option">
                                     <Avatar className="circle-state" style={{ backgroundColor: getColorOfState(e.state as SaleStates) || '#19E052' }} shape="circle"></Avatar>
                                     <span className="text-state">{getTranslationOfState(e.state||'')}</span>
                                 </div>,
-                }));
+                })) as unknown as IHistorySales[];
     
     useEffect(() => {
         (async()=>{

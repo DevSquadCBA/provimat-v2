@@ -18,9 +18,9 @@ type Props = {
 export function SaleHistoryModal({sale}:Props) {
     const dispatch = useDispatch();
     const {modalHistoryVisible,stateSelected} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalHistoryVisible: boolean,modalHistorySale: null| IHistorySales, stateSelected: string});
-    const finishedSale = (<p><span className="text-important">Plazo de entrega:</span> {moment(sale.deadline?.toString()).format('DD/MM/YYYY')}</p>)
+    const finishedSale = (<p><span className="text-important">Entregado:</span> {moment(sale.deadline?.toString()).format('DD/MM/YYYY')}</p>)
     const activeSale = (<div className="active-sale">
-        <p className="delivery-date"><span className="text-important">Entregado:</span> {moment(sale.deadline?.toString()).format('DD/MM/YYYY')}</p>
+        <p className="delivery-date"><span className="text-important">Plazo de entrega:</span> {moment(sale.deadline?.toString()).format('DD/MM/YYYY')}</p>
         <p className="days-remaining"><span className="text-important">Días restantes:</span> {sale.estimatedDays?.toString()}</p>
     </div>)
     const headerElement = (
