@@ -1,5 +1,5 @@
 import { CreateModalProps, IHistorySales, TableColumns } from "@/interfaces/interfaces"
-import { changeVisibilityModalHistory, changeVisibilityModalPresupuestoToProforma } from "@/reducers/modalsSlice";
+import { changeVisibilityModalHistory, changeVisibilityModalModalProformaComprobante, changeVisibilityModalPresupuestoToProforma } from "@/reducers/modalsSlice";
 import { reducers } from "@/store";
 import { Dialog } from "primereact/dialog";
 import { useDispatch, useSelector } from "react-redux";
@@ -72,7 +72,8 @@ export function SaleHistoryModal({sale}:Props) {
             dispatch(changeVisibilityModalHistory({modalHistoryVisible: false, modalHistorySale: null}));
         }
         if(weight == 1 ) { // si es proforma
-            console.log('Abrir modal de proforma a COMPROBANTE');
+            dispatch(changeVisibilityModalModalProformaComprobante({modalProformaToComprobanteVisible: true, idSaleForModals: sale.id as number}));
+            dispatch(changeVisibilityModalHistory({modalHistoryVisible: false, modalHistorySale: null}));
         }
         if(weight >= 2){ // si es comprobante o despues
             console.log('Permitir guardar el cambio de estado');
