@@ -1,5 +1,5 @@
 import { CreateModalProps, IHistorySales, TableColumns } from "@/interfaces/interfaces"
-import { changeVisibilityModalHistory } from "@/reducers/modalsSlice";
+import { changeVisibilityModalHistory, changeVisibilityModalPresupuestoToProforma } from "@/reducers/modalsSlice";
 import { reducers } from "@/store";
 import { Dialog } from "primereact/dialog";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,7 +52,7 @@ export function SaleHistoryModal({sale}:Props) {
         </div>  
     );
     const footerElementTable = ()=>{
-        if(sale.paid == sale.total)
+        if(sale.paid == sale.total || sale.state == SaleStates.presupuesto)
             return (
                 <p className="modal-container">
                     <span className="text-important big-text">Total:</span>
@@ -68,7 +68,8 @@ export function SaleHistoryModal({sale}:Props) {
         const weight = getWeightOfState(sale.state || '');
         const newWeight = getWeightOfState(stateSelected || '');
         if(weight == 0){ //si es presupuesto
-            console.log('Abrir modal de presupuesto a PROFORMA');
+            dispatch(changeVisibilityModalPresupuestoToProforma({modalPresupuestoToProformaVisible: true, idSaleForModals: sale.id as number}));
+            dispatch(changeVisibilityModalHistory({modalHistoryVisible: false, modalHistorySale: null}));
         }
         if(weight == 1 ) { // si es proforma
             console.log('Abrir modal de proforma a COMPROBANTE');
@@ -93,7 +94,7 @@ export function SaleHistoryModal({sale}:Props) {
             dispatch(changeVisibilityModalHistory({modalHistoryVisible: true, modalHistorySale: updatePaid}));
             dispatch(showToast({severity: 'success', summary: 'Pago agregado', detail: 'El pago se agrego correctamente'}));
         }catch(e){
-            console.log(e);
+            dispatch(showToast({severity: 'error', summary: 'Error', detail: 'Ocurrio un error al agregar el pago'}));
         }
     }
     const getLabelOfButton = () => {
@@ -111,7 +112,7 @@ export function SaleHistoryModal({sale}:Props) {
     const footerElement = (<div>
         {footerElementTable()}
         <p className="modal-footer">
-            {sale.paid != sale.total &&
+            {sale.paid != sale.total || sale.state == SaleStates.presupuesto &&
             <Button onClick={handleAddPaymentButton}>Agregar un pago</Button>
             }
             <Button onClick={handleSaveButton}>{getLabelOfButton()}</Button>
@@ -135,11 +136,13 @@ export function SaleHistoryModal({sale}:Props) {
         }
     )
     return (
-        <Dialog className="modal-history" header={headerElement} footer={footerElement}
-             visible={modalHistoryVisible} 
-             style={{ width: '50vw' }} 
-             onHide={() => {if (!modalHistoryVisible) return; dispatch(changeVisibilityModalHistory({modalHistoryVisible: false,modalHistorySale:null})); }}>
-            <Table columns={columns} data={formattedProducts} minimalQuantity={5} newModalContent={createNewModal}></Table>
-        </Dialog>
+        <>
+            <Dialog className="modal-history" header={headerElement} footer={footerElement}
+                visible={modalHistoryVisible} 
+                style={{ width: '50vw' }} 
+                onHide={() => {if (!modalHistoryVisible) return; dispatch(changeVisibilityModalHistory({modalHistoryVisible: false,modalHistorySale:null})); }}>
+                <Table columns={columns} data={formattedProducts} minimalQuantity={5} newModalContent={createNewModal}></Table>
+            </Dialog>
+        </>
     )
 }

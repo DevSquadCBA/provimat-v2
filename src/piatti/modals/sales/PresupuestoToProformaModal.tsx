@@ -26,8 +26,12 @@ export function PresupuestoToProformaModal(){
     const montoAPagar = useRef(null as unknown as HTMLInputElement);
     const handleClick = ()=>{
         if(!montoAPagar.current) return;
-        const monto = parseInt(montoAPagar.current.attributes.getNamedItem('aria-valuenow')?.value as unknown as string);
+        const monto = parseInt(montoAPagar.current.value.replace(/\$|\.|,/g,'').trim() as unknown as string) || 0;
         const toPay = salesProducts.total - salesProducts.paid;
+        console.log({
+            monto,
+            toPay
+        })
         if((toPay != 0) && (typeof monto !== 'number' || monto<1)){
             dispatch(showToast({ severity: "error", summary: "Error", detail: "El monto debe ser mayor a 1", life: 3000 }));
             return
@@ -35,7 +39,6 @@ export function PresupuestoToProformaModal(){
         salesProducts.paid = +monto;
         salesProducts.state= SaleStates.proforma;
         salesProducts.products;
-        console.log(salesProducts);
         (async () => {
             try {
                 const userData = getUserData();
@@ -48,7 +51,10 @@ export function PresupuestoToProformaModal(){
                 dispatch(removeSaleFromSales({id: idSaleForModals}));
                 dispatch(changeVisibilityModalPresupuestoToProforma({modalPresupuestoToProformaVisible: false, idSaleForModals: 0}));
                 dispatch(showToast({ severity: "success", summary: "Presupuesto actualizado", detail: "Se ha actualizado el presupuesto", life: 3000 }));
-                
+                // refresh the page
+                setTimeout(() => {
+                    window.location.reload();
+                },500)
             } catch (e) {
                 removeToken();
                 navigate('/');
