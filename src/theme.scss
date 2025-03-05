@@ -18,6 +18,8 @@ $primaryTextColor: #ffffff !default;
 $primaryBackgroundColor : #F4F5FA !default;
 $secondaryTextColor: #000 !default;
 $menuSelectedColor: #e85300 !default;
+$rojo: #E02D39;
+$disabled: #89A9A4;
 $fontFamily: "Sofia Sans", sans-serif !default;
 $rounded-radius: 2rem;
 
@@ -33,6 +35,8 @@ $rounded-radius: 2rem;
   --primary-background-color: #{$primaryBackgroundColor}!important;
   --menu-selected-color: #{$menuSelectedColor}!important;
   --font-family: #{$fontFamily};
+  --rojo: #{$rojo};
+  --disabled: #{$disabled};
   --aire: 1rem;
   --rounded-radius: #{$rounded-radius};
 

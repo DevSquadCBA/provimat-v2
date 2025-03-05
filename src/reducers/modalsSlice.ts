@@ -8,6 +8,7 @@ interface ModalsState {
     modalCreationVisible: boolean;
     idSaleForModals: number,
     modalPresupuestoToProformaVisible: boolean;
+    modalProformaToComprobanteVisible: boolean;
 }
 
 const initialState: ModalsState = {
@@ -16,7 +17,8 @@ const initialState: ModalsState = {
     modalHistoryVisible: false,
     modalCreationVisible: false,
     idSaleForModals: 0,
-    modalPresupuestoToProformaVisible: false
+    modalPresupuestoToProformaVisible: false,
+    modalProformaToComprobanteVisible: false
 };
 
 export const modalsSlice = createSlice({
@@ -50,6 +52,13 @@ export const modalsSlice = createSlice({
                 idSaleForModals: action.payload.idSaleForModals
             };
         },
+        changeVisibilityModalModalProformaComprobante:(state, action: PayloadAction<{ modalProformaToComprobanteVisible: boolean, idSaleForModals: number }>) => {
+            return {
+                ...state,
+                modalProformaToComprobanteVisible: action.payload.modalProformaToComprobanteVisible,
+                idSaleForModals: action.payload.idSaleForModals
+            };
+        },
         hideAll(){
             return {
                 ...initialState
@@ -63,7 +72,8 @@ export const {
     hideAll,
     changeVisibilityModalHistory,
     changeVisibilityModalCreation,
-    changeVisibilityModalPresupuestoToProforma
+    changeVisibilityModalPresupuestoToProforma,
+    changeVisibilityModalModalProformaComprobante
  } = modalsSlice.actions;
 
 export default modalsSlice.reducer;

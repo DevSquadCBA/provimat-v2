@@ -148,6 +148,9 @@ class Sale {
     addPayment = async(id:number|undefined,data: unknown,token:string|null)=>{
         return await POST(`${API_URL}/sale/${id}/addPayment`, token,data);
     }
+    updateDetails = async(id:number|undefined, data:unknown, token:string|null)=>{
+        return await POST(`${API_URL}/sale/${id}/updateDetails`, token,data);
+    }
 }
 
 class User {
