@@ -225,3 +225,46 @@ p.icon, .p-input-icon, .p-icon {
     max-height: max-content;
   }
 }
+.confirm-dialog-modal{
+    position: absolute;
+    top: 51%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    height: 23vh;
+    width: 25vw; 
+    background-color: var(--primary-background-color);
+    border-radius: var(--rounded-radius);
+    color: var(--primary-text-color);
+    padding: 1rem 0 0 0;
+    div{
+        padding: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        .confirm-dialog-message{
+            color: var(--primary-dark-color);
+            font-size: 2rem;
+            text-align: center;
+            font-weight: bold;
+        }
+        .buttons-container{
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            button{
+                margin: 0 0.2rem;
+            }
+            .accept{
+              background-color: var(--primary-dark-color)!important;
+            }
+            .reject{
+              background-color: var(--rojo)!important;
+            }
+            .cancel{
+              background-color: var(--disabled)!important;
+            }
+        }
+    }
+}

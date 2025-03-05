@@ -7,7 +7,7 @@ import {  useState } from "react";
 import API from "@/services/API";
 import { Message } from "primereact/message";
 import { useNavigate } from "react-router-dom";
-import { setToken } from "@/services/common";
+import { getUserData, setToken } from "@/services/common";
 import { useDispatch } from "react-redux";
 import { hideAll } from "@/reducers/modalsSlice";
 export function AuthPage() {
@@ -17,6 +17,10 @@ export function AuthPage() {
     const [wrongCredentials, setWrongCredentials] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const userData = getUserData();
+    if(userData && userData.token){
+        navigate("/clientes");
+    }
     // reiniciar casi todos los estados de la app
     dispatch(hideAll());
     const handleLogin = async ()=>{

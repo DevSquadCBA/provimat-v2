@@ -15,6 +15,7 @@ import moment from "moment"
 import { Avatar } from "primereact/avatar"
 import { SaleStates } from "@/interfaces/enums"
 import { PresupuestoToProformaModal } from "@/piatti/modals/sales/PresupuestoToProformaModal"
+import { ProformaToComprobanteModal } from "@/piatti/modals/sales/ProformaToComprobanteModal"
 
 type Props = {
     client:IClient & { id: number } | undefined
@@ -27,7 +28,7 @@ interface RootState {
 export function ClientHistory({client}:Props) {
     const navigate = useNavigate();
     const {modalHistoryVisible,modalHistorySale} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalHistoryVisible: boolean,modalHistorySale: null| IHistorySales, stateSelected: string});
-    const {modalPresupuestoToProformaVisible} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalPresupuestoToProformaVisible: boolean, idSaleForModals: number});
+    const {modalPresupuestoToProformaVisible,modalProformaToComprobanteVisible} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalPresupuestoToProformaVisible: boolean, modalProformaToComprobanteVisible:boolean, idSaleForModals: number});
     const handleClick = (event:DataTableRowClickEvent)=>{
         if (event.data && 'id' in event.data) {
             dispatch(changeVisibilityModalHistory({modalHistoryVisible: true, modalHistorySale: event.data as IHistorySales}));
@@ -86,5 +87,6 @@ export function ClientHistory({client}:Props) {
         }
         {(modalHistoryVisible && <SaleHistoryModal sale={modalHistorySale!}></SaleHistoryModal>)}
         {modalPresupuestoToProformaVisible && <PresupuestoToProformaModal/>}
+        {modalProformaToComprobanteVisible && <ProformaToComprobanteModal/>}
     </>
 }
