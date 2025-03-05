@@ -2,7 +2,7 @@ import { EntityList } from "@/interfaces/enums";
 import { API_URL } from "../piatti/config/config";
 import { convertToVerboseDay } from "./common";
 import { ClientWithBudgetData } from "@/interfaces/dto";
-import { IProvider } from "@/interfaces/dbModels";
+import { IProduct, IProvider } from "@/interfaces/dbModels";
 
 const entity = EntityList.muebles
 
@@ -88,6 +88,39 @@ class Provider {
 class Product {
     all = async (token:string|null)=>{
         return await GET(`${API_URL}/products`, token);
+    }
+    create = async(token:string|null,data:Partial<IProduct>)=>{
+        const response = await fetch(`${API_URL}/product`, {headers: {
+            'Content-Type': 'application/json',
+            'entity': entity,
+            'Authorization': `Bearer ${token}`
+        }, method: 'POST', body: JSON.stringify(data)});
+        const dataResponse = await response.json();
+        if(dataResponse.statusCode == 401) return redirectToLogin();
+        if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
+        return dataResponse;
+    }
+    update = async(token:string|null,data:Partial<IProduct>)=>{
+        const response = await fetch(`${API_URL}/product`, {headers: {
+            'Content-Type': 'application/json',
+            'entity': entity,
+            'Authorization': `Bearer ${token}`
+        }, method: 'PUT', body: JSON.stringify(data)});
+        const dataResponse = await response.json();
+        if(dataResponse.statusCode == 401) return redirectToLogin();
+        if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
+        return dataResponse;
+    }
+    delete = async(token:string|null,id:number)=>{
+        const response = await fetch(`${API_URL}/product/${id}`, {headers: {
+            'Content-Type': 'application/json',
+            'entity': entity,
+            'Authorization': `Bearer ${token}`
+        }, method: 'DELETE'});
+        const dataResponse = await response.json();
+        if(dataResponse.statusCode == 401) return redirectToLogin();
+        if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
+        return dataResponse;
     }
 }
 class Sale {

@@ -200,3 +200,28 @@ button.updateToProforma, button.updateToComprobante {
     }
   }
 }
+span.p-button {
+
+  &-label {
+    font-weight: 400;
+    font-variant: all-small-caps;
+    font-size: large;
+  }
+
+  &-icon {
+    font-variant: all-small-caps;
+    line-height: 1.2;
+  }
+}
+
+p.icon, .p-input-icon, .p-icon {
+  color: var(--primary-color);
+}
+
+.p-dialog {
+  min-height: auto;
+  box-shadow: none;
+  &-content {
+    max-height: max-content;
+  }
+}
