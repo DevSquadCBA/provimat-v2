@@ -1,5 +1,6 @@
 import { SaleStates, StateProduct } from "@/interfaces/enums";
 import { StateOption, UserData } from "@/interfaces/interfaces";
+import moment from "moment";
 
 export function convertToVerboseDay(date: string|null): string|null {
     if (!date) {
@@ -116,6 +117,9 @@ export function getTranslationOfProductState(state: string):string {
 
 export function formatPrice(price: number):string {
     return price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+}
+export function formatDate(date: string):string {
+    return moment(date).format('DD/MM/YYYY');
 }
 
 export const states:StateOption[] = [
