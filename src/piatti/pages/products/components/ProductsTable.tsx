@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, Ref, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts } from "@/reducers/localDataReducer";
 import { changeVisibilityModalCreation } from "@/reducers/modalsSlice";
@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import { CreateModalProps } from "@/interfaces/interfaces";
 import { FloatLabel } from "primereact/floatlabel";
 import { InputText } from "primereact/inputtext";
-import{ InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 
@@ -32,46 +31,29 @@ export function ProductsTable() {
     const [providersFilter, setProvidersFilter] = useState<IProvider[]>([]);
     const [selectedProvider, setSelectedProvider] = useState<IProvider | null>(null);
 
+    const dropdownRef = useRef(null  as unknown); 
+    const formRef = useRef(null as unknown);
+    
 
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const userData = getUserData();
-            if (!userData || !userData.token) {
-              removeToken();
-              navigate("/");
-              return;
-            }
+    const handleProviderChange = useCallback((e: { value: number }) => {
+      const provider = providersFilter.find(p => p.id === e.value) || null;
+      setSelectedProvider(provider)
+        console.log("Proveedor seleccionado", e.value);
+    }, [providersFilter]);
     
-            const productResponse = await API.Product.all(userData.token);
-            const formattedProducts = productResponse.map((product: IProductWithProvider) => ({
-                ...product,
-                provider: product.provider.name
-            }))
-            dispatch(setProducts(formattedProducts));
-    
-            const providerResponse = await API.Provider.all(userData.token);
-            setProvidersFilter(providerResponse);
-          } catch (e) {
-            removeToken();
-            navigate("/");
-          }
-        };   
-        fetchData();
-      }, [dispatch, navigate]);
-
-      const handleProviderChange = (e: { value: number }) => {
-        const provider = providersFilter.find(p => p.id === e.value) || null;
-        setSelectedProvider(provider);
-    };
-    
-    const createProductHandler = (e: React.FormEvent) => {
+    const createProductHandler = useCallback((e: React.FormEvent) => {
         const form = (document.getElementById('createProductForm') as HTMLFormElement);
         e.preventDefault();
         if (!form.reportValidity()) return;
-        const data = Object.fromEntries(
+        const data:IProduct = Object.fromEntries(
             new FormData(form).entries()
-        );
+        ) as unknown as IProduct;
+        if(!data){
+            dispatch(showToast({ severity: "error", summary: "Error", detail: "Los campos de producto están vacíos", life: 3000 }));
+            return;
+        }
+        data.salePrice = parseInt(data.salePrice as unknown as string);
+        data.purchasePrice = parseInt(data.purchasePrice as unknown as string);
         (async () => {
             try {
                 const userData = getUserData();
@@ -80,17 +62,16 @@ export function ProductsTable() {
                     navigate('/');
                     return;
                 }
-                console.log(data);
-                //const response = await API.Product.create(userData.token, data);
-                //dispatch(setProducts([...products, response]));
-                //dispatch(changeVisibilityModalCreation({ modalCreationVisible: false }));
-                //dispatch(showToast({ severity: "success", summary: "Producto creado", detail: "Se ha creado el nuevo producto", life: 3000 }));
+                const response = await API.Product.create(userData.token, data);
+                dispatch(setProducts([...products, response]));
+                dispatch(changeVisibilityModalCreation({ modalCreationVisible: false }));
+                dispatch(showToast({ severity: "success", summary: "Producto creado", detail: "Se ha creado el nuevo producto", life: 3000 }));
             } catch (e) {
                 removeToken();
                 navigate('/');
             }
         })();
-    }
+    }, [dispatch, navigate, products]);
 
     const columns = [
         { isKey: true,  order: false, field: 'id', header: 'ID' },
@@ -98,12 +79,12 @@ export function ProductsTable() {
         { isKey: false, order: false, field: 'name', header: 'Nombre' },
         { isKey: false, order: false, field: 'salePrice', header: 'Precio' },
         { isKey: false, order: false, field: 'provider', header: 'Proveedor', filter: "Buscar por proveedor" },
-        { isKey: false, order: false, field: 'productType', header: 'Tipo' },
         { isKey: false, order: false, field: 'stock', header: 'Stock' },
+        { isKey: false, order: false, field: 'buttonsProducts', header: '' },
     ]
 
-    const body = ( 
-    <form id="createProductForm" className="modal-body" style={{maxWidth: '700px'}}>
+    const body = useMemo(()=>( 
+    <form id="createProductForm" ref={formRef as unknown as Ref<HTMLFormElement>} className="modal-body" style={{maxWidth: '700px'}}>
         <h3>Datos Requeridos</h3>
         <div className="flex flex_column gap_1 mt_2">
             <div className="flex flex_row space-between">
@@ -112,14 +93,15 @@ export function ProductsTable() {
                     <label htmlFor="name">Nombre De Producto</label>
                 </FloatLabel>
                 <FloatLabel>
-                    <InputNumber id="reference" name="reference" mode="decimal" useGrouping={false}  minFractionDigits={0}  maxFractionDigits={0} required/>
-                    <label htmlFor="reference">Referencia</label>
+                    <InputText id="code" name="code"  keyfilter="int" required/>
+                    <label htmlFor="code">Referencia</label>
                 </FloatLabel>    
             </div>
             <Dropdown
+                inputRef = {dropdownRef as unknown as Ref<HTMLSelectElement> | undefined}
                 value={selectedProvider?.id} 
                 onChange={handleProviderChange}
-                name="provider" 
+                name="providerId" 
                 options={providersFilter} 
                 optionLabel="name" 
                 optionValue="id"
@@ -127,28 +109,94 @@ export function ProductsTable() {
                 className="w-fit mt_1" />
             <div className="flex flex_row space-between mt_1">
                 <FloatLabel>
-                    <InputNumber id="purchase-price" name="purchase-price" mode="currency" currency="ARS" locale="en-AR" required/>
-                    <label htmlFor="purchase-price">Precio de Compra</label>
+                    <InputText id="purchasePrice"
+                        name="purchasePrice" 
+                        keyfilter={/^[0-9]$/}
+                        required/>
+                    <label htmlFor="purchasePrice">Precio de Compra</label>
                 </FloatLabel>
                 <FloatLabel>
-                    <InputNumber id="sale-price" name="sale-price" mode="currency" currency="ARS" locale="en-AR"required/>
-                    <label htmlFor="sale-price">Precio de Venta</label>
-                </FloatLabel>    
+                    <InputText id="salePricee"
+                        name="salePrice"
+                        keyfilter={/^[0-9]$/}
+                        required/>
+                    <label htmlFor="salePrice">Precio de venta</label>
+                </FloatLabel>
             </div>
         </div>
-    </form>)
+    </form>),[providersFilter, selectedProvider, handleProviderChange]);
 
-    const createNewModal:CreateModalProps = (
-            {
+    const createNewModal:CreateModalProps =  useMemo (() =>({
                 header: <h2>Nuevo Producto</h2>,
                 body,
                 primaryButtonEvent: () => {},
                 resizable: false,
                 footer:<div>
-                <Button rounded label="Crear" onClick={createProductHandler} />
+                <Button rounded label="Crear" id="submitButton" onClick={createProductHandler} />
                 </div>
-            }
-        )
+    }), [body, createProductHandler]);
+
+    const fillFieldsWithCurrentProductAndEditModal = (product: IProductWithProvider) => {
+      console.log(handleProviderChange) 
+      console.log(product)
+        const form: HTMLFormElement = formRef.current as unknown as HTMLFormElement;
+        if(!form){
+            setTimeout(fillFieldsWithCurrentProductAndEditModal, 200, product);
+            return;
+        }
+        const elementName: HTMLInputElement = form['name'] as unknown as HTMLInputElement;
+        elementName.value = product.name;
+        form.code.value = product.code;
+        const foundProvider = providersFilter.find(p => p.id === product.provider.id) || null;
+        setSelectedProvider(foundProvider); 
+        //form.providerId.parentNode.parentNode.querySelector('input').value = product.provider.name;
+        form.purchasePrice.value = product.purchasePrice;
+        form.salePrice.value = product.salePrice;
+
+        elementName.classList.add('p-filled');
+        form.code.classList.add('p-filled');
+        form.purchasePrice.classList.add('p-filled');
+        form.salePrice.classList.add('p-filled');
+    }
+    
+    useEffect(() => {
+      const fetchData = async () => {
+          try {
+          const userData = getUserData();
+          if (!userData || !userData.token) {
+              removeToken();
+              navigate("/");
+              return;
+          }
+  
+          const productResponse = await API.Product.all(userData.token);
+          const formattedProducts = productResponse.map((product: IProductWithProvider) => ({
+              ...product,
+              provider: product.provider.name,
+              buttonsProducts: (
+                <Button onClick={() => {
+                  dispatch(changeVisibilityModalCreation( {modalCreationVisible:true}));
+                  setTimeout(() => {
+                    fillFieldsWithCurrentProductAndEditModal(product);
+                  },200)
+                }}>
+                  Editar
+                </Button>
+              )
+              
+          }))
+          dispatch(setProducts(formattedProducts));
+  
+          const providerResponse = await API.Provider.all(userData.token);
+          setProvidersFilter(providerResponse);
+        } catch (e) {
+          removeToken();
+          navigate("/");
+        }
+      };   
+      fetchData();
+    }, []);
+
     return <Table key={'products'} data={products} columns={columns} placeholder="producto" newModalContent={createNewModal}/>;
 
 }
