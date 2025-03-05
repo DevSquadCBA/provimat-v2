@@ -95,7 +95,6 @@ class Product {
         const data = await response.json();
         if(data.statusCode == 401) return redirectToLogin();
         if(data.statusCode && data.statusCode !== 200){
-            console.log(data);
             throw new Error(data.message);
         } 
         return data;
@@ -106,6 +105,28 @@ class Product {
             'entity': entity,
             'Authorization': `Bearer ${token}`
         }, method: 'POST', body: JSON.stringify(data)});
+        const dataResponse = await response.json();
+        if(dataResponse.statusCode == 401) return redirectToLogin();
+        if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
+        return dataResponse;
+    }
+    update = async(token:string|null,data:Partial<IProduct>)=>{
+        const response = await fetch(`${API_URL}/product`, {headers: {
+            'Content-Type': 'application/json',
+            'entity': entity,
+            'Authorization': `Bearer ${token}`
+        }, method: 'PUT', body: JSON.stringify(data)});
+        const dataResponse = await response.json();
+        if(dataResponse.statusCode == 401) return redirectToLogin();
+        if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
+        return dataResponse;
+    }
+    delete = async(token:string|null,id:number)=>{
+        const response = await fetch(`${API_URL}/product/${id}`, {headers: {
+            'Content-Type': 'application/json',
+            'entity': entity,
+            'Authorization': `Bearer ${token}`
+        }, method: 'DELETE'});
         const dataResponse = await response.json();
         if(dataResponse.statusCode == 401) return redirectToLogin();
         if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
@@ -131,7 +152,6 @@ class Sale {
             'entity': entity,
             'Authorization': `Bearer ${token}`
         }});
-        console.log(token)
         const data = await response.json();
         if(data.statusCode == 401) return redirectToLogin();
         if(data.statusCode && data.statusCode !== 200) throw new Error(data.message);

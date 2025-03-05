@@ -73,6 +73,51 @@ export function ProductsTable() {
         })();
     }, [dispatch, navigate, products]);
 
+    const updateProductHandle = ( e: React.FormEvent) => {
+        const form = (document.getElementById('createProductForm') as HTMLFormElement);
+        e.preventDefault();
+        if (!form.reportValidity()) return;
+        const data= Object.fromEntries(new FormData(form).entries());
+        (async () => {
+          try {
+            const userData = getUserData();
+            if (!userData || !userData.token) {
+              removeToken();
+              navigate('/');
+              return;
+            }
+            const response = await API.Product.update(userData.token, data);
+            dispatch(setProducts(products.map(p => p.id === response.id ? response : p)));
+            dispatch(changeVisibilityModalCreation({ modalCreationVisible: false }));
+            dispatch(showToast({ severity: "success", summary: "Producto actualizado", detail: "Se ha actualizado el producto", life: 3000 }));
+          } catch (e) {
+            removeToken();
+            navigate('/');
+          }
+        })();
+    }
+
+    const deleteProductHandle = ( id: number | undefined) => {
+      if(!id) return;
+      (async () => {
+        try {
+          const userData = getUserData();
+          if (!userData || !userData.token) {
+            removeToken();
+            navigate('/');
+            return;
+          }
+          const response = await API.Product.delete(userData.token, id);
+          dispatch(setProducts(products.filter(p => p.id !== response.id)));
+          dispatch(changeVisibilityModalCreation({ modalCreationVisible: false }));
+          dispatch(showToast({ severity: "success", summary: "Producto eliminado", detail: "Se ha eliminado el producto", life: 3000 }));
+        } catch (e) {
+          removeToken();
+          navigate('/');
+        }
+      })();
+    }
+
     const columns = [
         { isKey: true,  order: false, field: 'id', header: 'ID' },
         { isKey: false, order: false, field: 'code', header: 'Codigo' },
@@ -137,8 +182,6 @@ export function ProductsTable() {
     }), [body, createProductHandler]);
 
     const fillFieldsWithCurrentProductAndEditModal = (product: IProductWithProvider) => {
-      console.log(handleProviderChange) 
-      console.log(product)
         const form: HTMLFormElement = formRef.current as unknown as HTMLFormElement;
         if(!form){
             setTimeout(fillFieldsWithCurrentProductAndEditModal, 200, product);
@@ -157,7 +200,33 @@ export function ProductsTable() {
         form.code.classList.add('p-filled');
         form.purchasePrice.classList.add('p-filled');
         form.salePrice.classList.add('p-filled');
-    }
+        const button = document.querySelector('#submitButton') as HTMLButtonElement;
+        if(button){
+            // create updateButton
+            const newButtonUpdate = button.cloneNode(true) as HTMLButtonElement;
+            newButtonUpdate.id = 'updateButton';
+            newButtonUpdate.addEventListener('click', updateProductHandle as ()=>void);
+            newButtonUpdate.classList.add('p-button-secondary');
+            const label = newButtonUpdate?.querySelector('.p-button-label');
+            if(label){
+              label.setAttribute('label', 'Actualizar');
+              label.innerHTML = 'Actualizar';
+            }
+            button.parentNode?.replaceChild(newButtonUpdate, button);
+            //add deletebutton
+            const newButtonDelete = button.cloneNode(true) as HTMLButtonElement;
+            newButtonDelete.id = 'deleteButton';
+            newButtonDelete.addEventListener('click', () => deleteProductHandle(product.id));
+            const labelDelete = newButtonDelete?.querySelector('.p-button-label');
+            if(labelDelete){
+              labelDelete.setAttribute('label', 'Eliminar');
+              labelDelete.innerHTML = 'Eliminar';
+            }
+            newButtonUpdate.parentNode?.prepend(newButtonDelete);
+          }
+            const title = document.querySelector('.p-dialog-title h2');
+            if(title) title.innerHTML = 'Editar Producto';
+        }
     
     useEffect(() => {
       const fetchData = async () => {
@@ -195,6 +264,7 @@ export function ProductsTable() {
         }
       };   
       fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return <Table key={'products'} data={products} columns={columns} placeholder="producto" newModalContent={createNewModal}/>;
