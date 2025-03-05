@@ -1,6 +1,7 @@
 
 import { IClient, SaleWithProduct } from "@/interfaces/dbModels"
 import { SaleStates } from "@/interfaces/enums"
+import { ToPayTotal } from "@/piatti/components/ToPayTotal"
 import { removeSaleFromSales } from "@/reducers/localDataReducer"
 import { changeVisibilityModalPresupuestoToProforma } from "@/reducers/modalsSlice"
 import { showToast } from "@/reducers/toastSlice"
@@ -11,7 +12,6 @@ import { Button } from "primereact/button"
 import { Column } from "primereact/column"
 import { DataTable } from "primereact/datatable"
 import { Dialog } from "primereact/dialog"
-import { InputNumber } from "primereact/inputnumber"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -27,15 +27,15 @@ export function PresupuestoToProformaModal(){
     const handleClick = ()=>{
         if(!montoAPagar.current) return;
         const monto = parseInt(montoAPagar.current.attributes.getNamedItem('aria-valuenow')?.value as unknown as string);
-        console.log(monto);
-        
-        if(typeof monto !== 'number' || monto<1){
+        const toPay = salesProducts.total - salesProducts.paid;
+        if((toPay != 0) && (typeof monto !== 'number' || monto<1)){
             dispatch(showToast({ severity: "error", summary: "Error", detail: "El monto debe ser mayor a 1", life: 3000 }));
             return
         }
         salesProducts.paid = +monto;
         salesProducts.state= SaleStates.proforma;
         salesProducts.products;
+        console.log(salesProducts);
         (async () => {
             try {
                 const userData = getUserData();
@@ -129,25 +129,7 @@ export function PresupuestoToProformaModal(){
                     
                     </DataTable>
                     <div className="footer">
-                        <div className="flex justify-content-start flex_column">
-                            <p><span className="text-important text-2xl">Detalles de Pago</span></p>
-                            <div className="flex flex_row">
-                                <div className="flex flex_column">
-                                    <p className="text-important m-0">Monto a pagar</p>
-                                    <InputNumber inputRef={montoAPagar} locale="es-AR" mode="currency" currency="ARS" currencyDisplay="symbol" max= {salesProducts.total - salesProducts.paid} min={0} className="w-full" />
-                                </div>
-                                <div className="flex flex_column ml-8">
-                                    <div>
-                                        <p className="text-important text-xl m-1">Falta Abonar</p>
-                                        <p className="text text-3xl p-0 m-0 verde-medio">${salesProducts.total - salesProducts.paid}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-important text-xl m-1">Total</p>
-                                        <p className="text text-3xl p-0 m-0 verde-medio">${salesProducts.total}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <ToPayTotal salesProducts={salesProducts} montoAPagar={montoAPagar}></ToPayTotal>
                     </div>
                 </div>
             </Dialog>

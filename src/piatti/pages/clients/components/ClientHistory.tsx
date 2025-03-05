@@ -33,7 +33,6 @@ export function ClientHistory({client}:Props) {
     }
     const dispatch = useDispatch();
     let sales = useSelector((state:RootState)=>state.localData.sales)
-    console.log(sales);
     if(sales)
         sales = sales.map(e=>({
                     ...e,

@@ -103,6 +103,9 @@ class Sale {
     update = async (id:number|undefined,data: unknown,token:string|null)=>{
         return await PUT(`${API_URL}/sale/${id}`, token,data);
     }
+    addPayment = async(id:number|undefined,data: unknown,token:string|null)=>{
+        return await POST(`${API_URL}/sale/${id}/addPayment`, token,data);
+    }
 }
 
 class User {
