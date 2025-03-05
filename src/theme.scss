@@ -11,6 +11,7 @@
 $primaryColor: #1F5D53 !default;
 $primaryColorOpacity: #1f5d53ab !default;
 $primaryLightColor: #4CB3A0 !default;
+$verdeMedio :#497B73 !default;
 $primaryDarkColor: #0D3831 !default;
 $primaryDarkerColor: #071d19 !default;
 $primaryTextColor: #ffffff !default;
@@ -26,6 +27,7 @@ $rounded-radius: 2rem;
   --primary-dark-color: #{$primaryDarkColor}!important;
   --primary-light-color: #{$primaryLightColor}!important;
   --primary-darker-color: #{$primaryDarkerColor}!important;
+  --verde-medio: #{$verdeMedio}!important;
   --primary-text-color: #{$primaryTextColor}!important;
   --secondary-text-color: #{$secondaryTextColor}!important;
   --primary-background-color: #{$primaryBackgroundColor}!important;
@@ -95,8 +97,8 @@ $rounded-radius: 2rem;
 .p-panel{
   border-color: var(--primary-color) !important;
 }
-.p-inputwrapper-focus,.p-inputtext:enabled:focus:not(.p-dropdown-label) {
-  box-shadow: 0 0 0 0.2rem var(--primary-light-color); 
+.p-inputwrapper-focus,.p-inputtext:enabled:focus {
+  //box-shadow: 0 0 0 0.2rem var(--primary-light-color); 
   border-color: var(--primary-light-color);
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight.p-focus{
@@ -190,14 +192,14 @@ $rounded-radius: 2rem;
 .justify-content-end{
   justify-content: flex-end;
 }
+.justify-content-start{
+  justify-content: flex-start;
+}
 .space-between{
   justify-content: space-between;
 }
 .space-around{
   justify-content: space-around;
-}
-.justify-content-start{
-  justify-content: flex-start;
 }
 .align-items-center{
   align-items: center;
@@ -211,16 +213,5 @@ $rounded-radius: 2rem;
   }
   &_3{
       gap: 3rem;
-  }
-}
-.mt{
-  &_1{
-      margin-top: 1rem;
-  }
-  &_2{
-      margin-top: 2rem;
-  }
-  &_3{
-      margin-top: 3rem;
   }
 }

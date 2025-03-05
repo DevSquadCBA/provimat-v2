@@ -8,6 +8,9 @@ import { Table } from "@/piatti/components/Table";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { CreateModalProps } from "@/interfaces/interfaces";
+import { reducers } from "@/store";
+import { PresupuestoToProformaModal } from "@/piatti/modals/sales/PresupuestoToProformaModal";
+import { changeVisibilityModalPresupuestoToProforma } from "@/reducers/modalsSlice";
 interface RootState {
     localData: {
         sales: ISale[]
@@ -16,6 +19,7 @@ interface RootState {
 
 
 export function PresupuestosTable() {
+    const {modalPresupuestoToProformaVisible} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalPresupuestoToProformaVisible: boolean});
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const prespuestos = useSelector((state: RootState) => state.localData.sales);
@@ -32,7 +36,11 @@ export function PresupuestosTable() {
                     let response:ISale[] = await API.Sale.get('presupuesto',userData.token);
                     response = response.map((e:ISale) =>({
                         ...e, 
-                        updateToProforma: <Button className="updateToProforma" size="small" onClick={()=>console.log(e)}>Actualizar a Proforma</Button>
+                        updateToProforma: <Button className="updateToProforma" size="small" onClick={
+                            () => {
+                                dispatch(changeVisibilityModalPresupuestoToProforma({modalPresupuestoToProformaVisible: true, idSaleForModals: e.id || 0}));
+                            }
+                        }>Actualizar a Proforma</Button>
                     }));
 
                     dispatch(setSales(response));
@@ -59,5 +67,8 @@ export function PresupuestosTable() {
                 footer: <div></div>
             }
         )
-    return <Table key={'presupuesto'} data={prespuestos} columns={columns} placeholder="venta" newModalContent={createNewModal}/>;
+    return <>
+    <Table key={'presupuesto'} data={prespuestos} columns={columns} placeholder="venta" newModalContent={createNewModal}/>;
+    {modalPresupuestoToProformaVisible && <PresupuestoToProformaModal/>}
+    </>
 }

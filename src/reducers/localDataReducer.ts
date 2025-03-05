@@ -30,6 +30,9 @@ export const localDataSlice = createSlice({
         setSales: (state, action) => {
             state.sales = action.payload;
         },
+        removeSaleFromSales(state, action) {
+            state.sales = state.sales.filter((sale) => sale.id !== action.payload);
+        },
         setTeam: (state, action) => {
             state.team = action.payload;
         },
@@ -63,6 +66,7 @@ export const {
     setClients,
     setProviders,
     setSales,
+    removeSaleFromSales,
     setTeam,
     setSalesProducts,
     setProductLastUpdated,
