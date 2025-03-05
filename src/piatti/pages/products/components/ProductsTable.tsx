@@ -131,7 +131,7 @@ export function ProductsTable() {
     const body = useMemo(()=>( 
     <form id="createProductForm" ref={formRef as unknown as Ref<HTMLFormElement>} className="modal-body" style={{maxWidth: '700px'}}>
         <h3>Datos Requeridos</h3>
-        <div className="flex flex_column gap_1 mt_2">
+        <div className="flex flex_column gap_2 mt_3">
             <div className="flex flex_row space-between">
                 <FloatLabel>
                     <InputText id="name" name="name" required/>

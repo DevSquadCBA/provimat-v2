@@ -2,7 +2,7 @@ import { EntityList } from "@/interfaces/enums";
 import { API_URL } from "../piatti/config/config";
 import { convertToVerboseDay } from "./common";
 import { ClientWithBudgetData } from "@/interfaces/dto";
-import { IProduct, IProvider } from "@/interfaces/dbModels";
+import { IClient, IProduct, IProvider } from "@/interfaces/dbModels";
 
 const entity = EntityList.muebles
 
@@ -67,6 +67,15 @@ class Client {
     get = async (id:string,token:string|null)=>{
         const data = await GET(`${API_URL}/client/${id}`, token);
         return {...data, lastModification: convertToVerboseDay(data.lastModification)};
+    }
+    create = async(token:string|null,data:Partial<IClient>)=>{
+        return await POST(`${API_URL}/client`, token,data);
+    }
+    update = async(token:string|null,data:Partial<IClient>)=>{
+        return await PUT(`${API_URL}/client`, token,data);
+    }
+    delete = async(token:string|null,id:number)=>{
+        return await DELETE(`${API_URL}/client/${id}`, token);
     }
 }
 

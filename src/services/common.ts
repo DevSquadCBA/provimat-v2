@@ -6,6 +6,7 @@ export function convertToVerboseDay(date: string|null): string|null {
     if (!date) {
         return null;
     }
+    
     const getDiferences = (d1:Date, d2:Date): string => {
         const diff_time = d1.getTime() - d2.getTime();
         return parseFloat((diff_time / (1000 * 3600 * 24)).toString()).toFixed(0);
@@ -135,3 +136,5 @@ export const states:StateOption[] = [
 export function getWeightOfState(state: string):number {
     return states.find(stateOption => stateOption.value === state)?.weight || 0;
 }
+
+export const regexForText =/^[A-Za-zÀ-ÖØ-öø-ÿñÑ\s]*$/
