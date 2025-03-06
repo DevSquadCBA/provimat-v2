@@ -73,6 +73,7 @@ export type ProductsInSale = {
         state: StateProduct, 
         details?: string
     },
+    discount?: number,
     quantity?: number,
     state?: StateProduct,
     details?: string,

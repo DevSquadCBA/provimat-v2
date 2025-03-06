@@ -11,6 +11,7 @@ import { CreateModalProps } from "@/interfaces/interfaces";
 import { reducers } from "@/store";
 import { changeVisibilityModalModalProformaComprobante } from "@/reducers/modalsSlice";
 import { ProformaToComprobanteModal } from "@/piatti/modals/sales/ProformaToComprobanteModal";
+import { CreateNewSaleElement } from "@/piatti/modals/creational/partial/CreateNewSaleElement";
 interface RootState {
     localData: {
         sales: ISale[]
@@ -58,15 +59,16 @@ export function ProformasTable() {
             { isKey: false, order: false, field: 'createdAt', header: 'Fecha De Inicio'},
             { isKey: false, order: false, field: 'total', header: 'Total'}
         ];
+    const body = (<CreateNewSaleElement />);
     const createNewModal:CreateModalProps = (
-                {
-                    header: <h2>Nuevo Proveedor</h2>,
-                    body: <></>,
-                    primaryButtonEvent: () => {},
-                    resizable: false,
-                    footer: <div></div>
-                }
-            )
+            {
+                header: <h3>Nuevo (Presupuesto)</h3>,
+                body,
+                primaryButtonEvent: () => {},
+                resizable: false,
+                footer: <div></div>
+            }
+        )
     return <>
        <Table key={'Proforma'} data={proformas} columns={columns} placeholder="venta" newModalContent={createNewModal}/>;
        {modalProformaToComprobanteVisible && <ProformaToComprobanteModal/>}

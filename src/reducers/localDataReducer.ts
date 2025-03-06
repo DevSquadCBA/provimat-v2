@@ -97,7 +97,7 @@ export const localDataSlice = createSlice({
                 products: [],
             };
         },
-        addQtyToProductinNewSaleData(state, action){
+        addQtyToProductinNewSaleData(state, action:{payload:{index: number}}){
             if (!state.newSaleData) return;
             const products = [...state.newSaleData.products];
             const foundProduct = products[action.payload.index];
@@ -105,14 +105,36 @@ export const localDataSlice = createSlice({
             products[action.payload.index] = {
                 ...foundProduct,
                 quantity: newQty,
-                total: newQty * foundProduct.salePrice
+                total: +(((foundProduct.quantity || 0) * (foundProduct.salePrice)) * (foundProduct.discount || 1)).toFixed(2)
             };
             state.newSaleData.products = products;
             state.newSaleData.total = state.newSaleData?.products.reduce((acc, product) => acc + (parseInt(product?.total?.toString() || '0')), 0);
-
+        },
+        removeProductFromNewSaleData(state, action:{payload:{index: number}}){
+            if (!state.newSaleData) return;
+            const products = [...state.newSaleData.products];
+            products.splice(action.payload.index, 1);
+            state.newSaleData.products = products;
+            state.newSaleData.total = state.newSaleData?.products.reduce((acc, product) => acc + (parseInt(product?.total?.toString() || '0')), 0);
+        },
+        addDiscountToProduct(state, action:{payload:{index: number, discount: number}}){
+            if(!state.newSaleData) return;
+            const products = [...state.newSaleData.products];
+            const foundProduct = products[action.payload.index];
+            //const discount = foundProduct.discount || 0;
+            const newDiscount = action.payload.discount;
+            products[action.payload.index] = {
+                ...foundProduct,
+                discount: newDiscount,
+                total: +(((foundProduct.quantity || 0) * (foundProduct.salePrice)) * newDiscount).toFixed(2)
+            };
+            state.newSaleData.products = products;
+            state.newSaleData.total = state.newSaleData?.products.reduce((acc, product) => acc + (parseInt(product?.total?.toString() || '0')), 0);
         }
     },
 })
+
+
 
 export const { 
     setProducts,
@@ -130,5 +152,7 @@ export const {
     getData,
     updateNewSaleData,
     addQtyToProductinNewSaleData,
-    removeNewSaleData
+    removeNewSaleData,
+    removeProductFromNewSaleData,
+    addDiscountToProduct
 } = localDataSlice.actions;

@@ -5,7 +5,7 @@ import { DropdownWithData } from "@/piatti/components/DropdownWithData";
 import { useDispatch, useSelector } from "react-redux";
 import { reducers } from "@/store";
 import {  IProduct,  SaleWithProduct } from "@/interfaces/dbModels";
-import { addQtyToProductinNewSaleData, removeNewSaleData, updateNewSaleData } from "@/reducers/localDataReducer";
+import { addDiscountToProduct, addQtyToProductinNewSaleData, removeNewSaleData, removeProductFromNewSaleData, updateNewSaleData } from "@/reducers/localDataReducer";
 import API from "@/services/API";
 import React, { useEffect, useRef, useState } from "react";
 import { DataTable, DataTableFilterMeta, DataTableFilterMetaData, DataTableOperatorFilterMetaData } from "primereact/datatable";
@@ -19,11 +19,13 @@ import { InputText } from "primereact/inputtext";
 import { FilterMatchMode } from "primereact/api";
 import { showToast } from "@/reducers/toastSlice";
 import { changeVisibilityModalCreation } from "@/reducers/modalsSlice";
-type IProductWithAddToTheList = IProduct & {addToTheList: React.ReactNode, formattedPrice: string}
+import { InputNumber, InputNumberChangeEvent } from "primereact/inputnumber";
+type IProductWithAddToTheList = IProduct & {addToTheList: React.ReactNode, formattedPrice: string, discount: number};
 export function CreateNewSaleElement(){
     const {newSaleData} = useSelector((state:reducers)=>state.localData as unknown as {newSaleData: SaleWithProduct});
     const [products, setProducts] = useState([]) as unknown as [IProductWithAddToTheList[], React.Dispatch<React.SetStateAction<IProductWithAddToTheList[]>>]; 
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
+    //const [adminToken, setAdminToken] = useState<string>('');
     const form = useRef<HTMLFormElement>(null);
     const [filters, setFilters] = useState<DataTableFilterMeta>({
             global: { value: null, matchMode: FilterMatchMode.CONTAINS,  },
@@ -35,15 +37,13 @@ export function CreateNewSaleElement(){
         { field: 'code', header: 'Código'},
         { field: 'name', header: 'Nombre'},
         { field: 'formattedPrice', header: 'Precio'},
-        { field: 'addToTheList', header: ''}
+        { field: 'addToTheList', header: ''},
     ];
     const columnsSelectedProducts = [
         { field: 'code', header: 'Código'},
         { field: 'name', header: 'Producto'},
         { field: 'quantity', header: 'Cantidad'},
         { field: 'total', header: 'Precio'},
-        { field: 'desc', header: 'Desc'},
-        { field: 'delete', header: ''}
     ]
     const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -84,6 +84,23 @@ export function CreateNewSaleElement(){
             dispatch(showToast({severity: 'error', summary: 'Error', detail: 'Ocurrio un error al crear la venta'}));
         }
     }
+    const deleteElement = (e: React.FormEvent,id: number | undefined) => {
+        e.preventDefault();
+        console.log({e,id});
+        // refresh the newSaleData
+        const index = newSaleData.products.findIndex(product=>product.id===id);
+        if(index!==-1){
+            return dispatch(removeProductFromNewSaleData({index}));
+        }
+    }
+    const addDiscount = (e: InputNumberChangeEvent, id: number | undefined) => {
+        const index = newSaleData.products.findIndex(product=>product.id===id);
+        if(index!==-1 && e.value){
+            if(e.value>100) return;
+            const discount = +(1 - (e.value / 100 )).toFixed(2);
+            dispatch(addDiscountToProduct({index, discount}));
+        }
+    }
     useEffect(() => {
         (async () => {
             try {
@@ -102,9 +119,21 @@ export function CreateNewSaleElement(){
                                 e.preventDefault();
                                 const index = newSaleData.products.findIndex(product=>product.id===element.id);
                                 if(index!==-1){
+                                    // aumento la cantidad del producto ya existente
                                     return dispatch(addQtyToProductinNewSaleData({index}));
                                 }
-                                return dispatch(updateNewSaleData({...newSaleData,products: [...newSaleData.products,{...element,quantity: 1, total: element.salePrice}] }));
+                                // agrego el producto al detalle presupuesto
+                                return dispatch(updateNewSaleData({
+                                        ...newSaleData,
+                                        products: [
+                                            ...newSaleData.products,
+                                            {...element,
+                                                quantity: 1,
+                                                total: element.salePrice,
+                                                // desc:<InputNumber size={0} value={0}/>,
+                                                // delete:<Button rounded onClick={(e)=>deleteElement(e,element.id)}>Delete</Button>
+                                            }
+                                        ]}));
                         }}
                         >+</Button>
                     return element;
@@ -116,6 +145,8 @@ export function CreateNewSaleElement(){
             } 
         })();
     },[dispatch, navigate, newSaleData]);
+    const rowInputDesc = (rowData: IProductWithAddToTheList) =><div><InputNumber className="discount-input" value={0} max={100} onChange={(e) => addDiscount(e, rowData.id)}/>%</div> ;
+    const rowButtonDelete = (rowData: IProductWithAddToTheList) => <Button rounded onClick={(e)=>deleteElement(e, rowData.id)}>X</Button>;
     return (createNewSale && <form ref={form}>
         <div className="flex flex_columns p-4 pl-5 pr-5">
             <div className="left-column">
@@ -168,6 +199,8 @@ export function CreateNewSaleElement(){
                         max={300}
                     >
                     {columnsSelectedProducts.map((e,i)=><Column key={i} field={e.field} header={e.header}></Column>)}
+                    <Column key={"desc"} header={"Desc."} body={rowInputDesc}></Column>
+                    <Column key={"delete"} header={""} body={rowButtonDelete}></Column>
                     </DataTable>
                 <div className="total-container">
                     <span className="text-important text-3xl">TOTAL</span>

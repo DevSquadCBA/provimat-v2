@@ -295,4 +295,7 @@ p.icon, .p-input-icon, .p-icon {
       border-bottom: var(--primary-color) 0px solid !important;
     }
   }
+  .discount-input, .discount-input input{
+      width: 4rem !important;
+  }
 }
