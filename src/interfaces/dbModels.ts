@@ -1,5 +1,6 @@
 import { EntityList,  SaleStates,  StateProduct} from './enums';
 export type IClient = {
+    id?: number,
     name: string,
     fantasyName?: string,
     fiscalCategory: string,

@@ -73,7 +73,7 @@ export function ProductsTable() {
         })();
     }, [dispatch, navigate, products]);
 
-    const updateProductHandle = ( e: React.FormEvent) => {
+    const updateProductHandle = ( e: MouseEvent, idClient: number) => {
         const form = (document.getElementById('createProductForm') as HTMLFormElement);
         e.preventDefault();
         if (!form.reportValidity()) return;
@@ -86,7 +86,7 @@ export function ProductsTable() {
               navigate('/');
               return;
             }
-            const response = await API.Product.update(userData.token, data);
+            const response = await API.Product.update(userData.token, data, idClient);
             dispatch(setProducts(products.map(p => p.id === response.id ? response : p)));
             dispatch(changeVisibilityModalCreation({ modalCreationVisible: false }));
             dispatch(showToast({ severity: "success", summary: "Producto actualizado", detail: "Se ha actualizado el producto", life: 3000 }));
@@ -190,8 +190,7 @@ export function ProductsTable() {
         const elementName: HTMLInputElement = form['name'] as unknown as HTMLInputElement;
         elementName.value = product.name;
         form.code.value = product.code;
-        const foundProvider = providersFilter.find(p => p.id === product.provider.id) || null;
-        setSelectedProvider(foundProvider); 
+        setSelectedProvider(product.provider); 
         //form.providerId.parentNode.parentNode.querySelector('input').value = product.provider.name;
         form.purchasePrice.value = product.purchasePrice;
         form.salePrice.value = product.salePrice;
@@ -203,9 +202,10 @@ export function ProductsTable() {
         const button = document.querySelector('#submitButton') as HTMLButtonElement;
         if(button){
             // create updateButton
+            const idProduct = product.id as number;
             const newButtonUpdate = button.cloneNode(true) as HTMLButtonElement;
             newButtonUpdate.id = 'updateButton';
-            newButtonUpdate.addEventListener('click', updateProductHandle as ()=>void);
+            newButtonUpdate.addEventListener('click',(e: MouseEvent) => updateProductHandle(e, idProduct));
             newButtonUpdate.classList.add('p-button-secondary');
             const label = newButtonUpdate?.querySelector('.p-button-label');
             if(label){
@@ -247,7 +247,7 @@ export function ProductsTable() {
                   dispatch(changeVisibilityModalCreation( {modalCreationVisible:true}));
                   setTimeout(() => {
                     fillFieldsWithCurrentProductAndEditModal(product);
-                  },200)
+                  },500)
                 }}>
                   Editar
                 </Button>
@@ -267,6 +267,12 @@ export function ProductsTable() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return <Table key={'products'} data={products} columns={columns} placeholder="producto" newModalContent={createNewModal}/>;
+    return <Table 
+    key={'products'} 
+    data={products} 
+    columns={columns} 
+    placeholder="producto"
+    newModalContent={createNewModal}
+    callbackBeforeCreation={() =>setSelectedProvider(null)}/>;
 
 }

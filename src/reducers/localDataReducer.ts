@@ -12,6 +12,7 @@ const initialState: LocalData = {
     providerLastUpdated: new Date().getTime(),
     saleLastUpdated: new Date().getTime(),
     saleProductLastUpdated: new Date().getTime(),
+    selectedFiscalCategory: null,
 };
 
 export const localDataSlice = createSlice({
@@ -56,8 +57,13 @@ export const localDataSlice = createSlice({
         },
         getData(state) {
             return state;
-        }
-
+        },
+        setSelectedFiscalCategory: (state, action) => {
+            state.selectedFiscalCategory = action.payload;
+        },
+        cleanSelectedFiscalCategory: (state) => {
+            state.selectedFiscalCategory = null;
+        },  
     },
 })
 
@@ -74,4 +80,7 @@ export const {
     setProviderLastUpdated,
     setSaleLastUpdated,
     setSaleProductLastUpdated,
-    getData } = localDataSlice.actions;
+    setSelectedFiscalCategory,
+    cleanSelectedFiscalCategory,
+    getData 
+} = localDataSlice.actions;

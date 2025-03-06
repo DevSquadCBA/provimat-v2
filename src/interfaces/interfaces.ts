@@ -1,5 +1,5 @@
 import { IProduct, IClient,IProvider, ISale, ISaleProduct, IUser } from "./dbModels"
-import { SaleStates } from "./enums"
+import { FiscalCategory, SaleStates } from "./enums"
 
 type MenuItems = 'emptyAfter'|'emptyBefore'|'clients'| 'products' | 'providers' | 'sales' | 'submenu'
 type MenuSubItems = 'empty'|'presupuesto'|'proforma'|'comprobante'
@@ -20,7 +20,8 @@ export type LocalData = {
     providerLastUpdated: number,
     clientLastUpdated: number,
     saleLastUpdated: number,
-    saleProductLastUpdated: number
+    saleProductLastUpdated: number,
+    selectedFiscalCategory: FiscalCategory| null
 }
 
 export type UserData = {
@@ -71,4 +72,5 @@ export type CreateModalProps = {
     primaryButtonEvent: () => void,
     resizable?: boolean,
     footer?: JSX.Element,
+    callback?: () => void
 }
