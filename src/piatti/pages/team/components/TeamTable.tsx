@@ -212,8 +212,9 @@ export function TeamTable() {
             resizable: false,
             footer: <div>
             <Button rounded label="Crear" id="submitButton" onClick={createTeamHandler}></Button>
-            </div>
-    }), [body, createTeamHandler]);
+            </div>,
+            onShow: () => dispatch(setSelectedRole(null)),
+    }), [body, createTeamHandler, dispatch]);
 
     const fillFieldWithCurentUserAndEditModal = ( user: IUser ) => {
         const form: HTMLFormElement = formRef.current as unknown as HTMLFormElement;
@@ -297,6 +298,5 @@ export function TeamTable() {
     columns={columns} 
     placeholder="usuario" 
     newModalContent={createNewModal}
-    callbackBeforeCreation={() => dispatch(setSelectedRole(null))}
     />;
 }
