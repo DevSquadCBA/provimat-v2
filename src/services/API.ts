@@ -64,7 +64,7 @@ class Client {
         const data = await GET(`${API_URL}/clients`, token);
         return data.map((e:ClientWithBudgetData)=>({...e, lastModification: convertToVerboseDay(e.lastModification)}));
     }
-    get = async (id:string,token:string|null)=>{
+    get = async (id:string,token:string|null): Promise<ClientWithBudgetData>=>{
         const data = await GET(`${API_URL}/client/${id}`, token);
         return {...data, lastModification: convertToVerboseDay(data.lastModification)};
     }
@@ -143,6 +143,9 @@ class Sale {
     }
     updateDetails = async(id:number|undefined, data:unknown, token:string|null)=>{
         return await POST(`${API_URL}/sale/${id}/updateDetails`, token,data);
+    }
+    create = async (data:unknown, token:string|null)=>{
+        return await POST(`${API_URL}/sale`,token, data);
     }
 }
 

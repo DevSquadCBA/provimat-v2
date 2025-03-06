@@ -113,10 +113,10 @@ export function SaleHistoryModal({sale}:Props) {
     const footerElement = (<div>
         {footerElementTable()}
         <p className="modal-footer">
-            {sale.paid != sale.total || sale.state == SaleStates.presupuesto &&
-            <Button onClick={handleAddPaymentButton}>Agregar un pago</Button>
+            {sale.paid != sale.total &&
+            <Button rounded onClick={handleAddPaymentButton}>Agregar un pago</Button>
             }
-            <Button onClick={handleSaveButton}>{getLabelOfButton()}</Button>
+            <Button rounded onClick={handleSaveButton}>{getLabelOfButton()}</Button>
         </p>
         </div>
     )

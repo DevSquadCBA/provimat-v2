@@ -268,3 +268,85 @@ p.icon, .p-input-icon, .p-icon {
         }
     }
 }
+
+.login-dialog-modal{
+  position: absolute;
+  top: 51%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  height: 37vh;
+  width: 25vw; 
+  background-color: var(--primary-background-color);
+  border-radius: var(--rounded-radius);
+  color: var(--primary-text-color);
+  padding: 1rem 0 0 0;
+  .dialog-container{
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      .input-container>.p-icon-field{
+          margin-bottom: 1rem;
+          width: 100%;
+      }
+      .login-dialog-message{
+          padding: 1rem;
+          color: var(--primary-dark-color);
+          font-size: 2rem;
+          text-align: center;
+          font-weight: bold;
+      }
+      .buttons-container{
+          margin: 1rem;
+          display: flex;
+          align-items: end;
+          justify-content: space-between;
+          button{
+              margin: 0 0.2rem;
+          }
+          .accept{
+            background-color: var(--primary-dark-color)!important;
+          }
+          .reject{
+            background-color: var(--rojo)!important;
+          }
+          .cancel{
+            background-color: var(--disabled)!important;
+          }
+      }
+  }
+}
+
+.total-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    margin: 0.5rem 0;
+    background-color: var(--disabled);
+    .text-important{
+        color: var(--primary-dark-color);
+    }
+    .price{
+        color: var(--secondary-text-color);
+    }
+}
+.table-container{
+  border: 1px var(--primary-color) solid;
+  border-radius: 1rem;
+  .p-datatable-wrapper{
+    background-color: transparent !important;
+  }
+  .p-datatable-table{
+    padding: .5rem 0.9rem !important;
+    border-radius: 1rem;
+    .p-datatable-thead tr th{
+      border-bottom: var(--primary-color) 0px solid !important;
+    }
+  }
+  .discount-input, .discount-input input{
+      width: 4rem !important;
+  }
+}

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit/react";
 import { LocalData } from "@/interfaces/interfaces";
+import { EntityList,  SaleStates } from "@/interfaces/enums";
 const initialState: LocalData = {
     products: [],
     clients: [],
@@ -12,6 +13,23 @@ const initialState: LocalData = {
     providerLastUpdated: new Date().getTime(),
     saleLastUpdated: new Date().getTime(),
     saleProductLastUpdated: new Date().getTime(),
+    newSaleData: {
+        clientId: 0,
+        state: SaleStates.presupuesto,
+        total: 0,
+        paid: 0,
+        budgetDetails: "",
+        dispatch: 'without',
+        seller: "",
+        billing: "",
+        estimatedDays: 0,
+        deadline: null,
+        entity: EntityList.muebles,
+        createdAt: "",
+        updatedAt: "string",
+        products: [],
+    }, 
+    adminToken: "",
     selectedFiscalCategory: null,
 };
 
@@ -58,6 +76,69 @@ export const localDataSlice = createSlice({
         getData(state) {
             return state;
         },
+        setAdminToken(state, action) {
+            state.adminToken = action.payload;
+        },
+        cleanAdminToken(state) {
+            state.adminToken = "";
+        },
+        updateNewSaleData(state, action) {
+            state.newSaleData = action.payload;
+            if(state.newSaleData)
+                state.newSaleData.total = state.newSaleData?.products.reduce((acc, product) => acc + (parseInt(product?.total?.toString() || '0')), 0);
+        },
+        removeNewSaleData(state){
+            state.newSaleData =  {
+                clientId: 0,
+                state: SaleStates.presupuesto,
+                total: 0,
+                paid: 0,
+                budgetDetails: "",
+                dispatch: 'without',
+                seller: "",
+                billing: "",
+                estimatedDays: 0,
+                deadline: null,
+                entity: EntityList.muebles,
+                createdAt: "",
+                updatedAt: "string",
+                products: [],
+            };
+        },
+        addQtyToProductinNewSaleData(state, action:{payload:{index: number}}){
+            if (!state.newSaleData) return;
+            const products = [...state.newSaleData.products];
+            const foundProduct = products[action.payload.index];
+            const newQty = (foundProduct.quantity || 0) + 1;
+            products[action.payload.index] = {
+                ...foundProduct,
+                quantity: newQty,
+                total: +(((foundProduct.quantity || 0) * (foundProduct.salePrice)) * (foundProduct.discount || 1)).toFixed(2)
+            };
+            state.newSaleData.products = products;
+            state.newSaleData.total = state.newSaleData?.products.reduce((acc, product) => acc + (parseInt(product?.total?.toString() || '0')), 0);
+        },
+        removeProductFromNewSaleData(state, action:{payload:{index: number}}){
+            if (!state.newSaleData) return;
+            const products = [...state.newSaleData.products];
+            products.splice(action.payload.index, 1);
+            state.newSaleData.products = products;
+            state.newSaleData.total = state.newSaleData?.products.reduce((acc, product) => acc + (parseInt(product?.total?.toString() || '0')), 0);
+        },
+        addDiscountToProduct(state, action:{payload:{index: number, discount: number}}){
+            if(!state.newSaleData) return;
+            const products = [...state.newSaleData.products];
+            const foundProduct = products[action.payload.index];
+            //const discount = foundProduct.discount || 0;
+            const newDiscount = action.payload.discount;
+            products[action.payload.index] = {
+                ...foundProduct,
+                discount: newDiscount,
+                total: +(((foundProduct.quantity || 0) * (foundProduct.salePrice)) * newDiscount).toFixed(2)
+            };
+            state.newSaleData.products = products;
+            state.newSaleData.total = state.newSaleData?.products.reduce((acc, product) => acc + (parseInt(product?.total?.toString() || '0')), 0);
+        },
         setSelectedFiscalCategory: (state, action) => {
             state.selectedFiscalCategory = action.payload;
         },
@@ -66,6 +147,8 @@ export const localDataSlice = createSlice({
         },  
     },
 })
+
+
 
 export const { 
     setProducts,
@@ -80,6 +163,13 @@ export const {
     setProviderLastUpdated,
     setSaleLastUpdated,
     setSaleProductLastUpdated,
+    setAdminToken,
+    cleanAdminToken,
+    updateNewSaleData,
+    addQtyToProductinNewSaleData,
+    removeNewSaleData,
+    removeProductFromNewSaleData,
+    addDiscountToProduct,
     setSelectedFiscalCategory,
     cleanSelectedFiscalCategory,
     getData 

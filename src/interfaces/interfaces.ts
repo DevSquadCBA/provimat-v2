@@ -1,5 +1,5 @@
-import { IProduct, IClient,IProvider, ISale, ISaleProduct, IUser } from "./dbModels"
-import { FiscalCategory, SaleStates } from "./enums"
+import { IProduct, IClient,IProvider, ISale, ISaleProduct, IUser, SaleWithProduct } from "./dbModels"
+import { FiscalCategory,SaleStates } from "./enums"
 
 type MenuItems = 'emptyAfter'|'emptyBefore'|'clients'| 'products' | 'providers' | 'sales' | 'submenu'
 type MenuSubItems = 'empty'|'presupuesto'|'proforma'|'comprobante'
@@ -21,6 +21,8 @@ export type LocalData = {
     clientLastUpdated: number,
     saleLastUpdated: number,
     saleProductLastUpdated: number,
+    newSaleData: SaleWithProduct|null,
+    adminToken: string,
     selectedFiscalCategory: FiscalCategory| null
 }
 

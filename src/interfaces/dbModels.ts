@@ -74,10 +74,12 @@ export type ProductsInSale = {
         state: StateProduct, 
         details?: string
     },
+    discount?: number,
     quantity?: number,
     state?: StateProduct,
     details?: string,
-    entity: EntityList
+    entity: EntityList,
+    total?: number
 }
 export type SaleWithProduct = ISale & {products: ProductsInSale[]}
 

@@ -75,8 +75,28 @@ export function ProformaToComprobanteModal(){
             <span className="ml-2">COMPROBANTE</span>
         </h2>
     )
+    const handleAddPaymentButton = async()=>{
+        try{
+            const monto = parseInt(montoAPagar.current.attributes.getNamedItem('aria-valuenow')?.value as unknown as string);
+            const userData = getUserData();
+            if (!userData || !userData.token) {
+                removeToken();
+                navigate('/');
+                return;
+            }
+            const saleUpdated = await API.Sale.addPayment(salesProducts.id,{paid: monto}, userData.token);
+            salesProducts.paid = saleUpdated.paid;
+            setSalesProducts({...salesProducts});
+            dispatch(showToast({severity: 'success', summary: 'Pago agregado', detail: 'El pago se agrego correctamente'}));
+        }catch(e){
+            dispatch(showToast({severity: 'error', summary: 'Error', detail: 'Ocurrio un error al agregar el pago'}));
+        }
+    }
     const footerElement = (
         <div className="flex justify-content-end ">
+            {salesProducts.paid != salesProducts.total &&
+                <Button rounded onClick={handleAddPaymentButton}>Agregar un pago</Button>
+            }
             <Button 
                 disabled={salesProducts.products?.some(p=>p.details === '')|| false}
                 label="Actualizar a Comprobante" rounded onClick={handleClick}></Button>
