@@ -101,8 +101,14 @@ $rounded-radius: 2rem;
 .p-panel{
   border-color: var(--primary-color) !important;
 }
+.p-dropdown .p-inputtext:enabled:focus {
+  box-shadow: none;
+}
+#password.p-inputwrapper-focus {
+  box-shadow: none;
+}
 .p-inputwrapper-focus,.p-inputtext:enabled:focus {
-  //box-shadow: 0 0 0 0.2rem var(--primary-light-color); 
+  box-shadow: 0 0 0 0.2rem var(--primary-light-color); 
   border-color: var(--primary-light-color);
 }
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight.p-focus{

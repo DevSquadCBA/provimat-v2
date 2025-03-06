@@ -17,6 +17,7 @@ import { SaleStates } from "@/interfaces/enums";
 import { ProgressBar } from "primereact/progressbar";
 import { Chip } from "primereact/chip";
 
+
 interface RootState {
     localData: {
         sales: ISale[]
@@ -67,27 +68,25 @@ export function ComprobantesTable() {
         { isKey: false, order: false, field: 'totalFormatted', header: 'Total'},
     ]
     const handleRowClick = (event:DataTableRowClickEvent)=>{
-        console.log(event);
         if (event.data && 'id' in event.data) {
             dispatch(changeVisibilityModalHistory({modalHistoryVisible: true, modalHistorySale: event.data as IHistorySales}));
         }
     }
-    const body = (<CreateNewSaleElement />);
-    const createNewModal:CreateModalProps = (
-            {
-                header: <h3>Nuevo (Presupuesto)</h3>,
-                body,
-                primaryButtonEvent: () => {},
-                resizable: false,
-                footer: <div></div>,
-                onHide: ()=>window.location.reload(),
-                onShow: ()=>cleanAdminToken()
-            }
-        )
+   const body = (<CreateNewSaleElement />);
+       const createNewModal:CreateModalProps = (
+               {
+                   header: <h3>Nuevo (Presupuesto)</h3>,
+                   body,
+                   primaryButtonEvent: () => {},
+                   resizable: false,
+                   footer: <div></div>,
+                   onHide: ()=>window.location.reload(),
+                   onShow: ()=>cleanAdminToken()
+               }
+           )
     return <>
         <Table key={'comprobante'} data={comprobantes} columns={columns} placeholder="venta" onRowClick={handleRowClick} newModalContent={createNewModal} />
-        {(modalHistoryVisible && <SaleHistoryModal sale={modalHistorySale!}></SaleHistoryModal>)}
-    </>
-    
+           {(modalHistoryVisible && <SaleHistoryModal sale={modalHistorySale!}></SaleHistoryModal>)}
+       </>
 }        
 

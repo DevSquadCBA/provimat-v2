@@ -73,3 +73,9 @@ export enum Role{
     SUPERVISOR = 'Supervisor',
     SELLER = 'Vendedor',
 }
+
+export const RoleData = {
+    [Role.ADMIN]: { id: 1, name: Role.ADMIN },
+    [Role.SUPERVISOR]: { id: 2, name: Role.SUPERVISOR },
+    [Role.SELLER]: { id: 3, name: Role.SELLER },
+};

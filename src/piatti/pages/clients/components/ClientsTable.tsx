@@ -15,6 +15,7 @@ import { FloatLabel } from "primereact/floatlabel";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { FiscalCategory, FiscalCategoryValues } from "@/interfaces/enums";
+import  pencil  from '../../../../assets/pencil.svg';
 import { reducers } from "@/store";
 
 interface RootState {
@@ -43,7 +44,7 @@ export function ClientsTable() {
         dispatch(setSelectedFiscalCategory(e.value));
     }, [dispatch]);
 
-    const createUserHandler = useCallback((e: React.FormEvent) => {
+    const createClientHandler = useCallback((e: React.FormEvent) => {
         const form = (document.getElementById('createClientForm') as HTMLFormElement);
         e.preventDefault();
         if (!form.reportValidity()) return;
@@ -218,10 +219,10 @@ export function ClientsTable() {
             primaryButtonEvent: () => { },
             resizable: false,
             footer: <div>
-            <Button rounded label="Crear" id="submitButton" onClick={createUserHandler} /> 
+            <Button rounded label="Crear" id="submitButton" onClick={createClientHandler} /> 
             </div>,
             onShow: ()=>dispatch(setSelectedFiscalCategory(null))
-    }), [body, createUserHandler]);
+    }), [body, createClientHandler, dispatch]);
 
 
     const fillFieldWithCurrentClientAndEditModal = ( client: IClient ) => {
@@ -293,15 +294,15 @@ export function ClientsTable() {
                 response = response.map((c) => ({
                     ...c,
                     buttonsClients: (
-                        <Button onClick={() => {
-                            
+                        <img src={pencil} onClick={(e) => {
+                            e.stopPropagation();
                             dispatch(changeVisibilityModalCreation({modalCreationVisible: true }));
                             setTimeout(() => {
                                 fillFieldWithCurrentClientAndEditModal(c);
                             }, 500);
                         }}>
-                            Editar
-                        </Button>
+                            
+                        </img>
                     )
 
                 }))
