@@ -22,6 +22,7 @@ $rojo: #E02D39;
 $disabled: #89A9A4;
 $fontFamily: "Sofia Sans", sans-serif !default;
 $rounded-radius: 2rem;
+$claro: #F4F5FA;
 
 :root{
   --primary-color: #{$primaryColor}!important; 
@@ -34,6 +35,7 @@ $rounded-radius: 2rem;
   --secondary-text-color: #{$secondaryTextColor}!important;
   --primary-background-color: #{$primaryBackgroundColor}!important;
   --menu-selected-color: #{$menuSelectedColor}!important;
+  --claro: #{$claro};
   --font-family: #{$fontFamily};
   --rojo: #{$rojo};
   --disabled: #{$disabled};

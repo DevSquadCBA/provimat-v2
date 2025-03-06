@@ -23,6 +23,49 @@ div#root {
   
   }
 
+  .company__container{
+    width: 240px;
+    position: fixed;
+    bottom: 1vh;
+    left: 0rem;
+    border-radius: 3rem 0 0 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  
+
+    .previous_company{
+      position: relative;
+      background: var(--claro);
+      height: 3.6rem;
+      
+      .emptyBefore_company{
+        background-color: var(--primary-dark-color);
+        width: -webkit-fill-available;
+        height: inherit;
+        border-radius: 0 0 3rem 0;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+
+        ;
+      }
+    }
+    
+  }
+  &__company{
+    background: var(--claro);
+    border-radius: 3rem 0 0 3rem;
+    cursor: pointer;
+
+
+    &__logo{
+      height: 4rem;
+      padding: 0.5rem;
+      margin-left: 2rem;
+    }
+  }
+
   &__logo {
     margin: 1rem;
     width: -webkit-fill-available;
