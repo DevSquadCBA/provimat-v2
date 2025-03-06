@@ -5,13 +5,14 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { useDispatch, useSelector } from "react-redux";
 
-export function CreateModal({body,header,primaryButtonEvent,footer,resizable}:CreateModalProps){
+export function CreateModal({body,header,primaryButtonEvent,footer,resizable,callback=()=>{}}:CreateModalProps){
     const dispatch = useDispatch();
     const {modalCreationVisible} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalCreationVisible: boolean});
     return (<Dialog className="create-modal"
                    resizable={resizable??false}
                    header={header}
                    visible={modalCreationVisible}
+                   onShow={callback}
                    onHide={()=>{if (!modalCreationVisible) return; dispatch(changeVisibilityModalCreation({modalCreationVisible: false})); }}
                    footer={footer?footer:
                     <div className="flex justify-content-end">

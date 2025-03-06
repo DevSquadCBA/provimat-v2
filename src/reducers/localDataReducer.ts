@@ -30,6 +30,7 @@ const initialState: LocalData = {
         products: [],
     }, 
     adminToken: "",
+    selectedFiscalCategory: null,
 };
 
 export const localDataSlice = createSlice({
@@ -137,7 +138,13 @@ export const localDataSlice = createSlice({
             };
             state.newSaleData.products = products;
             state.newSaleData.total = state.newSaleData?.products.reduce((acc, product) => acc + (parseInt(product?.total?.toString() || '0')), 0);
-        }
+        },
+        setSelectedFiscalCategory: (state, action) => {
+            state.selectedFiscalCategory = action.payload;
+        },
+        cleanSelectedFiscalCategory: (state) => {
+            state.selectedFiscalCategory = null;
+        },  
     },
 })
 
@@ -156,12 +163,14 @@ export const {
     setProviderLastUpdated,
     setSaleLastUpdated,
     setSaleProductLastUpdated,
-    getData,
     setAdminToken,
     cleanAdminToken,
     updateNewSaleData,
     addQtyToProductinNewSaleData,
     removeNewSaleData,
     removeProductFromNewSaleData,
-    addDiscountToProduct
+    addDiscountToProduct,
+    setSelectedFiscalCategory,
+    cleanSelectedFiscalCategory,
+    getData 
 } = localDataSlice.actions;
