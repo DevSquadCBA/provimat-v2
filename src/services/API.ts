@@ -87,8 +87,8 @@ class Provider {
     create = async(token:string|null,data:Partial<IProvider>)=>{
         return await POST(`${API_URL}/provider`, token,data);
     }
-    update = async(token:string|null,data:Partial<IProvider>)=>{
-        return await PUT(`${API_URL}/provider`, token,data);
+    update = async(token:string|null,data:Partial<IProvider>, id:number)=>{
+        return await PUT(`${API_URL}/provider/${id}`, token,data);
     }
     delete = async(token:string|null,id:number)=>{
         return await DELETE(`${API_URL}/provider/${id}`, token);
