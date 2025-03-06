@@ -13,6 +13,8 @@ import { FloatLabel } from "primereact/floatlabel";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
+import  pencil  from '../../../../assets/pencil.svg';
+
 
 
 interface RootState {
@@ -124,7 +126,6 @@ export function ProductsTable() {
         { isKey: false, order: false, field: 'name', header: 'Nombre' },
         { isKey: false, order: false, field: 'salePrice', header: 'Precio' },
         { isKey: false, order: false, field: 'provider', header: 'Proveedor', filter: "Buscar por proveedor" },
-        { isKey: false, order: false, field: 'stock', header: 'Stock' },
         { isKey: false, order: false, field: 'buttonsProducts', header: '' },
     ]
 
@@ -243,14 +244,15 @@ export function ProductsTable() {
               ...product,
               provider: product.provider.name,
               buttonsProducts: (
-                <Button onClick={() => {
+                <img src={pencil} onClick={(e) => {
+                  e.stopPropagation();
                   dispatch(changeVisibilityModalCreation( {modalCreationVisible:true}));
                   setTimeout(() => {
                     fillFieldsWithCurrentProductAndEditModal(product);
                   },500)
                 }}>
-                  Editar
-                </Button>
+                
+                </img>
               )
               
           }))

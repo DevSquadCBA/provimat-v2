@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { CreateModalProps } from "@/interfaces/interfaces";
 import { CreateNewSaleElement } from "@/piatti/modals/creational/partial/CreateNewSaleElement";
 
+
 interface RootState {
     localData: {
         sales: ISale[]
@@ -47,6 +48,7 @@ export function ComprobantesTable() {
         { isKey: false, order: false, field: 'createdAt', header: 'Fecha De Inicio'},
         { isKey: false, order: false, field: 'total', header: 'Total'},
     ]
+
    const body = (<CreateNewSaleElement />);
        const createNewModal:CreateModalProps = (
                {

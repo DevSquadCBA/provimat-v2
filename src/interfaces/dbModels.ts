@@ -99,12 +99,13 @@ export type IProductToAdd = {
 
 
 export type IUser = {
+    id: number,
     name: string,
     email: string,
     phone: string,
     whatsapp: string,
     address: string,
-    role: IRol
+    role: IRol,
 }
 
 export type IRol = {

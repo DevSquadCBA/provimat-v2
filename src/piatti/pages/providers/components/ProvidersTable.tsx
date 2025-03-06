@@ -12,6 +12,8 @@ import { InputText } from "primereact/inputtext";
 import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import  pencil  from '../../../../assets/pencil.svg';
+
 
 interface RootState {
     localData: {
@@ -222,14 +224,15 @@ export function ProvidersTable() {
                 response = response.map((p) => ({
                     ...p,
                     buttonsProviders: (
-                        <Button onClick={() => {
+                        <img src={pencil} onClick={(e) => {
+                            e.stopPropagation();
                             dispatch(changeVisibilityModalCreation({ modalCreationVisible: true }));
                             setTimeout(() => {
                                 fillFieldsWithCurrentProviderAndEditModal(p);
                             },200)
                         }}>
-                            Editar
-                        </Button>
+                            
+                        </img>
                     )
                 }));
                 dispatch(setProviders(response));

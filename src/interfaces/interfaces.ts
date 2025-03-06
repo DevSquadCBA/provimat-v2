@@ -23,7 +23,8 @@ export type LocalData = {
     saleProductLastUpdated: number,
     newSaleData: SaleWithProduct|null,
     adminToken: string,
-    selectedFiscalCategory: FiscalCategory| null
+    selectedFiscalCategory: FiscalCategory| null,
+    selectedRole: number | null,
 }
 
 export type UserData = {

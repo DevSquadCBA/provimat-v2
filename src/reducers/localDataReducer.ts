@@ -31,6 +31,8 @@ const initialState: LocalData = {
     }, 
     adminToken: "",
     selectedFiscalCategory: null,
+    selectedRole: null
+
 };
 
 export const localDataSlice = createSlice({
@@ -144,7 +146,13 @@ export const localDataSlice = createSlice({
         },
         cleanSelectedFiscalCategory: (state) => {
             state.selectedFiscalCategory = null;
-        },  
+        },
+        setSelectedRole: (state, action) => {
+            state.selectedRole = action.payload;
+        },
+        cleanSelectedRole: (state) => {
+            state.selectedRole = null;
+        }, 
     },
 })
 
@@ -172,5 +180,7 @@ export const {
     addDiscountToProduct,
     setSelectedFiscalCategory,
     cleanSelectedFiscalCategory,
+    setSelectedRole,
+    cleanSelectedRole,
     getData 
 } = localDataSlice.actions;

@@ -2,7 +2,7 @@ import { EntityList } from "@/interfaces/enums";
 import { API_URL } from "../piatti/config/config";
 import { convertToVerboseDay } from "./common";
 import { ClientWithBudgetData } from "@/interfaces/dto";
-import { IClient, IProduct, IProvider } from "@/interfaces/dbModels";
+import { IClient, IProduct, IProvider, IUser } from "@/interfaces/dbModels";
 
 const entity = EntityList.muebles
 
@@ -153,7 +153,18 @@ class User {
     all = async (token:string|null)=>{
         return await GET(`${API_URL}/user`, token);
     }
+    create = async(token:string|null,data:Partial<IUser>)=>{
+        return await POST(`${API_URL}/user`, token,data)
+    }
+    update = async(token:string|null,data:Partial<IUser>,id:number)=>{
+        return await PUT(`${API_URL}/user/${id}`, token,data);
+    }
+    delete = async(token:string|null,id:number)=>{
+        return await DELETE(`${API_URL}/user/${id}`, token);
+    }
+    
 }
+
 class Auth{
     login = async (credentials:{username:string, password:string})=>{
         return await POST(`${API_URL}/auth/login`, null,{email: credentials.username, password: credentials.password});
