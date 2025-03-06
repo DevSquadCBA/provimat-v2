@@ -219,7 +219,8 @@ export function ClientsTable() {
             resizable: false,
             footer: <div>
             <Button rounded label="Crear" id="submitButton" onClick={createUserHandler} /> 
-            </div>
+            </div>,
+            onShow: ()=>dispatch(setSelectedFiscalCategory(null))
     }), [body, createUserHandler]);
 
 
@@ -320,5 +321,5 @@ export function ClientsTable() {
     placeholder="cliente" 
     onRowClick={handleClickEvent} 
     newModalContent={createNewModal} 
-    callbackBeforeCreation={()=>dispatch(setSelectedFiscalCategory(null))}/>;
+    />;
 }
