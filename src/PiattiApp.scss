@@ -350,3 +350,11 @@ p.icon, .p-input-icon, .p-icon {
       width: 4rem !important;
   }
 }
+.progressBar{
+  border-radius: var(--rounded-radius);
+  background-color: #4cb3a04d;
+  .p-progressbar-value{
+    background-color: var(--primary-color);
+    border-radius: var(--rounded-radius);
+  }
+}

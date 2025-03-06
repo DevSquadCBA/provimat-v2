@@ -5,7 +5,7 @@ import { DropdownWithData } from "@/piatti/components/DropdownWithData";
 import { useDispatch, useSelector } from "react-redux";
 import { reducers } from "@/store";
 import {  IProduct,  SaleWithProduct } from "@/interfaces/dbModels";
-import { addDiscountToProduct, addQtyToProductinNewSaleData, removeNewSaleData, removeProductFromNewSaleData, setAdminToken, updateNewSaleData } from "@/reducers/localDataReducer";
+import { addDiscountToProduct, addQtyToProductinNewSaleData,  removeNewSaleData, removeProductFromNewSaleData, setAdminToken, updateNewSaleData } from "@/reducers/localDataReducer";
 import API from "@/services/API";
 import React, { useEffect, useRef, useState } from "react";
 import { DataTable, DataTableFilterMeta, DataTableFilterMetaData, DataTableOperatorFilterMetaData } from "primereact/datatable";

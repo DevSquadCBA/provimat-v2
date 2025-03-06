@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { ClientHistory } from "../components/ClientHistory";
 import { LayoutContainerHistory } from "@/piatti/layout/LayoutContainerHistory";
-import { IClient } from "@/interfaces/dbModels";
 import API from "@/services/API";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUserData, removeToken } from "@/services/common";
+import { ClientWithBudgetData } from "@/interfaces/dto";
 
 export function HistoryClientPage() {
     const navigate = useNavigate();
     const {clientId} = useParams();
-    const [client,setClient] = useState<IClient>();
+    const [client,setClient] = useState<ClientWithBudgetData>();
     
     useEffect(() => {
         (async () => {
