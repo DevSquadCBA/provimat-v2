@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit/react";
 import { LocalData } from "@/interfaces/interfaces";
+import { EntityList,  SaleStates } from "@/interfaces/enums";
 const initialState: LocalData = {
     products: [],
     clients: [],
@@ -12,6 +13,22 @@ const initialState: LocalData = {
     providerLastUpdated: new Date().getTime(),
     saleLastUpdated: new Date().getTime(),
     saleProductLastUpdated: new Date().getTime(),
+    newSaleData: {
+        clientId: 0,
+        state: SaleStates.presupuesto,
+        total: 0,
+        paid: 0,
+        budgetDetails: "",
+        dispatch: 'without',
+        seller: "",
+        billing: "",
+        estimatedDays: 0,
+        deadline: null,
+        entity: EntityList.muebles,
+        createdAt: "",
+        updatedAt: "string",
+        products: [],
+    }
 };
 
 export const localDataSlice = createSlice({
@@ -56,8 +73,44 @@ export const localDataSlice = createSlice({
         },
         getData(state) {
             return state;
-        }
+        },
+        updateNewSaleData(state, action) {
+            state.newSaleData = action.payload;
+            if(state.newSaleData)
+                state.newSaleData.total = state.newSaleData?.products.reduce((acc, product) => acc + (parseInt(product?.total?.toString() || '0')), 0);
+        },
+        removeNewSaleData(state){
+            state.newSaleData =  {
+                clientId: 0,
+                state: SaleStates.presupuesto,
+                total: 0,
+                paid: 0,
+                budgetDetails: "",
+                dispatch: 'without',
+                seller: "",
+                billing: "",
+                estimatedDays: 0,
+                deadline: null,
+                entity: EntityList.muebles,
+                createdAt: "",
+                updatedAt: "string",
+                products: [],
+            };
+        },
+        addQtyToProductinNewSaleData(state, action){
+            if (!state.newSaleData) return;
+            const products = [...state.newSaleData.products];
+            const foundProduct = products[action.payload.index];
+            const newQty = (foundProduct.quantity || 0) + 1;
+            products[action.payload.index] = {
+                ...foundProduct,
+                quantity: newQty,
+                total: newQty * foundProduct.salePrice
+            };
+            state.newSaleData.products = products;
+            state.newSaleData.total = state.newSaleData?.products.reduce((acc, product) => acc + (parseInt(product?.total?.toString() || '0')), 0);
 
+        }
     },
 })
 
@@ -74,4 +127,8 @@ export const {
     setProviderLastUpdated,
     setSaleLastUpdated,
     setSaleProductLastUpdated,
-    getData } = localDataSlice.actions;
+    getData,
+    updateNewSaleData,
+    addQtyToProductinNewSaleData,
+    removeNewSaleData
+} = localDataSlice.actions;

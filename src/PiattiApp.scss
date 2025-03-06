@@ -268,3 +268,31 @@ p.icon, .p-input-icon, .p-icon {
         }
     }
 }
+.total-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    margin: 0.5rem 0;
+    background-color: var(--disabled);
+    .text-important{
+        color: var(--primary-dark-color);
+    }
+    .price{
+        color: var(--secondary-text-color);
+    }
+}
+.table-container{
+  border: 1px var(--primary-color) solid;
+  border-radius: 1rem;
+  .p-datatable-wrapper{
+    background-color: transparent !important;
+  }
+  .p-datatable-table{
+    padding: .5rem 0.9rem !important;
+    border-radius: 1rem;
+    .p-datatable-thead tr th{
+      border-bottom: var(--primary-color) 0px solid !important;
+    }
+  }
+}

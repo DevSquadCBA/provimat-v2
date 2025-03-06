@@ -1,4 +1,4 @@
-import { IProduct, IClient,IProvider, ISale, ISaleProduct, IUser } from "./dbModels"
+import { IProduct, IClient,IProvider, ISale, ISaleProduct, IUser, SaleWithProduct } from "./dbModels"
 import { SaleStates } from "./enums"
 
 type MenuItems = 'emptyAfter'|'emptyBefore'|'clients'| 'products' | 'providers' | 'sales' | 'submenu'
@@ -20,7 +20,8 @@ export type LocalData = {
     providerLastUpdated: number,
     clientLastUpdated: number,
     saleLastUpdated: number,
-    saleProductLastUpdated: number
+    saleProductLastUpdated: number,
+    newSaleData: SaleWithProduct|null
 }
 
 export type UserData = {
