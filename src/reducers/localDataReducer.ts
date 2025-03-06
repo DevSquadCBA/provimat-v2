@@ -28,7 +28,8 @@ const initialState: LocalData = {
         createdAt: "",
         updatedAt: "string",
         products: [],
-    }
+    }, 
+    adminToken: "",
 };
 
 export const localDataSlice = createSlice({
@@ -73,6 +74,12 @@ export const localDataSlice = createSlice({
         },
         getData(state) {
             return state;
+        },
+        setAdminToken(state, action) {
+            state.adminToken = action.payload;
+        },
+        cleanAdminToken(state) {
+            state.adminToken = "";
         },
         updateNewSaleData(state, action) {
             state.newSaleData = action.payload;
@@ -150,6 +157,8 @@ export const {
     setSaleLastUpdated,
     setSaleProductLastUpdated,
     getData,
+    setAdminToken,
+    cleanAdminToken,
     updateNewSaleData,
     addQtyToProductinNewSaleData,
     removeNewSaleData,

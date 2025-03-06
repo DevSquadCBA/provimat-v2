@@ -1,11 +1,9 @@
-import { getUserData } from "@/services/common";
+import { getUserData, removeToken } from "@/services/common";
 import { Avatar } from "primereact/avatar"
 import { ContextMenu } from "primereact/contextmenu";
 import React from "react";
-import { useDispatch, } from "react-redux"
 
 export function UserComponent(){
-    const dispatch = useDispatch();
     const data = getUserData();
     const username = data?.username;
     const role = data?.role;
@@ -17,7 +15,7 @@ export function UserComponent(){
             label: 'Logout',
             icon: 'pi pi-sign-out',
             command: () => {
-                dispatch({type:'userData/removeUserData'});
+                removeToken();
                 window.location.href = '/';
             }
         }

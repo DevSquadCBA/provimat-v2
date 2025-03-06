@@ -52,3 +52,8 @@ export function getEntityList(entity:string):EntityList{
     }
     return Object.entries(EntityList).find(([, v]) => v === entity)?.[0] as EntityList | EntityList.muebles
 }
+export enum Role{
+    ADMIN = 'Administrador',
+    SUPERVISOR = 'Supervisor',
+    SELLER = 'Vendedor',
+}

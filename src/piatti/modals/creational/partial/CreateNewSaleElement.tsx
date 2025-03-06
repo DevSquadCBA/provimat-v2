@@ -5,12 +5,12 @@ import { DropdownWithData } from "@/piatti/components/DropdownWithData";
 import { useDispatch, useSelector } from "react-redux";
 import { reducers } from "@/store";
 import {  IProduct,  SaleWithProduct } from "@/interfaces/dbModels";
-import { addDiscountToProduct, addQtyToProductinNewSaleData, removeNewSaleData, removeProductFromNewSaleData, updateNewSaleData } from "@/reducers/localDataReducer";
+import { addDiscountToProduct, addQtyToProductinNewSaleData, removeNewSaleData, removeProductFromNewSaleData, setAdminToken, updateNewSaleData } from "@/reducers/localDataReducer";
 import API from "@/services/API";
 import React, { useEffect, useRef, useState } from "react";
 import { DataTable, DataTableFilterMeta, DataTableFilterMetaData, DataTableOperatorFilterMetaData } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { formatPrice, getUserData, removeToken } from "@/services/common";
+import { decodeJWTToken, formatPrice, getUserData, removeToken } from "@/services/common";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { IconField } from "primereact/iconfield";
@@ -20,12 +20,14 @@ import { FilterMatchMode } from "primereact/api";
 import { showToast } from "@/reducers/toastSlice";
 import { changeVisibilityModalCreation } from "@/reducers/modalsSlice";
 import { InputNumber, InputNumberChangeEvent } from "primereact/inputnumber";
+import { Role } from "@/interfaces/enums";
+import { LoginByAdminModal } from "../../dialog/LoginByAdminModal";
 type IProductWithAddToTheList = IProduct & {addToTheList: React.ReactNode, formattedPrice: string, discount: number};
 export function CreateNewSaleElement(){
-    const {newSaleData} = useSelector((state:reducers)=>state.localData as unknown as {newSaleData: SaleWithProduct});
+    const {newSaleData, adminToken} = useSelector((state:reducers)=>state.localData as unknown as {newSaleData: SaleWithProduct, adminToken: string});
+    const [loginModalVisible, setLoginModalVisible] = useState(false);
     const [products, setProducts] = useState([]) as unknown as [IProductWithAddToTheList[], React.Dispatch<React.SetStateAction<IProductWithAddToTheList[]>>]; 
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
-    //const [adminToken, setAdminToken] = useState<string>('');
     const form = useRef<HTMLFormElement>(null);
     const [filters, setFilters] = useState<DataTableFilterMeta>({
             global: { value: null, matchMode: FilterMatchMode.CONTAINS,  },
@@ -67,7 +69,22 @@ export function CreateNewSaleElement(){
             data.products = data.products.map(p => ({...p, provider: null, addToTheList: null}));
             if(data.createdAt== '') 
                 data.createdAt = new Date().toISOString();
-            const response = await API.Sale.create(data,userData.token)
+            const hasDiscount = data.products.some(p=>p.discount && p.discount>0);
+            if(hasDiscount && !adminToken){
+                setLoginModalVisible(true);
+                return;
+            }
+            const role = decodeJWTToken(adminToken).role;
+            if(hasDiscount && role !== Role.ADMIN && role !== Role.SUPERVISOR){
+                dispatch(showToast({severity: 'error', summary: 'Error', detail: 'No tienes permiso para aplicar descuentos con ese usuario logueado'}));
+                return;
+            }
+            let response;
+            if (hasDiscount && (role === Role.ADMIN || role === Role.SUPERVISOR)){
+                response = await API.Sale.create(data,adminToken);
+            }else{
+                response = await API.Sale.create(data,userData.token)
+            }
             if(!response){
                 dispatch(showToast({severity: 'error', summary: 'Error', detail: 'Ocurrio un error al crear la venta'}));
             }
@@ -94,12 +111,25 @@ export function CreateNewSaleElement(){
         }
     }
     const addDiscount = (e: InputNumberChangeEvent, id: number | undefined) => {
+        const userData = getUserData();
+        if(!userData){removeToken();navigate('/');return;}
+        if(userData.role == Role.SELLER){
+            if(!adminToken){
+                dispatch(showToast({severity: 'error', summary: 'Error', detail: 'No tienes permiso para agregar descuentos'}));
+                setLoginModalVisible(true);
+                return;
+            }
+        }
         const index = newSaleData.products.findIndex(product=>product.id===id);
         if(index!==-1 && e.value){
             if(e.value>100) return;
             const discount = +(1 - (e.value / 100 )).toFixed(2);
             dispatch(addDiscountToProduct({index, discount}));
         }
+    }
+    const saveAdminCredentials = (credentials: string) => {
+        dispatch(setAdminToken(credentials));
+        setLoginModalVisible(false);
     }
     useEffect(() => {
         (async () => {
@@ -147,7 +177,8 @@ export function CreateNewSaleElement(){
     },[dispatch, navigate, newSaleData]);
     const rowInputDesc = (rowData: IProductWithAddToTheList) =><div><InputNumber className="discount-input" value={0} max={100} onChange={(e) => addDiscount(e, rowData.id)}/>%</div> ;
     const rowButtonDelete = (rowData: IProductWithAddToTheList) => <Button rounded onClick={(e)=>deleteElement(e, rowData.id)}>X</Button>;
-    return (createNewSale && <form ref={form}>
+    return <>
+        <form ref={form}>
         <div className="flex flex_columns p-4 pl-5 pr-5">
             <div className="left-column">
                 <div className="flex flex_column">
@@ -214,5 +245,6 @@ export function CreateNewSaleElement(){
             <Button rounded size="large" onClick={createNewSale}>Guardar</Button>
         </div>
         </form>
-    )
+    {loginModalVisible && <LoginByAdminModal accept={saveAdminCredentials} visible={loginModalVisible} setVisible={setLoginModalVisible}/>}
+    </>
 }

@@ -21,7 +21,8 @@ export type LocalData = {
     clientLastUpdated: number,
     saleLastUpdated: number,
     saleProductLastUpdated: number,
-    newSaleData: SaleWithProduct|null
+    newSaleData: SaleWithProduct|null,
+    adminToken: string,
 }
 
 export type UserData = {
