@@ -74,5 +74,6 @@ export type CreateModalProps = {
     primaryButtonEvent: () => void,
     resizable?: boolean,
     footer?: JSX.Element,
-    callback?: () => void
+    onShow?: () => void,
+    onHide?: () => void
 }

@@ -48,15 +48,15 @@ export function ComprobantesTable() {
         { isKey: false, order: false, field: 'total', header: 'Total'},
     ]
    const body = (<CreateNewSaleElement />);
-       const createNewModal:CreateModalProps = (
-               {
-                   header: <h3>Nuevo (Presupuesto)</h3>,
-                   body,
-                   primaryButtonEvent: () => {},
-                   resizable: false,
-                   footer: <div></div>
-               }
-           )
+   const createNewModal:CreateModalProps = (
+        {
+            header: <h3>Nuevo (Presupuesto)</h3>,
+            body,
+            primaryButtonEvent: () => {},
+            resizable: false,
+            footer: <div></div>,
+        }
+    )
     return <Table key={'comprobante'} data={comprobantes} columns={columns} placeholder="venta" newModalContent={createNewModal} />;
 }        
 
