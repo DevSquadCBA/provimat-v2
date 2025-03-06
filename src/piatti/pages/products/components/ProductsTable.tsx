@@ -179,7 +179,8 @@ export function ProductsTable() {
                 resizable: false,
                 footer:<div>
                 <Button rounded label="Crear" id="submitButton" onClick={createProductHandler} />
-                </div>
+                </div>,
+                onShow: ()=>setSelectedProvider(null),
     }), [body, createProductHandler]);
 
     const fillFieldsWithCurrentProductAndEditModal = (product: IProductWithProvider) => {
@@ -275,6 +276,6 @@ export function ProductsTable() {
     columns={columns} 
     placeholder="producto"
     newModalContent={createNewModal}
-    callbackBeforeCreation={() =>setSelectedProvider(null)}/>;
+    />;
 
 }

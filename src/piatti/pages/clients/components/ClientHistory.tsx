@@ -1,7 +1,6 @@
-import { IClient } from "@/interfaces/dbModels"
 import { CreateModalProps, IHistorySales } from "@/interfaces/interfaces"
 import { Table } from "@/piatti/components/Table"
-import { setSales } from "@/reducers/localDataReducer"
+import { cleanAdminToken, setSales } from "@/reducers/localDataReducer"
 import API from "@/services/API"
 import { formatPrice, getColorOfState, getTranslationOfState, getUserData, removeToken } from "@/services/common"
 import { DataTableRowClickEvent } from "primereact/datatable"
@@ -16,9 +15,11 @@ import { Avatar } from "primereact/avatar"
 import { SaleStates } from "@/interfaces/enums"
 import { PresupuestoToProformaModal } from "@/piatti/modals/sales/PresupuestoToProformaModal"
 import { ProformaToComprobanteModal } from "@/piatti/modals/sales/ProformaToComprobanteModal"
+import { CreateNewSaleElement } from "@/piatti/modals/creational/partial/CreateNewSaleElement"
+import { ClientWithBudgetData } from "@/interfaces/dto"
 
 type Props = {
-    client:IClient & { id: number } | undefined
+    client:ClientWithBudgetData & { id: number } | undefined
 }
 interface RootState {
     localData: {
@@ -37,6 +38,7 @@ export function ClientHistory({client}:Props) {
     const dispatch = useDispatch();
     let sales = useSelector((state:RootState)=>state.localData.sales)
     if(sales)
+        console.log(sales);
         sales = sales.map(e=>({
                     ...e,
                     createdAt: moment(e.createdAt).format('DD/MM/YYYY'),
@@ -73,14 +75,18 @@ export function ClientHistory({client}:Props) {
         { isKey: false, order: false, field: 'productsCount', header: 'Num Productos' },
         { isKey: false, order: false, field: 'granTotal', header: 'Total' },
     ]
+    const body = (<CreateNewSaleElement />);
     const createNewModal:CreateModalProps = (
-            {
-                body: <></>,
-                header: <></>,
-                primaryButtonEvent: () => {},
-                footer: <></>
-            }
-        )
+         {
+             header: <h3>Nuevo (Presupuesto)</h3>,
+             body,
+             primaryButtonEvent: () => {},
+             resizable: false,
+             footer: <div></div>,
+             onHide: ()=>window.location.reload(),
+             onShow: ()=>cleanAdminToken()
+         }
+     )
     return <> 
         {client &&
             <Table key={'clientHistory'} data={sales} columns={columns} onRowClick={handleClick} placeholder="Venta" newModalContent={createNewModal}></Table>

@@ -116,7 +116,7 @@ export function getTranslationOfProductState(state: string):string {
     return translations[state as StateProduct];
 }
 
-export function formatPrice(price: number):string {
+export function formatPrice(price: number|string):string {
     return price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
 }
 export function formatDate(date: string):string {
@@ -138,3 +138,17 @@ export function getWeightOfState(state: string):number {
 }
 
 export const regexForText =/^[A-Za-zÀ-ÖØ-öø-ÿñÑ\s]*$/
+
+const percents:Record<SaleStates, number> = {
+    [SaleStates.presupuesto]: 1,
+    [SaleStates.proforma]: 15,
+    [SaleStates.comprobante]: 30,
+    [SaleStates.in_order]: 54,
+    [SaleStates.in_provider]: 75,
+    [SaleStates.delayed_provider]: 90,
+    [SaleStates.finished]: 100,
+    [SaleStates.canceled]: 0,
+}
+export function getPercentOfState(state: SaleStates):number {
+    return percents[state];
+}

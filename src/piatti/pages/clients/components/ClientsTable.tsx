@@ -220,8 +220,9 @@ export function ClientsTable() {
             resizable: false,
             footer: <div>
             <Button rounded label="Crear" id="submitButton" onClick={createClientHandler} /> 
-            </div>
-    }), [body, createClientHandler]);
+            </div>,
+            onShow: ()=>dispatch(setSelectedFiscalCategory(null))
+    }), [body, createClientHandler, dispatch]);
 
 
     const fillFieldWithCurrentClientAndEditModal = ( client: IClient ) => {
@@ -321,5 +322,5 @@ export function ClientsTable() {
     placeholder="cliente" 
     onRowClick={handleClickEvent} 
     newModalContent={createNewModal} 
-    callbackBeforeCreation={()=>dispatch(setSelectedFiscalCategory(null))}/>;
+    />;
 }

@@ -48,7 +48,7 @@ export type IHistorySales ={
             id: number,
             name: string
         },
-        SaleProduct: ISaleProduct & { createdAt: string, updatedAt: string }
+        saleProduct: ISaleProduct & { createdAt: string, updatedAt: string }
     }[],
     createdAt: string|null,
     updatedAt: string 
@@ -75,5 +75,6 @@ export type CreateModalProps = {
     primaryButtonEvent: () => void,
     resizable?: boolean,
     footer?: JSX.Element,
-    callback?: () => void
+    onShow?: () => void,
+    onHide?: () => void
 }

@@ -4,7 +4,7 @@ import { reducers } from "@/store";
 import { Dialog } from "primereact/dialog";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
-import { getUserData, getWeightOfState, removeToken} from "@/services/common";
+import { formatPrice, getUserData, getWeightOfState, removeToken} from "@/services/common";
 import { SaleStates } from "@/interfaces/enums";
 import '../style/SaleHistory.scss';
 import { Table } from "@/piatti/components/Table";
@@ -52,11 +52,11 @@ export function SaleHistoryModal({sale}:Props) {
         </div>  
     );
     const footerElementTable = ()=>{
-        if(sale.paid == sale.total || sale.state == SaleStates.presupuesto)
+        if(sale.paid == sale.total)
             return (
                 <p className="modal-container">
                     <span className="text-important big-text">Total:</span>
-                    <span className="text-important big-text" style={{color: 'var(--secondaryTextColor)'}}> {(sale.granTotal)}</span>
+                    <span className="text-important big-text" style={{color: 'var(--secondaryTextColor)'}}>$ {(sale.total)}</span>
                 </p>
             );
         else
@@ -125,9 +125,19 @@ export function SaleHistoryModal({sale}:Props) {
         { isKey: false,  order: false, field: 'name', header: 'Producto' },
         { isKey: false,  order: false, field: 'saleProduct.details', header: 'Detalle' },
         { isKey: false,  order: false, field: 'saleProduct.quantity', header: 'Cantidad' },
-        { isKey: false,  order: false, field: 'salePrice', header: 'Precio', dataType: 'numeric' },
+        { isKey: false,  order: false, field: 'saleProduct.price', header: 'Precio' },
+        { isKey: false,  order: false, field: 'saleProduct.discount', header: 'Descuento', dataType: 'numeric' },
     ]
-    const formattedProducts = sale.products.map((product) => ({...product,salePrice: (<span>$ {(product.salePrice)}</span>)}));
+    const formattedProducts = sale.products.map((product) => ({
+        ...product,
+        salePrice: (<span>$ {(product.salePrice)}</span>),
+        saleProduct:{
+            ...product.saleProduct,
+            price: (<span>$ {formatPrice(product.saleProduct.price.toString().replace(/\..*$/,''))}</span>),
+            discount: (<span>{product.saleProduct.discount!=0?Math.round((1 - product.saleProduct.discount)*100): 0} % </span>)
+        }
+        
+    }));
     const createNewModal:CreateModalProps = (
         {
             body: <></>,
