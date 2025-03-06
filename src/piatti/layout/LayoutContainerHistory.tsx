@@ -3,12 +3,12 @@ import {HeaderHistory} from "@/piatti/components/HeaderHistory";
 import { Sidebar } from "../components/Sidebar";
 import "./LayoutContainerTable.scss";
 import { Children, ReactNode } from "react";
-import { IClient } from "@/interfaces/dbModels";
+import { ClientWithBudgetData } from "@/interfaces/dto";
 
 type Props = {
     children: ReactNode;
     historyComponents: ReactNode;
-    clientData:IClient|undefined
+    clientData:ClientWithBudgetData|undefined
 }
 
 

@@ -1,11 +1,11 @@
-import { IClient } from "@/interfaces/dbModels"
 import { Button } from "primereact/button"
 import "./HeaderHistory.scss"
 import { useNavigate } from "react-router-dom"
 import { UserComponent } from "./UserComponent"
+import { ClientWithBudgetData } from "@/interfaces/dto"
 type Props = {
     title: string
-    clientData: IClient
+    clientData: ClientWithBudgetData
 }
 export function HeaderHistory({title}:Props) {
     const navigate = useNavigate();

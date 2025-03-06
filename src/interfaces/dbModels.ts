@@ -87,6 +87,8 @@ export type ISaleProduct = {
     saleId: number,
     productId: number,
     quantity: number,
+    discount: number,
+    price: number,
     state: StateProduct
     details?: string|null
 }
