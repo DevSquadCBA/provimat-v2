@@ -47,7 +47,7 @@ export function ComprobantesTable() {
                     totalFormatted: '$'+ formatPrice(e.total || 0),
                     createdAtFormatted: moment(e.createdAt).format('DD/MM/YYYY'),
                     percent: e.state == SaleStates.canceled
-                    ? <Chip label="Cancelado" icon="pi pi-times" className="bg-red-400 text-white mt-0 mb-0 pt-0 pb-0 leading-none"/>
+                    ? <Chip label="Cancelado" icon="pi pi-times" className="bg-red-400 text-white text-xxs mt-0 mb-0 pt-0 pb-0 leading-none"/>
                     : <ProgressBar value={getPercentOfState(e.state)} className="progressBar" />
                         
                 }))
