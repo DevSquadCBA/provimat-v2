@@ -2,7 +2,7 @@ import { EntityList } from "@/interfaces/enums";
 import { API_URL } from "../piatti/config/config";
 import { convertToVerboseDay } from "./common";
 import { ClientWithBudgetData } from "@/interfaces/dto";
-import { IProduct, IProvider } from "@/interfaces/dbModels";
+import { IClient, IProduct, IProvider } from "@/interfaces/dbModels";
 
 const entity = EntityList.muebles
 
@@ -68,6 +68,15 @@ class Client {
         const data = await GET(`${API_URL}/client/${id}`, token);
         return {...data, lastModification: convertToVerboseDay(data.lastModification)};
     }
+    create = async(token:string|null,data:Partial<IClient>)=>{
+        return await POST(`${API_URL}/client`, token,data);
+    }
+    update = async(token:string|null,data:Partial<IClient>,id:number)=>{
+        return await PUT(`${API_URL}/client/${id}`, token,data);
+    }
+    delete = async(token:string|null,id:number)=>{
+        return await DELETE(`${API_URL}/client/${id}`, token);
+    }
 }
 
 
@@ -100,17 +109,10 @@ class Product {
         if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
         return dataResponse;
     }
-    update = async(token:string|null,data:Partial<IProduct>)=>{
-        const response = await fetch(`${API_URL}/product`, {headers: {
-            'Content-Type': 'application/json',
-            'entity': entity,
-            'Authorization': `Bearer ${token}`
-        }, method: 'PUT', body: JSON.stringify(data)});
-        const dataResponse = await response.json();
-        if(dataResponse.statusCode == 401) return redirectToLogin();
-        if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
-        return dataResponse;
+    update = async(token:string|null,data:Partial<IProduct>,id:number)=>{
+        return await PUT(`${API_URL}/product/${id}`, token,data);
     }
+
     delete = async(token:string|null,id:number)=>{
         const response = await fetch(`${API_URL}/product/${id}`, {headers: {
             'Content-Type': 'application/json',

@@ -23,9 +23,10 @@ type Props ={
     newModalContent: CreateModalProps,
     footer?: JSX.Element,
     minimalQuantity?: number
+    callbackBeforeCreation?: () => void
 }
 
-export function Table({columns, data, placeholder, onRowClick, footer,newModalContent, minimalQuantity=30}:Props) {
+export function Table({columns, data, placeholder, onRowClick, footer,newModalContent, minimalQuantity=30,callbackBeforeCreation}:Props) {
     const {modalCreationVisible} = useSelector((state:reducers) => state.modalsSlice as unknown as {modalCreationVisible: boolean});
     const dispatch = useDispatch();
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
@@ -98,6 +99,7 @@ export function Table({columns, data, placeholder, onRowClick, footer,newModalCo
                 header={newModalContent.header}
                 primaryButtonEvent={newModalContent.primaryButtonEvent}
                 footer={newModalContent.footer}
+                callback={callbackBeforeCreation}
             />}
         </>
 }

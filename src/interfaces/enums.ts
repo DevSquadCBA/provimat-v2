@@ -37,6 +37,22 @@ export const StateProductValues:StateProduct[] = [
     StateProduct.on_deposit
 ];
 
+export enum FiscalCategory{
+    consumidor_final='Consumidor Final', 
+    monotributista='Monotributista', 
+    responsable_inscripto='Responsable Inscripto', 
+    exento='Exento', 
+    no_categorizado='No categorizado'
+}
+
+export const FiscalCategoryValues:FiscalCategory[] = [
+    FiscalCategory.consumidor_final,
+    FiscalCategory.monotributista,
+    FiscalCategory.responsable_inscripto,
+    FiscalCategory.exento,
+    FiscalCategory.no_categorizado
+]
+
 export enum EntityList{
     muebles = 'muebles',
     instalaciones = 'instalaciones',
