@@ -29,8 +29,7 @@ export function DropdownWithData({endpoint,visualizationField,value,handleChange
                 const response = await endpoint(userData.token);
                 setData(response);
             }catch(e){
-                removeToken();
-                navigate('/');
+                console.error(e);
             }
         })();
     },[endpoint, navigate])

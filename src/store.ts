@@ -3,12 +3,14 @@ import {sidebarSlice} from './reducers/sidebarSlice';
 import { localDataSlice } from './reducers/localDataReducer';
 import { modalsSlice } from './reducers/modalsSlice';
 import {toastSlice} from './reducers/toastSlice';
+import APIResponseSlice from './reducers/APIResponseSlice';
 
 export type reducers = {
     sideBar: typeof sidebarSlice
     localData: typeof localDataSlice
     modalsSlice: typeof modalsSlice
     toastSlice: typeof toastSlice
+    APIResponse: typeof APIResponseSlice
 }
 
 export const store = configureStore({
@@ -16,7 +18,8 @@ export const store = configureStore({
         sideBar: sidebarSlice.reducer,
         localData: localDataSlice.reducer,
         modalsSlice: modalsSlice.reducer,
-        toastSlice: toastSlice.reducer
+        toastSlice: toastSlice.reducer,
+        APIResponse: APIResponseSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

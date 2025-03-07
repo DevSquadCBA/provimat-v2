@@ -17,17 +17,13 @@ import { Dropdown } from "primereact/dropdown";
 import { FiscalCategory, FiscalCategoryValues } from "@/interfaces/enums";
 import  pencil  from '../../../../assets/pencil.svg';
 import { reducers } from "@/store";
+import { BadRequest, ErrorResponse } from "@/interfaces/Errors";
 
-interface RootState {
-    localData: {
-        clients: IClient[]
-    }
-}
 
 export function ClientsTable() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const clients = useSelector((state:RootState)=>state.localData.clients);
+    const {clients} = useSelector((state:reducers)=>state.localData as unknown as {clients: IClient[] | null});
     const {selectedFiscalCategory} = useSelector((state:reducers)=>state.localData as unknown as {selectedFiscalCategory: FiscalCategory| null});
     const dropdownRef = useRef(null  as unknown); 
     const formRef = useRef(null as unknown);
@@ -66,7 +62,8 @@ export function ClientsTable() {
                 }
 
                 const response = await API.Client.create(userData.token,data);
-                dispatch(setClients([...clients,response]));
+                if(clients)
+                    dispatch(setClients([...clients,response]));
                 dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
                 dispatch(showToast({ severity: "success", summary: "Cliente creado", detail: "Se ha creado el nuevo cliente", life: 3000 }));
                 
@@ -75,8 +72,16 @@ export function ClientsTable() {
                 }, 500);
             
             } catch (e) {
-                removeToken();
-                navigate('/');   
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo crear el usuario", life: 3000 }));
+                }
+                console.error(e);   
             }
         })()
     }, [clients, dispatch, navigate]);
@@ -96,7 +101,7 @@ export function ClientsTable() {
                     return;
                 }
                 const response = await API.Client.update(userData.token,data, idClient);
-                dispatch(setClients(clients.map(client => client.id === response.id ? response : client)));
+                dispatch(setClients(clients?.map(client => client.id === response.id ? response : client)));
                 dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
                 dispatch(showToast({ severity: "success", summary: "Cliente actualizado", detail: "Se ha actualizado el cliente", life: 3000 }));
                 
@@ -106,8 +111,17 @@ export function ClientsTable() {
                 }, 500);
 
             }catch(e){
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "Error al actualizar el cliente", life: 3000 }));
+                    console.log(e);
+                }
+                console.error(e);
             }
         })();
     }
@@ -123,18 +137,26 @@ export function ClientsTable() {
                     return;
                 }
                 const response = await API.Client.delete(userData.token,id);
-                dispatch(setClients(clients.filter(client => client.id !== response.id)));
+                if(!response){
+                    throw new BadRequest('No se ha podido eliminar el cliente');
+                }
                 dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
                 dispatch(showToast({ severity: "success", summary: "Cliente eliminado", detail: "Se ha eliminado el cliente", life: 3000 }));
 
                 setTimeout(() => {
                     window.location.reload();
-
-                }, 500);
+                }, 2000);
 
             } catch (e) {
-                removeToken();
-                navigate('/');
+                console.log(e);
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }
+                console.error(e);
             }
         })();       
     }
@@ -306,21 +328,34 @@ export function ClientsTable() {
                     )
 
                 }))
+                
                 dispatch(setClients(response));
             }catch(e){
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo obtener los clientes", life: 3000 }));
+                }
+                console.error(e);
             }
         })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
-    return <Table 
-    key={'clients'} 
-    data={clients} 
-    columns={columns} 
-    placeholder="cliente" 
-    onRowClick={handleClickEvent} 
-    newModalContent={createNewModal} 
-    />;
+    return <>
+     {clients &&
+        <Table 
+            key={'clients'} 
+            data={clients} 
+            columns={columns} 
+            placeholder="cliente" 
+            onRowClick={handleClickEvent} 
+            newModalContent={createNewModal} 
+        />
+     }
+    </>
 }

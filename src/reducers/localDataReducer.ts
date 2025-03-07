@@ -2,12 +2,15 @@ import { createSlice } from "@reduxjs/toolkit/react";
 import { LocalData } from "@/interfaces/interfaces";
 import { EntityList,  SaleStates } from "@/interfaces/enums";
 const initialState: LocalData = {
-    products: [],
-    clients: [],
-    providers: [],
-    sales: [],
+    products: null,
+    clients: null,
+    providers: null,
+    sales: null,
+    presupuestos:null,
+    proformas:null,
+    comprobantes:null,
     salesProducts: [],
-    team: [],
+    team: null,
     productLastUpdated: new Date().getTime(),
     clientLastUpdated: new Date().getTime(),
     providerLastUpdated: new Date().getTime(),
@@ -31,8 +34,8 @@ const initialState: LocalData = {
     }, 
     adminToken: "",
     selectedFiscalCategory: null,
-    selectedRole: null
-
+    selectedRole: null,
+    clientSelected: null
 };
 
 export const localDataSlice = createSlice({
@@ -51,8 +54,18 @@ export const localDataSlice = createSlice({
         setSales: (state, action) => {
             state.sales = action.payload;
         },
+        setPresupuestos(state, action) {
+            state.presupuestos = action.payload
+        },
+        setProformas(state, action) {
+            state.proformas = action.payload
+        },
+        setComprobantes(state, action) {
+            state.comprobantes = action.payload
+        },
         removeSaleFromSales(state, action) {
-            state.sales = state.sales.filter((sale) => sale.id !== action.payload);
+            if(state.sales)
+                state.sales = state.sales.filter((sale) => sale.id !== action.payload);
         },
         setTeam: (state, action) => {
             state.team = action.payload;
@@ -153,16 +166,20 @@ export const localDataSlice = createSlice({
         cleanSelectedRole: (state) => {
             state.selectedRole = null;
         }, 
+        setClientSelected: (state, action) => {
+            state.clientSelected = action.payload
+        }
     },
 })
-
-
 
 export const { 
     setProducts,
     setClients,
     setProviders,
     setSales,
+    setPresupuestos,
+    setProformas,
+    setComprobantes,
     removeSaleFromSales,
     setTeam,
     setSalesProducts,
@@ -182,5 +199,6 @@ export const {
     cleanSelectedFiscalCategory,
     setSelectedRole,
     cleanSelectedRole,
-    getData 
+    getData,
+    setClientSelected 
 } = localDataSlice.actions;
