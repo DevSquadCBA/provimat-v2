@@ -4,6 +4,7 @@ import { Sidebar } from "../components/Sidebar";
 import "./LayoutContainerTable.scss";
 import { Children, ReactNode } from "react";
 import { ClientWithBudgetData } from "@/interfaces/dto";
+import { UserData } from "../pages/clients/components/partial/UserData";
 
 type Props = {
     children: ReactNode;
@@ -21,9 +22,10 @@ export function LayoutContainerHistory({children,historyComponents, clientData}:
             {clientData &&
             <>
                 <div className="header">
-                    <HeaderHistory title={`Historial de ${clientData.name}`} clientData={clientData}/>
+                    <HeaderHistory title={`Historial de Cliente`} clientData={clientData}/>
                 </div>
-                <div className="view">
+                <div className="view history-client">
+                <UserData clientData={clientData}/>
                 {historyComponents}
                 {history}
                 </div>

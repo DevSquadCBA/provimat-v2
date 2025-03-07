@@ -37,6 +37,9 @@ export function Table({columns, data, placeholder, onRowClick, footer,newModalCo
     const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const _filters:{ [key: string]: DataTableFilterMetaData | DataTableOperatorFilterMetaData } = { ...filters };
+
+        console.log(_filters);
+        
         _filters['global']= { ...filters.global, value: value};
         setFilters(_filters);
         setGlobalFilterValue(value);
