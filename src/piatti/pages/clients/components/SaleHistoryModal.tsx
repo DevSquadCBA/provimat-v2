@@ -89,7 +89,7 @@ export function SaleHistoryModal({sale}:Props) {
                 navigate('/');
                 return;
             }
-            const saleUpdated = await API.Sale.addPayment(sale.id,{paid: monto}, userData.token);
+            const saleUpdated = await API.Sale.addPayment(userData.token,sale.id,{paid: monto});
             const updatePaid = {...sale};
             updatePaid.paid = saleUpdated.paid;
             dispatch(changeVisibilityModalHistory({modalHistoryVisible: true, modalHistorySale: updatePaid}));

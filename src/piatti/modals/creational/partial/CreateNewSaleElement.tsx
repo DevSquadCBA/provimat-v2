@@ -81,9 +81,9 @@ export function CreateNewSaleElement(){
             }
             let response;
             if (hasDiscount && (role === Role.ADMIN || role === Role.SUPERVISOR)){
-                response = await API.Sale.create(data,adminToken);
+                response = await API.Sale.create(adminToken,data);
             }else{
-                response = await API.Sale.create(data,userData.token)
+                response = await API.Sale.create(userData.token,data)
             }
             if(!response){
                 dispatch(showToast({severity: 'error', summary: 'Error', detail: 'Ocurrio un error al crear la venta'}));

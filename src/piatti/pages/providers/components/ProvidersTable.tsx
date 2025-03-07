@@ -9,19 +9,23 @@ import { getUserData, removeToken } from "@/services/common";
 import { Button } from "primereact/button";
 import { FloatLabel } from "primereact/floatlabel";
 import { InputText } from "primereact/inputtext";
-import { useCallback,  useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import  pencil  from '../../../../assets/pencil.svg';
-import { reducers } from "@/store";
-import { APIComponent } from "@/services/APIComponent";
 
+
+interface RootState {
+    localData: {
+        providers: IProvider[]
+    }
+}
 
 export function ProvidersTable() {
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
-    const {providers} = useSelector((state:reducers)=>state.localData as unknown as {providers: IProvider[]});
+    const providers = useSelector((state:RootState)=>state.localData.providers);
 
     const createProviderHandler = useCallback((e: React.FormEvent)=>{
         // obtiene los datos del formulario y los envía al backend
@@ -94,60 +98,59 @@ export function ProvidersTable() {
             })();
     }
     const body = useMemo(()=>(<form id="createProviderForm" className="modal-body" style={{maxWidth: "700px"}}>
-            <h3>Datos Requeridos</h3>
-            <div className="flex flex_column gap_2 mt_2">
-                <div className="flex flex_row space-between">
-                    <FloatLabel>
-                        <InputText id="name" name="name" required/>
-                        <label htmlFor="name">Nombre</label>
-                    </FloatLabel>
-                    <FloatLabel>
-                        <InputText id="daysDelays" name="daysDelays" required keyfilter={'int'}/>
-                        <label htmlFor="daysDelays">Días de demora habitual</label>
-                    </FloatLabel>
-                </div>
-                <div className="flex flex_row space-between">
-                    <FloatLabel>
-                        <InputText id="fantasyName" name="fantasyName" required/>
-                        <label htmlFor="fantasyName">Nombre Fantasía</label>
-                    </FloatLabel>
-                    <FloatLabel>
-                        <InputText id="cuit_cuil" name="cuit_cuil" required keyfilter={/^[0-9]*-*$/}/>
-                        <label htmlFor="cuit_cuil">Cuit/Cuil</label>
-                    </FloatLabel>
-                </div>
+        <h3>Datos Requeridos</h3>
+        <div className="flex flex_column gap_2 mt_2">
+            <div className="flex flex_row space-between">
+                <FloatLabel>
+                    <InputText id="name" name="name" required/>
+                    <label htmlFor="name">Nombre</label>
+                </FloatLabel>
+                <FloatLabel>
+                    <InputText id="daysDelays" name="daysDelays" required keyfilter={'int'}/>
+                    <label htmlFor="daysDelays">Días de demora habitual</label>
+                </FloatLabel>
             </div>
-            <h3>Información Adicional</h3>
-            <div className="flex flex_column gap_2 mt_2">
-                <div className="flex flex_row space-between">
-                    <FloatLabel>
-                        <InputText id="phone" name="phone"/>
-                        <label htmlFor="phone">Teléfono</label>
-                    </FloatLabel>
-                    <FloatLabel>
-                        <InputText id="email" name="email" />
-                        <label htmlFor="email">Email</label>
-                    </FloatLabel>
-                </div>
-                <div style={{ padding: "0 0"}}>
-                    <FloatLabel>
-                        <InputText id="address" name="address" />
-                        <label htmlFor="address">Dirección</label>
-                    </FloatLabel>
-                </div>
-                <div className="flex flex_row space-between">
-                    <FloatLabel>
-                        <InputText id="province" name="province" />
-                        <label htmlFor="province">Provincia</label>
-                    </FloatLabel>
-                    <FloatLabel>
-                        <InputText id="locality" name="locality" />
-                        <label htmlFor="locality">Localidad</label>
-                    </FloatLabel>
-                </div>
+            <div className="flex flex_row space-between">
+                <FloatLabel>
+                    <InputText id="fantasyName" name="fantasyName" required/>
+                    <label htmlFor="fantasyName">Nombre Fantasía</label>
+                </FloatLabel>
+                <FloatLabel>
+                    <InputText id="cuit_cuil" name="cuit_cuil" required keyfilter={/^[0-9]*-*$/}/>
+                    <label htmlFor="cuit_cuil">Cuit/Cuil</label>
+                </FloatLabel>
             </div>
-        </form>)
-    ,[]);
+        </div>
+        <h3>Información Adicional</h3>
+        <div className="flex flex_column gap_2 mt_2">
+            <div className="flex flex_row space-between">
+                <FloatLabel>
+                    <InputText id="phone" name="phone"/>
+                    <label htmlFor="phone">Teléfono</label>
+                </FloatLabel>
+                <FloatLabel>
+                    <InputText id="email" name="email" />
+                    <label htmlFor="email">Email</label>
+                </FloatLabel>
+            </div>
+            <div style={{ padding: "0 0"}}>
+                <FloatLabel>
+                    <InputText id="address" name="address" />
+                    <label htmlFor="address">Dirección</label>
+                </FloatLabel>
+            </div>
+            <div className="flex flex_row space-between">
+                <FloatLabel>
+                    <InputText id="province" name="province" />
+                    <label htmlFor="province">Provincia</label>
+                </FloatLabel>
+                <FloatLabel>
+                    <InputText id="locality" name="locality" />
+                    <label htmlFor="locality">Localidad</label>
+                </FloatLabel>
+            </div>
+        </div>
+    </form>),[]);
     const createNewModal: CreateModalProps = useMemo(() => ({
         header: <h2>Nuevo Proveedor</h2>,
         body,
@@ -208,22 +211,39 @@ export function ProvidersTable() {
         const title = document.querySelector('.p-dialog-title h2');
         if(title) title.innerHTML = 'Editar Proveedor';
     }
-    
-    const mappingFunction = (providers: IProvider[]) => providers.map((p) => ({
-        ...p,
-        buttonsProviders: (
-            <img src={pencil} onClick={(e) => {
-                e.stopPropagation();
-                dispatch(changeVisibilityModalCreation({ modalCreationVisible: true }));
-                setTimeout(() => {
-                    fillFieldsWithCurrentProviderAndEditModal(p);
-                },200)
-            }}>
-                
-            </img>
-        )
-    }));
-    
+    useEffect(() => {
+        (async () => {
+            try {
+                const userData = getUserData();
+                if (!userData || !userData.token) {
+                    removeToken();
+                    navigate('/');
+                    return;
+                }
+                let response: IProvider[] = await API.Provider.all(userData.token);
+                response = response.map((p) => ({
+                    ...p,
+                    buttonsProviders: (
+                        <img src={pencil} onClick={(e) => {
+                            e.stopPropagation();
+                            dispatch(changeVisibilityModalCreation({ modalCreationVisible: true }));
+                            setTimeout(() => {
+                                fillFieldsWithCurrentProviderAndEditModal(p);
+                            },200)
+                        }}>
+                            
+                        </img>
+                    )
+                }));
+                dispatch(setProviders(response));
+            } catch (e) {
+                removeToken();
+                navigate('/');
+            }
+        })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const columns = [
         { isKey: true,  order: false, field: 'id', header: 'ID' },
         { isKey: false, order: false, field: 'name', header: 'Nombre' },
@@ -232,15 +252,6 @@ export function ProvidersTable() {
         { isKey: false, order: false, field: 'buttonsProviders', header: '' }
     ]
 
-    return <>
-        {!providers && 
-            <APIComponent 
-                callBack={API.Provider.all}
-                mapping={mappingFunction}
-                onSuccess={response=>dispatch(setProviders(response))}
-            />
-        }
-        <Table key={'providers'} data={providers} columns={columns} placeholder="proveedor" newModalContent={createNewModal} />;
-        </>
+    return <Table key={'providers'} data={providers} columns={columns} placeholder="proveedor" newModalContent={createNewModal} />;
     
 }

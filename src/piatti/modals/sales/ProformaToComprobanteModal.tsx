@@ -52,7 +52,7 @@ export function ProformaToComprobanteModal(){
                     navigate('/');
                     return;
                 }
-                await API.Sale.update(idSaleForModals,salesProducts, userData.token);
+                await API.Sale.update(userData.token,idSaleForModals,salesProducts);
                 dispatch(removeSaleFromSales({id: idSaleForModals}));
                 dispatch(changeVisibilityModalModalProformaComprobante({modalProformaToComprobanteVisible: false, idSaleForModals: 0}));
                 dispatch(showToast({ severity: "success", summary: "Proforma actualizado", detail: "Se ha actualizado la proforma a Comprobante", life: 3000 }));
@@ -84,7 +84,7 @@ export function ProformaToComprobanteModal(){
                 navigate('/');
                 return;
             }
-            const saleUpdated = await API.Sale.addPayment(salesProducts.id,{paid: monto}, userData.token);
+            const saleUpdated = await API.Sale.addPayment(userData.token,salesProducts.id,{paid: monto}, );
             salesProducts.paid = saleUpdated.paid;
             setSalesProducts({...salesProducts});
             dispatch(showToast({severity: 'success', summary: 'Pago agregado', detail: 'El pago se agrego correctamente'}));
@@ -137,7 +137,7 @@ export function ProformaToComprobanteModal(){
                 navigate('/');
                 return;
             }
-            await API.Sale.updateDetails(idSaleForModals,products, userData.token);
+            await API.Sale.updateDetails(userData.token,idSaleForModals,products);
             setConfirmDialogVisible(false);
             dispatch(changeVisibilityModalModalProformaComprobante({modalProformaToComprobanteVisible: false, idSaleForModals: 0}))
         }catch(e){
@@ -153,7 +153,7 @@ export function ProformaToComprobanteModal(){
                     navigate('/');
                     return;
                 }
-                const salesProducts = await API.Sale.getSalesWithProducts(idSaleForModals,userData.token);
+                const salesProducts = await API.Sale.getSalesWithProducts(userData.token,idSaleForModals);
                 setSalesProducts(salesProducts);
             }catch(e){
                 console.log(e);

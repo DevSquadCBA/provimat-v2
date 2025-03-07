@@ -2,7 +2,7 @@ import { CreateModalProps, IHistorySales } from "@/interfaces/interfaces"
 import { Table } from "@/piatti/components/Table"
 import { cleanAdminToken, setSales} from "@/reducers/localDataReducer"
 import API from "@/services/API"
-import { formatPrice, getColorOfState, getTranslationOfState} from "@/services/common"
+import { formatPrice, getColorOfState, getTranslationOfState, getUserData, removeToken} from "@/services/common"
 import { DataTableRowClickEvent } from "primereact/datatable"
 import { useDispatch, useSelector } from "react-redux"
 import { reducers } from "@/store"
@@ -15,7 +15,9 @@ import { PresupuestoToProformaModal } from "@/piatti/modals/sales/PresupuestoToP
 import { ProformaToComprobanteModal } from "@/piatti/modals/sales/ProformaToComprobanteModal"
 import { CreateNewSaleElement } from "@/piatti/modals/creational/partial/CreateNewSaleElement"
 import { ClientWithBudgetData } from "@/interfaces/dto"
-import { APIComponent } from "@/services/APIComponent"
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { showToast } from "@/reducers/toastSlice"
 
 type Props = {
     client:ClientWithBudgetData & { id: number } | undefined
@@ -25,6 +27,7 @@ export function ClientHistory({client}:Props) {
     const {modalPresupuestoToProformaVisible,modalProformaToComprobanteVisible} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalPresupuestoToProformaVisible: boolean, modalProformaToComprobanteVisible:boolean, idSaleForModals: number});
     const dispatch = useDispatch();
     const {sales} = useSelector((state:reducers)=>state.localData as unknown as {sales: IHistorySales[]});
+    const navigate = useNavigate();
     const mappingFunction = (sales:IHistorySales[])=>sales.map(e=>({
         ...e,
         createdAt: moment(e.createdAt).format('DD/MM/YYYY'),
@@ -59,16 +62,30 @@ export function ClientHistory({client}:Props) {
              onShow: ()=>cleanAdminToken()
          }
     )
+    useEffect(() => {
+        (async()=>{
+            try{
+                const userData = getUserData();
+                if (!userData ||!userData.token) {
+                    removeToken();
+                    navigate('/');
+                    return;
+                }
+                const response:IHistorySales[] = await API.Sale.history(userData.token,client?.id);
+                if(!response){
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudieron obtener las ventas", life: 3000 }));
+                    return;
+                }
+                dispatch(setSales(mappingFunction(response)));
+            }catch(e){
+                dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudieron obtener las ventas", life: 3000 }));
+                removeToken();
+                navigate('/');
+            }
+        })();
+    },[dispatch,navigate, client?.id]);
     return <> 
-        {(client && !sales) &&
-            <APIComponent
-                callBack={API.Sale.history}
-                id={client.id}
-                mapping={mappingFunction}
-                onSuccess={(e)=>dispatch(setSales(e))}
-            />
-        }
-        {sales &&
+        {client &&
             <Table key={'clientHistory'} data={sales} columns={columns} onRowClick={handleClick} placeholder="Venta" newModalContent={createNewModal}></Table>
         }
         {(modalHistoryVisible && <SaleHistoryModal sale={modalHistorySale!}></SaleHistoryModal>)}

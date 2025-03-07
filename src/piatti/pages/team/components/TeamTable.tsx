@@ -13,18 +13,32 @@ import { Dropdown } from "primereact/dropdown";
 import { FloatLabel } from "primereact/floatlabel";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
-import React, { Ref, useCallback, useMemo, useRef, useState } from "react";
+import React, { Ref, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import  pencil  from '../../../../assets/pencil.svg';
-import { APIComponent } from "@/services/APIComponent";
+
+
+/*
+            const role = decodeJWTToken(adminToken).role;
+            if(hasDiscount && role !== Role.ADMIN && role !== Role.SUPERVISOR){
+                dispatch(showToast({severity: 'error', summary: 'Error', detail: 'No tienes permiso para aplicar descuentos con ese usuario logueado'}));
+                return;
+            }
+*/
+
+interface RootState {
+    localData: {
+        team: IUser[]
+    }
+}
 
 export function TeamTable() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const dropdownRef = useRef(null  as unknown); 
     const formRef = useRef(null as unknown);
-    const {team} = useSelector((state:reducers)=>state.localData as unknown as {team: IUser[]} );
+    const team = useSelector((state:RootState)=>state.localData.team);
     const {selectedRole} = useSelector((state:reducers) => state.localData as unknown as {selectedRole: Role| null });
     const [pass, setPass] = useState('');
     
@@ -45,7 +59,8 @@ export function TeamTable() {
             return;
         }
 
-        (async() => {
+        (
+            async() => {
                 try {
                     const userData = getUserData();
                     if (!userData ||!userData.token) {
@@ -245,34 +260,43 @@ export function TeamTable() {
         if(title) title.innerHTML = 'Editar Usuario';
     }
 
-    const mappingFunction = (team: IUser[])=>team.map(user => ({
-        ...user,
-        buttonsUsers:(
-            <img src={pencil} onClick={() => {
-                dispatch(changeVisibilityModalCreation({modalCreationVisible: true}));
-                setTimeout(() => {
-                    fillFieldWithCurentUserAndEditModal(user);
-                }, 500);
-            }}>
-            </img>
-        )
-    }));
+    useEffect(() => {
+        (async () => {
+            try{
+                const userData = getUserData();
+                if (!userData ||!userData.token) {
+                    removeToken();
+                    navigate('/');
+                    return;
+                }
+                let response: IUser[] = await API.User.all(userData.token);
+                response = response.map(user => ({
+                    ...user,
+                buttonsUsers:(
+                    <img src={pencil} onClick={() => {
+                        dispatch(changeVisibilityModalCreation({modalCreationVisible: true}));
+                        setTimeout(() => {
+                            fillFieldWithCurentUserAndEditModal(user);
+                        }, 500);
+                    }}>
 
-    return <>
-        {!team && 
-            <APIComponent
-                callBack={API.User.all}
-                mapping={mappingFunction}
-                onSuccess={response=>dispatch(setTeam(response))}
-            />
-        }
-        <Table 
-            key={'team'} 
-            data={team} 
-            columns={columns} 
-            placeholder="usuario" 
-            emptyMessage="No se encontraron usuarios"
-            newModalContent={createNewModal}
-        />;
-    </>
+                    </img>
+                ) 
+            }))
+                dispatch(setTeam(response));
+            }catch(e){
+                removeToken();
+                navigate('/');
+            }
+        })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return <Table 
+    key={'team'} 
+    data={team} 
+    columns={columns} 
+    placeholder="usuario" 
+    newModalContent={createNewModal}
+    />;
 }
