@@ -4,9 +4,9 @@ import { reducers } from "@/store";
 import { Dialog } from "primereact/dialog";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
-import { formatPrice, getUserData, getWeightOfState, removeToken} from "@/services/common";
+import { formatPrice, getTranslationOfState, getUserData, getWeightOfState, removeToken} from "@/services/common";
 import { SaleStates } from "@/interfaces/enums";
-import '../style/SaleHistory.scss';
+import '@/piatti/pages/clients/style/SaleHistory.scss';
 import { Table } from "@/piatti/components/Table";
 import { Button } from "primereact/button";
 import { StateSelector } from "@/piatti/components/StateSelector";
@@ -15,6 +15,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "@/services/API";
 import { showToast } from "@/reducers/toastSlice";
+import { ErrorResponse } from "@/interfaces/Errors";
 
 type Props = {
     sale: IHistorySales
@@ -66,7 +67,7 @@ export function SaleHistoryModal({sale}:Props) {
     }
     const handleSaveButton = () => {
         const weight = getWeightOfState(sale.state || '');
-        const newWeight = getWeightOfState(stateSelected || '');
+        //const newWeight = getWeightOfState(stateSelected || '');
         if(weight == 0){ //si es presupuesto
             dispatch(changeVisibilityModalPresupuestoToProforma({modalPresupuestoToProformaVisible: true, idSaleForModals: sale.id as number}));
             dispatch(changeVisibilityModalHistory({modalHistoryVisible: false, modalHistorySale: null}));
@@ -76,8 +77,37 @@ export function SaleHistoryModal({sale}:Props) {
             dispatch(changeVisibilityModalHistory({modalHistoryVisible: false, modalHistorySale: null}));
         }
         if(weight >= 2){ // si es comprobante o despues
-            console.log('Permitir guardar el cambio de estado');
-            console.log(newWeight);
+            //console.log('Permitir guardar el cambio de estado');
+            //console.log(newWeight);
+            update(stateSelected)
+        }
+    }
+    const update = async(stateSelected:string)=>{
+        try{
+            const userData = getUserData();
+            if (!userData || !userData.token) {
+                removeToken();
+                navigate('/');
+                return;
+            }
+            if(!stateSelected)return;
+            await API.Sale.update(userData.token,sale.id,{...sale,state: stateSelected});
+            dispatch(changeVisibilityModalHistory({modalHistoryVisible: false, modalHistorySale: null}));
+            dispatch(showToast({severity: 'success', summary: 'Venta Actualizada', detail: 'Se ha actualizado el estado a ' + getTranslationOfState(stateSelected)}));
+            setTimeout(() => {
+                window.location.reload();
+            }, 600);
+        }catch(e){
+            if(e instanceof ErrorResponse) {
+                dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                if(e.getCode() === 401){
+                    removeToken();
+                    navigate('/');
+                }
+            }else{
+                dispatch(showToast({severity: 'error', summary: 'Error', detail: 'Ocurrio un error al agregar el pago'}));
+            }
+            console.error(e);
         }
     }
     const handleAddPaymentButton = async()=>{
@@ -89,13 +119,25 @@ export function SaleHistoryModal({sale}:Props) {
                 navigate('/');
                 return;
             }
-            const saleUpdated = await API.Sale.addPayment(sale.id,{paid: monto}, userData.token);
+            const saleUpdated = await API.Sale.addPayment(userData.token,sale.id,{paid: monto});
+            if(!saleUpdated.paid){
+                throw new Error('Ocurrio un error al agregar el pago');
+            }
             const updatePaid = {...sale};
             updatePaid.paid = saleUpdated.paid;
             dispatch(changeVisibilityModalHistory({modalHistoryVisible: true, modalHistorySale: updatePaid}));
             dispatch(showToast({severity: 'success', summary: 'Pago agregado', detail: 'El pago se agrego correctamente'}));
         }catch(e){
-            dispatch(showToast({severity: 'error', summary: 'Error', detail: 'Ocurrio un error al agregar el pago'}));
+            if(e instanceof ErrorResponse) {
+                dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                if(e.getCode() === 401){
+                    removeToken();
+                    navigate('/');
+                }
+            }else{
+                dispatch(showToast({severity: 'error', summary: 'Error', detail: 'Ocurrio un error al agregar el pago'}));
+            }
+            console.error(e);
         }
     }
     const getLabelOfButton = () => {

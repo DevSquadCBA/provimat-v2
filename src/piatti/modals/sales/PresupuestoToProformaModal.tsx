@@ -1,6 +1,7 @@
 
 import { IClient, SaleWithProduct } from "@/interfaces/dbModels"
 import { SaleStates } from "@/interfaces/enums"
+import { ErrorResponse } from "@/interfaces/Errors"
 import { ToPayTotal } from "@/piatti/components/ToPayTotal"
 import { removeSaleFromSales } from "@/reducers/localDataReducer"
 import { changeVisibilityModalPresupuestoToProforma } from "@/reducers/modalsSlice"
@@ -47,7 +48,7 @@ export function PresupuestoToProformaModal(){
                     navigate('/');
                     return;
                 }
-                await API.Sale.update(idSaleForModals,salesProducts, userData.token);
+                await API.Sale.update(userData.token,idSaleForModals,salesProducts);
                 dispatch(removeSaleFromSales({id: idSaleForModals}));
                 dispatch(changeVisibilityModalPresupuestoToProforma({modalPresupuestoToProformaVisible: false, idSaleForModals: 0}));
                 dispatch(showToast({ severity: "success", summary: "Presupuesto actualizado", detail: "Se ha actualizado el presupuesto", life: 3000 }));
@@ -56,8 +57,16 @@ export function PresupuestoToProformaModal(){
                     window.location.reload();
                 },500)
             } catch (e) {
-                removeToken();
-                navigate('/');
+                 if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo actualizar la venta", life: 3000 }));
+                }
+                console.error(e);
             }
         })();
     }
@@ -79,7 +88,7 @@ export function PresupuestoToProformaModal(){
                 navigate('/');
                 return;
             }
-            const saleUpdated = await API.Sale.addPayment(salesProducts.id,{paid: monto}, userData.token);
+            const saleUpdated = await API.Sale.addPayment(userData.token,salesProducts.id,{paid: monto});
             salesProducts.paid = saleUpdated.paid;
             setSalesProducts({...salesProducts});
             dispatch(showToast({severity: 'success', summary: 'Pago agregado', detail: 'El pago se agrego correctamente'}));
@@ -110,12 +119,19 @@ export function PresupuestoToProformaModal(){
                     navigate('/');
                     return;
                 }
-                const salesProducts = await API.Sale.getSalesWithProducts(idSaleForModals,userData.token);
+                const salesProducts = await API.Sale.getSalesWithProducts(userData.token,idSaleForModals);
                 setSalesProducts(salesProducts);
             }catch(e){
-                console.log(e);
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo obtener las ventas", life: 3000 }));
+                }
+                console.error(e);
             }
         })()
     },[idSaleForModals, modalPresupuestoToProformaVisible, navigate])

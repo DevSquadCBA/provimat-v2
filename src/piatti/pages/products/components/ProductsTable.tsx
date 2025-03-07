@@ -14,6 +14,7 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import  pencil  from '../../../../assets/pencil.svg';
+import { ErrorResponse } from "@/interfaces/Errors";
 
 
 
@@ -69,8 +70,16 @@ export function ProductsTable() {
                 dispatch(changeVisibilityModalCreation({ modalCreationVisible: false }));
                 dispatch(showToast({ severity: "success", summary: "Producto creado", detail: "Se ha creado el nuevo producto", life: 3000 }));
             } catch (e) {
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                  dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                if(e.getCode() === 401){
+                    removeToken();
+                    navigate('/');
+                }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo crear el usuario", life: 3000 }));
+                }
+                console.error(e);
             }
         })();
     }, [dispatch, navigate, products]);
@@ -93,8 +102,16 @@ export function ProductsTable() {
             dispatch(changeVisibilityModalCreation({ modalCreationVisible: false }));
             dispatch(showToast({ severity: "success", summary: "Producto actualizado", detail: "Se ha actualizado el producto", life: 3000 }));
           } catch (e) {
-            removeToken();
-            navigate('/');
+            if(e instanceof ErrorResponse) {
+              dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+              if(e.getCode() === 401){
+                  removeToken();
+                  navigate('/');
+              }
+            }else{
+                dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo actualizar el usuario", life: 3000 }));
+            }
+            console.error(e);
           }
         })();
     }
@@ -114,8 +131,16 @@ export function ProductsTable() {
           dispatch(changeVisibilityModalCreation({ modalCreationVisible: false }));
           dispatch(showToast({ severity: "success", summary: "Producto eliminado", detail: "Se ha eliminado el producto", life: 3000 }));
         } catch (e) {
-          removeToken();
-          navigate('/');
+          if(e instanceof ErrorResponse) {
+            dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+            if(e.getCode() === 401){
+                removeToken();
+                navigate('/');
+            }
+          }else{
+              dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo borrar el usuario", life: 3000 }));
+          }
+          console.error(e);
         }
       })();
     }
@@ -262,8 +287,16 @@ export function ProductsTable() {
           const providerResponse = await API.Provider.all(userData.token);
           setProvidersFilter(providerResponse);
         } catch (e) {
-          removeToken();
-          navigate("/");
+          if(e instanceof ErrorResponse) {
+              dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+              if(e.getCode() === 401){
+                  removeToken();
+                  navigate('/');
+              }
+          }else{
+              dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudieron obtener los productos", life: 3000 }));
+          }
+          console.error(e);
         }
       };   
       fetchData();

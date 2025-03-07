@@ -10,12 +10,15 @@ export type MenuView = {
     submenu: MenuSubItems
 }
 export type LocalData = {
-    products : IProduct[],
-    clients : IClient[],
-    providers : IProvider[],
-    sales : ISale[],
+    products : IProduct[]|null,
+    clients : IClient[]|null,
+    providers : IProvider[]|null,
+    sales : ISale[]|null,
+    presupuestos: ISale[]|null,
+    proformas: ISale[]|null,
+    comprobantes: ISale[]|null,
     salesProducts : ISaleProduct[],
-    team: IUser[],
+    team: IUser[] |null,
     productLastUpdated: number,
     providerLastUpdated: number,
     clientLastUpdated: number,
@@ -25,6 +28,7 @@ export type LocalData = {
     adminToken: string,
     selectedFiscalCategory: FiscalCategory| null,
     selectedRole: number | null,
+    clientSelected: number | null
 }
 
 export type UserData = {

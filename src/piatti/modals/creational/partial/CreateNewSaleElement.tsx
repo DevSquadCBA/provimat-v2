@@ -22,6 +22,7 @@ import { changeVisibilityModalCreation } from "@/reducers/modalsSlice";
 import { InputNumber, InputNumberChangeEvent } from "primereact/inputnumber";
 import { Role } from "@/interfaces/enums";
 import { LoginByAdminModal } from "../../dialog/LoginByAdminModal";
+import { ErrorResponse } from "@/interfaces/Errors";
 type IProductWithAddToTheList = IProduct & {addToTheList: React.ReactNode, formattedPrice: string, discount: number};
 export function CreateNewSaleElement(){
     const {newSaleData, adminToken} = useSelector((state:reducers)=>state.localData as unknown as {newSaleData: SaleWithProduct, adminToken: string});
@@ -81,9 +82,9 @@ export function CreateNewSaleElement(){
             }
             let response;
             if (hasDiscount && (role === Role.ADMIN || role === Role.SUPERVISOR)){
-                response = await API.Sale.create(data,adminToken);
+                response = await API.Sale.create(adminToken,data);
             }else{
-                response = await API.Sale.create(data,userData.token)
+                response = await API.Sale.create(userData.token,data)
             }
             if(!response){
                 dispatch(showToast({severity: 'error', summary: 'Error', detail: 'Ocurrio un error al crear la venta'}));
@@ -93,12 +94,18 @@ export function CreateNewSaleElement(){
             dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
             navigate('/ventas');
         }catch(e){
+            if(e instanceof ErrorResponse) {
+                dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                if(e.getCode() === 401){
+                    removeToken();
+                    navigate('/');
+                }
+            }else{
+                dispatch(showToast({ severity: "error", summary: "Error", detail: "Ocurrio un error al crear la venta", life: 3000 }));
+            }
             console.error(e);
             dispatch(removeNewSaleData());
             dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
-            removeToken();
-            navigate('/');
-            dispatch(showToast({severity: 'error', summary: 'Error', detail: 'Ocurrio un error al crear la venta'}));
         }
     }
     const deleteElement = (e: React.FormEvent,id: number | undefined) => {
@@ -170,8 +177,16 @@ export function CreateNewSaleElement(){
                 })
                 setProducts(response);
             }catch(e){
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudieron obtener los productos", life: 3000 }));
+                }
+                console.error(e);
             } 
         })();
     },[dispatch, navigate, newSaleData]);
