@@ -1,0 +1,79 @@
+.closest-next-delivery{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    background-color: #fff;
+    border-radius: var(--rounded-radius);
+    padding:0rem;
+    width: 20rem;
+    text-overflow: ellipsis;
+    .truckIcon-container{
+        padding:0;
+        margin: 0;
+        border-radius: var(--rounded-radius) 1rem 1rem var(--rounded-radius);
+        background-color: #4CB3A05C;
+        display: flex;
+        height: 10rem;
+        img{
+            padding: 1rem;
+            margin: auto;
+            width: 5rem;
+        }
+    }
+    .closest-next-delivery-info{
+        padding: 1rem 2rem 0 2rem ;
+        margin: 0;
+    }
+}
+.date{
+    color: var(--primary-dark-color);
+    font-variant: all-small-caps;
+    font-size: 3rem;
+    line-height: 1rem;
+    margin: 0rem 0rem 1rem;
+    font-weight: bold;
+}
+.clientName{
+    margin: 0.5rem 0 0 0 ;
+    font-variant: all-small-caps;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 0.8rem;
+    color: var(--primary-dark-color);
+    height: 1rem;
+    width: 10rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    span{
+        height: 1rem;
+        width: 10rem;
+        text-overflow: ellipsis;
+    }
+}
+.clientName::before{
+    content: " · ";
+    margin: 0rem 0.5rem 0 0.5rem;
+    font-weight: bolder;
+    font-size: 2rem;
+    line-height: 0rem;
+
+}
+.next-deliveries{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;;
+    background-color: #fff;
+    border-radius: var(--rounded-radius);
+    padding: 2rem 1rem 1rem 0rem;
+    width: 20rem;
+    text-overflow: ellipsis;
+    .next-delivery{
+
+    }
+}
