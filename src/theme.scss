@@ -35,7 +35,7 @@ $claro: #F4F5FA;
   --secondary-text-color: #{$secondaryTextColor}!important;
   --primary-background-color: #{$primaryBackgroundColor}!important;
   --menu-selected-color: #{$menuSelectedColor}!important;
-  --claro: #{$claro};
+  --claro: #{$claro}!important;
   --font-family: #{$fontFamily};
   --rojo: #{$rojo};
   --disabled: #{$disabled};

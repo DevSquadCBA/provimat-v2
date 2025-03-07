@@ -13,6 +13,12 @@ div#root {
 }
 
 .sidebar {
+
+  .view {
+    box-shadow: 11px 11px 17px rgba(30, 30, 30, 0.05);
+    border-radius: 2rem;
+    border: none !important;
+  }
   
   .sidebar_container {
     position: fixed;
@@ -216,6 +222,126 @@ button.updateToProforma, button.updateToComprobante {
   top: 1vh;
   bottom: 1vh;
   overflow-y: scroll;
+
+  .view{
+    &__user.history-client{
+      margin-bottom: 2rem;
+
+      .data{
+        width: 100%;
+        &_user {
+          background-color: #ffffff;
+          border-radius: var(--rounded-radius);
+          width: 45%;
+          padding: 1.2rem;
+          
+          &_container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            .user_identity {
+
+              h1 {
+                color: var(--primary-dark-color);
+                font-size: larger;
+                margin: 0;
+              }
+              
+            }
+          }
+
+          &_identity_extra{
+            display: flex;
+            justify-content: space-between;
+            color: var(--verde-medio);
+            font-weight: bold;
+            align-items: flex-end;
+            p {
+              margin: 0;
+            }
+            .fantasy_name{
+              font-style: italic;
+            }
+            .client_id{
+              font-variant: all-small-caps;
+              font-size: 1.1rem;
+            }
+          }
+
+          &_info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 1rem;
+
+            &_contact_item {
+              display: flex;
+              align-items: center;
+              p {
+                margin: 0.5rem;
+              }
+            }
+            &_extra {
+              p {
+                margin: 0.5rem;
+                font-variant: all-small-caps;
+                font-weight: 500;
+                font-size: large;
+                color: var(--primary-light-color);
+                span {
+                  color: black;
+                  font-variant: initial;
+                  font-size: medium;
+                  &.fiscal_code {
+                    font-variant: all-small-caps;
+                    font-size: larger;
+                  }
+                }
+              }
+            }
+          }
+
+          &_update {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.4rem;
+          }
+        }
+
+        &_graph{ 
+          background-color: var(--primary-color);
+          border-radius: var(--rounded-radius);
+          width: 53%;
+          display: flex;
+          
+          &_date {
+            display: flex;
+            flex-direction: column;
+            background: var(--verde-medio);
+            width: 50%;
+            border-radius: 2rem;
+            color: white;
+            align-items: center;
+            justify-content: center;
+            img {
+              width: 12%
+            }
+            p {
+              margin: 1rem;
+              font-size:larger;
+              font-size:300;
+            }
+            h3 {
+              margin: 0;
+              font-size: x-large;
+            }
+          }
+        }  
+      }
+      
+    }
+
+  }
 }
 
 .verde-medio{

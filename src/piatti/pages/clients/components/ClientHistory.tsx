@@ -17,6 +17,7 @@ import { PresupuestoToProformaModal } from "@/piatti/modals/sales/PresupuestoToP
 import { ProformaToComprobanteModal } from "@/piatti/modals/sales/ProformaToComprobanteModal"
 import { CreateNewSaleElement } from "@/piatti/modals/creational/partial/CreateNewSaleElement"
 import { ClientWithBudgetData } from "@/interfaces/dto"
+import { SelectButton } from "primereact/selectbutton"
 
 type Props = {
     client:ClientWithBudgetData & { id: number } | undefined
@@ -26,6 +27,9 @@ interface RootState {
         sales: IHistorySales[]
     }
 }
+
+const SaleTypes = [ "Presupuesto", "Proforma", "Comprobante" ];
+
 export function ClientHistory({client}:Props) {
     const navigate = useNavigate();
     const {modalHistoryVisible,modalHistorySale} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalHistoryVisible: boolean,modalHistorySale: null| IHistorySales, stateSelected: string});
@@ -47,6 +51,7 @@ export function ClientHistory({client}:Props) {
                                     <Avatar className="circle-state" style={{ backgroundColor: getColorOfState(e.state as SaleStates) || '#19E052' }} shape="circle"></Avatar>
                                     <span className="text-state">{getTranslationOfState(e.state||'')}</span>
                                 </div>,
+                    states: getTranslationOfState(e.state || ''),
                 })) as unknown as IHistorySales[];
     
     useEffect(() => {
@@ -74,6 +79,7 @@ export function ClientHistory({client}:Props) {
         { isKey: false, order: false, field: 'distinctProviders', header: 'Proveedores involucrados' },
         { isKey: false, order: false, field: 'productsCount', header: 'Num Productos' },
         { isKey: false, order: false, field: 'granTotal', header: 'Total' },
+        { isKey: false, order: false, field: 'states', header: 'naqve' },
     ]
     const body = (<CreateNewSaleElement />);
     const createNewModal:CreateModalProps = (
@@ -88,6 +94,8 @@ export function ClientHistory({client}:Props) {
          }
      )
     return <> 
+        <SelectButton value={SaleTypes}  />
+
         {client &&
             <Table key={'clientHistory'} data={sales} columns={columns} onRowClick={handleClick} placeholder="Venta" newModalContent={createNewModal}></Table>
         }
