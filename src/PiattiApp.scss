@@ -2,21 +2,22 @@
 @import './piatti/styles/variables.scss';
 @import './piatti/styles/global.scss';
 
+
 // IMAGES
 $menu-item-normal: (
-    clients: url('src/assets/sidebar/logoclientes.svg'),
-    providers: url('src/assets/sidebar/logoproveedores.svg'),
-    products: url('src/assets/sidebar/logoproductos.svg'),
-    sales: url('src/assets/sidebar/logopresupuestos.svg'), 
-    team: url('src/assets/sidebar/logoteam.svg')
+    clients: url('@/assets/sidebar/logoclientes.svg'),
+    providers: url('@/assets/sidebar/logoproveedores.svg'),
+    products: url('@/assets/sidebar/logoproductos.svg'),
+    sales: url('@/assets/sidebar/logopresupuestos.svg'), 
+    team: url('@/assets/sidebar/logoteam.svg')
 );
 
 $menu-item-selected: (
-    clients: url('src/assets/sidebar/logoclientesselect.svg'),
-    providers: url('src/assets/sidebar/logoproveedoresselect.svg'),
-    products: url('src/assets/sidebar/logoproductosselect.svg'),
-    sales: url('src/assets/sidebar/logopresupuestosselect.svg'), 
-    team: url('src/assets/sidebar/logoteamselect.svg')
+    clients: url('@/assets/sidebar/logoclientesselect.svg'),
+    providers: url('@/assets/sidebar/logoproveedoresselect.svg'),
+    products: url('@/assets/sidebar/logoproductosselect.svg'),
+    sales: url('@/assets/sidebar/logopresupuestosselect.svg'), 
+    team: url('@/assets/sidebar/logoteamselect.svg')
 );
 
 
@@ -239,7 +240,42 @@ button.updateToProforma, button.updateToComprobante {
   padding: 2rem 3vw;
   top: 1vh;
   bottom: 1vh;
-  overflow-y: scroll;
+  overflow-y: auto;
+
+  
+
+  &::-webkit-scrollbar {
+    width: 16px !important;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-light-color) transparent;
+    border-radius: 40px;
+    background-color: transparent!important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--primary-light-color); 
+    border-radius: 40px;
+    border: 3px solid var(--claro);
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent; 
+  }
+
+  &::-webkit-scrollbar-track-piece:start {
+    background-color: transparent;
+    margin-top: 3vh;
+  }
+
+  &::-webkit-scrollbar-track-piece:end {
+    background-color: transparent;
+    margin-bottom: 3vh;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none!important // 🔥 Oculta las flechas arriba y abajo
+  }
+  
 
   .view{
     &__user.history-client{
@@ -397,6 +433,42 @@ button.updateToProforma, button.updateToComprobante {
   }
 }
 
+.p-dialog-content {
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 16px !important;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-light-color) transparent;
+    border-radius: 40px;
+    background-color: transparent!important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--primary-light-color); 
+    border-radius: 40px;
+    border: 3px solid white;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent; 
+  }
+
+  &::-webkit-scrollbar-track-piece:start {
+    background-color: transparent;
+    margin-top: 3vh;
+  }
+
+  &::-webkit-scrollbar-track-piece:end {
+    background-color: transparent;
+    margin-bottom: 3vh;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none!important // 🔥 Oculta las flechas arriba y abajo
+  }
+}
+
 .verde-medio{
   color: var(--verde-medio);
 }
@@ -404,13 +476,43 @@ button.updateToProforma, button.updateToComprobante {
 .sales-modal{
   .p-dialog-header{
     padding: 1.2rem 1rem 0 1.5rem !important;
+    
+    h2.modal-title {
+      font-weight: 600;
+      color: var(--primary-dark-color);
+    }
+  }
+
+  .p-dialog-content {
+    span.text-important.modals-details{
+      color: black;
+      font-size: large;
+      font-weight: 400 !important;
+      margin-right: 0.4rem;
+    }
+    span.modals-info {
+      font-weight: 700;
+      font-variant: all-small-caps;
+      font-size: x-large;
+
+    }
+
+    .modals-title{
+      color: black;
+      font-size: 1.3rem !important;
+    }
+    .modals-title-amount{
+      font-weight: 400 !important;
+    }
+
+
   }
   .p-inputnumber-input{
     border-radius: var(--rounded-radius) !important;
   }
   &-table{
     height: 30vh;
-    overflow-y: scroll;
+    overflow-y: auto;
     border: 1px var(--primary-color) solid;
     border-radius: 1rem;
     // padding: 0.1rem
@@ -418,7 +520,48 @@ button.updateToProforma, button.updateToComprobante {
       padding: 0.3rem 0.9rem !important;
       .p-datatable-thead tr th{
         border-bottom: var(--primary-color) 0px solid !important;
+        td {
+          font-variant: all-small-caps;
+          font-size: larger;
+        }
       }
+      .p-datatable-tbody > tr > td{
+        border : none !important;
+        font-variant: all-small-caps;
+        font-size: larger;
+      }
+    }
+
+    &::-webkit-scrollbar {
+      width: 16px !important;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-light-color) transparent;
+      border-radius: 40px;
+      background-color: transparent!important;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--primary-light-color); 
+      border-radius: 40px;
+      border: 3px solid white;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background-color: transparent; 
+    }
+  
+    &::-webkit-scrollbar-track-piece:start {
+      background-color: transparent;
+      margin-top: 3vh;
+    }
+  
+    &::-webkit-scrollbar-track-piece:end {
+      background-color: transparent;
+      margin-bottom: 3vh;
+    }
+  
+    &::-webkit-scrollbar-button {
+      display: none!important // 🔥 Oculta las flechas arriba y abajo
     }
   }
 }
@@ -434,6 +577,7 @@ span.p-button {
     font-variant: all-small-caps;
     line-height: 1.2;
   }
+  
 }
 
 p.icon, .p-input-icon, .p-icon {
@@ -584,3 +728,4 @@ p.icon, .p-input-icon, .p-icon {
 .pi.pi-times {
   font-size: 0.5rem;
 }
+

@@ -104,7 +104,7 @@ export function ProformaToComprobanteModal(){
     const footerElement = (
         <div className="flex justify-content-end ">
             {salesProducts.paid != salesProducts.total &&
-                <Button rounded onClick={handleAddPaymentButton}>Agregar un pago</Button>
+                <Button className="secondary" rounded onClick={handleAddPaymentButton}><span className="p-button-label p-c ">Agregar un pago</span></Button>
             }
             <Button 
                 disabled={salesProducts.products?.some(p=>p.details === '')|| false}
@@ -195,7 +195,7 @@ export function ProformaToComprobanteModal(){
                         <p className="dummy"></p>
                     </div>
                     <div className="flex justify-content-start text-important text-xl m-0 p-0 mb-2">
-                        <p className="m-0 p-0 ">Productos</p>
+                        <p className="m-0 p-0 modals-title">Productos</p>
                     </div>
                     <DataTable 
                         key="products_table"

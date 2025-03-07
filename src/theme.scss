@@ -79,6 +79,10 @@ $claro: #F4F5FA;
     border-color: var(--primary-dark-color) !important;
     color: var(--primary-text-color) !important;
   }
+  &.secondary {
+    background-color: var(--primary-light-color) !important;
+    
+  }
 }
 
 .p-button:not(:disabled):hover {
