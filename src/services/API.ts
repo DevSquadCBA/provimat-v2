@@ -33,7 +33,13 @@ const POST = async (url:string, token:string|null,data:unknown)=>{
     }, method: 'POST', body: JSON.stringify(data)});
     const dataResponse = await response.json();
     if(dataResponse.statusCode == 401) return redirectToLogin();
-    if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
+    if(dataResponse.statusCode == 403) {
+        throw new Error(dataResponse.message);
+    }
+    if(dataResponse.statusCode && [200,201].includes(dataResponse.statusCode) ){
+        throw new Error(dataResponse.message);
+        return redirectToLogin();
+    }
     return dataResponse;
 }
 const PUT = async (url:string, token:string|null,data:unknown)=>{
@@ -64,7 +70,7 @@ class Client {
         const data = await GET(`${API_URL}/clients`, token);
         return data.map((e:ClientWithBudgetData)=>({...e, lastModification: convertToVerboseDay(e.lastModification)}));
     }
-    get = async (id:string,token:string|null): Promise<ClientWithBudgetData>=>{
+    get = async (token:string|null,id:string): Promise<ClientWithBudgetData>=>{
         const data = await GET(`${API_URL}/client/${id}`, token);
         return {...data, lastModification: convertToVerboseDay(data.lastModification)};
     }
@@ -78,7 +84,6 @@ class Client {
         return await DELETE(`${API_URL}/client/${id}`, token);
     }
 }
-
 
 class Provider {
     all = async (token:string|null)=>{
@@ -126,25 +131,25 @@ class Product {
     }
 }
 class Sale {
-    get = async (state:string,token:string|null)=>{
+    get = async (token:string|null,state:string)=>{
         return await GET(`${API_URL}/sales?state=${state}`, token);
     }
-    history = async (id:number|undefined,token:string|null)=>{
+    history = async (token:string|null,id:number|undefined)=>{
         return await GET(`${API_URL}/client/${id}/sales/`, token);
     }
-    getSalesWithProducts = async (id:number|undefined,token:string|null)=>{
+    getSalesWithProducts = async (token:string|null,id:number|undefined)=>{
         return await GET(`${API_URL}/sale/${id}`, token);
     }
-    update = async (id:number|undefined,data: unknown,token:string|null)=>{
+    update = async (token:string|null,id:number|undefined,data: unknown)=>{
         return await PUT(`${API_URL}/sale/${id}`, token,data);
     }
-    addPayment = async(id:number|undefined,data: unknown,token:string|null)=>{
+    addPayment = async(token:string|null,id:number|undefined,data: unknown)=>{
         return await POST(`${API_URL}/sale/${id}/addPayment`, token,data);
     }
-    updateDetails = async(id:number|undefined, data:unknown, token:string|null)=>{
+    updateDetails = async(token:string|null,id:number|undefined, data:unknown)=>{
         return await POST(`${API_URL}/sale/${id}/updateDetails`, token,data);
     }
-    create = async (data:unknown, token:string|null)=>{
+    create = async (token:string|null,data:unknown)=>{
         return await POST(`${API_URL}/sale`,token, data);
     }
 }
@@ -166,9 +171,11 @@ class User {
 }
 
 class Auth{
-    login = async (credentials:{username:string, password:string})=>{
-        return await POST(`${API_URL}/auth/login`, null,{email: credentials.username, password: credentials.password});
-    }
+    login = async (credentials:{username:string, password:string})=>
+        await POST(`${API_URL}/auth/login`, null,{email: credentials.username, password: credentials.password});
+}
+class Log{
+    get = async(token:string|null) => await GET(`${API_URL}/log`, token);
 }
 export default class API {
     static Client: Client = new Client();
@@ -177,4 +184,5 @@ export default class API {
     static Sale: Sale = new Sale();
     static User:User = new User();
     static Auth:Auth = new Auth();
+    static Log:Log = new Log();
 }

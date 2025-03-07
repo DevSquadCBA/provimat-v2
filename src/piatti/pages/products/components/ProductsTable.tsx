@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef, Ref, useCallback, useMemo } from "react";
+import {  useState, useRef, Ref, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setProducts } from "@/reducers/localDataReducer";
+import { setProducts, setProviders } from "@/reducers/localDataReducer";
 import { changeVisibilityModalCreation } from "@/reducers/modalsSlice";
 import { showToast } from "@/reducers/toastSlice";
 import API from "@/services/API";
@@ -14,23 +14,17 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import  pencil  from '../../../../assets/pencil.svg';
+import { reducers } from "@/store";
+import { APIComponent } from "@/services/APIComponent";
 
-
-
-interface RootState {
-    localData:{
-        products: IProduct[]
-    }
-}
 
 type IProductWithProvider = IProduct & {provider: IProvider}
 
 export function ProductsTable() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const products = useSelector((state:RootState)=>state.localData.products);
+    const {products,providers} = useSelector((state:reducers)=>state.localData as unknown as {products: IProductWithProvider[], providers: IProvider[]} );
 
-    const [providersFilter, setProvidersFilter] = useState<IProvider[]>([]);
     const [selectedProvider, setSelectedProvider] = useState<IProvider | null>(null);
 
     const dropdownRef = useRef(null  as unknown); 
@@ -38,10 +32,10 @@ export function ProductsTable() {
     
 
     const handleProviderChange = useCallback((e: { value: number }) => {
-      const provider = providersFilter.find(p => p.id === e.value) || null;
+      const provider = providers.find(p => p.id === e.value) || null;
       setSelectedProvider(provider)
         console.log("Proveedor seleccionado", e.value);
-    }, [providersFilter]);
+    }, [providers]);
     
     const createProductHandler = useCallback((e: React.FormEvent) => {
         const form = (document.getElementById('createProductForm') as HTMLFormElement);
@@ -130,7 +124,7 @@ export function ProductsTable() {
     ]
 
     const body = useMemo(()=>( 
-    <form id="createProductForm" ref={formRef as unknown as Ref<HTMLFormElement>} className="modal-body" style={{maxWidth: '700px'}}>
+      <form id="createProductForm" ref={formRef as unknown as Ref<HTMLFormElement>} className="modal-body" style={{maxWidth: '700px'}}>
         <h3>Datos Requeridos</h3>
         <div className="flex flex_column gap_2 mt_3">
             <div className="flex flex_row space-between">
@@ -148,7 +142,7 @@ export function ProductsTable() {
                 value={selectedProvider?.id} 
                 onChange={handleProviderChange}
                 name="providerId" 
-                options={providersFilter} 
+                options={providers} 
                 optionLabel="name" 
                 optionValue="id"
                 editable placeholder="Seleccione un Proveedor" 
@@ -170,7 +164,7 @@ export function ProductsTable() {
                 </FloatLabel>
             </div>
         </div>
-    </form>),[providersFilter, selectedProvider, handleProviderChange]);
+    </form>),[selectedProvider?.id, handleProviderChange, providers]);
 
     const createNewModal:CreateModalProps =  useMemo (() =>({
                 header: <h2>Nuevo Producto</h2>,
@@ -228,54 +222,45 @@ export function ProductsTable() {
           }
             const title = document.querySelector('.p-dialog-title h2');
             if(title) title.innerHTML = 'Editar Producto';
-        }
-    
-    useEffect(() => {
-      const fetchData = async () => {
-          try {
-          const userData = getUserData();
-          if (!userData || !userData.token) {
-              removeToken();
-              navigate("/");
-              return;
-          }
-  
-          const productResponse = await API.Product.all(userData.token);
-          const formattedProducts = productResponse.map((product: IProductWithProvider) => ({
-              ...product,
-              provider: product.provider.name,
-              buttonsProducts: (
-                <img src={pencil} onClick={(e) => {
-                  e.stopPropagation();
-                  dispatch(changeVisibilityModalCreation( {modalCreationVisible:true}));
-                  setTimeout(() => {
-                    fillFieldsWithCurrentProductAndEditModal(product);
-                  },500)
-                }}>
-                
-                </img>
-              )
-              
-          }))
-          dispatch(setProducts(formattedProducts));
-  
-          const providerResponse = await API.Provider.all(userData.token);
-          setProvidersFilter(providerResponse);
-        } catch (e) {
-          removeToken();
-          navigate("/");
-        }
-      };   
-      fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }
+    const mappingFunction = (products: IProductWithProvider[]) => products.map((product: IProductWithProvider) => ({
+        ...product,
+        provider: product.provider.name,
+        buttonsProducts: (
+          <img src={pencil} onClick={(e) => {
+            e.stopPropagation();
+            dispatch(changeVisibilityModalCreation( {modalCreationVisible:true}));
+            setTimeout(() => {
+              fillFieldsWithCurrentProductAndEditModal(product);
+            },500)
+          }}>
+          
+          </img>
+        )
+        
+    }));
 
-    return <Table 
-    key={'products'} 
-    data={products} 
-    columns={columns} 
-    placeholder="producto"
-    newModalContent={createNewModal}
-    />;
+    return <>
+      {!products && 
+        <APIComponent
+          mapping={mappingFunction}
+          callBack={API.Product.all}
+          onSuccess={response=>dispatch(setProducts(response))}
+        />
+      }
+      {!providers && 
+        <APIComponent
+          callBack={API.Provider.all}
+          onSuccess={response=>dispatch(setProviders(response))}
+        />
+      }
+      <Table 
+        key={'products'} 
+        data={products} 
+        columns={columns} 
+        placeholder="producto"
+        newModalContent={createNewModal}
+      />;
+    </>
 
 }

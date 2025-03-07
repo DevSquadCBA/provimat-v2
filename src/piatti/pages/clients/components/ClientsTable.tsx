@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, Ref } from "react";
 import { useDispatch, useSelector} from "react-redux";
-import { setClients, setSelectedFiscalCategory } from "@/reducers/localDataReducer";
+import { setClients, setClientSelected, setSelectedFiscalCategory } from "@/reducers/localDataReducer";
 import { changeVisibilityModalCreation } from "@/reducers/modalsSlice";
 import { showToast } from "@/reducers/toastSlice";
 import API from "@/services/API";
@@ -17,6 +17,7 @@ import { Dropdown } from "primereact/dropdown";
 import { FiscalCategory, FiscalCategoryValues } from "@/interfaces/enums";
 import  pencil  from '../../../../assets/pencil.svg';
 import { reducers } from "@/store";
+import { APIComponent } from "@/services/APIComponent";
 
 interface RootState {
     localData: {
@@ -31,7 +32,6 @@ export function ClientsTable() {
     const {selectedFiscalCategory} = useSelector((state:reducers)=>state.localData as unknown as {selectedFiscalCategory: FiscalCategory| null});
     const dropdownRef = useRef(null  as unknown); 
     const formRef = useRef(null as unknown);
-
 
     const handleClickEvent = (event: DataTableRowClickEvent) => {
         if (event.data && 'id' in event.data) {
@@ -114,7 +114,7 @@ export function ClientsTable() {
 
     const deleteClientHandler = (id: number|undefined ) => {
         if (!id) return;
-        ( async () => {
+            ( async () => {
             try {
                 const userData = getUserData();
                 if (!userData ||!userData.token) {
@@ -279,48 +279,40 @@ export function ClientsTable() {
         const title = document.querySelector('p-dialog-title h2');
         if(title) title.innerHTML = 'Editar Cliente';
     }
-
-    useEffect(() => {
-        (async () => {
-            try{
+    const mappingFunction = (clients: IClient[])=>clients.map((c) => ({
+        ...c,
+        buttonsClients: (
+            <img src={pencil} onClick={(e) => {
+                e.stopPropagation();
+                dispatch(changeVisibilityModalCreation({modalCreationVisible: true }));
+                setTimeout(() => {
+                    fillFieldWithCurrentClientAndEditModal(c);
+                }, 500);
+            }}>
                 
-                const userData = getUserData();
-                if (!userData ||!userData.token) {
-                    removeToken();
-                    navigate('/');
-                    return;
-                }
-                let response: IClient[] = await API.Client.all(userData.token);
-                response = response.map((c) => ({
-                    ...c,
-                    buttonsClients: (
-                        <img src={pencil} onClick={(e) => {
-                            e.stopPropagation();
-                            dispatch(changeVisibilityModalCreation({modalCreationVisible: true }));
-                            setTimeout(() => {
-                                fillFieldWithCurrentClientAndEditModal(c);
-                            }, 500);
-                        }}>
-                            
-                        </img>
-                    )
+            </img>
+        )
 
-                }))
-                dispatch(setClients(response));
-            }catch(e){
-                removeToken();
-                navigate('/');
-            }
-        })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    
-    return <Table 
-    key={'clients'} 
-    data={clients} 
-    columns={columns} 
-    placeholder="cliente" 
-    onRowClick={handleClickEvent} 
-    newModalContent={createNewModal} 
-    />;
+    }))
+    useEffect(()=>{
+        // para que cuando se seleccione un cliente, al volver y ver otro, este no se guarde
+        dispatch(setClientSelected(null))
+    })
+    return <>
+    {!clients &&
+    <APIComponent 
+        callBack={API.Client.all}
+        mapping={mappingFunction}
+        onSuccess={(data:IClient[])=>dispatch(setClients(data))}
+        />
+    }
+    <Table 
+        key={'clients'} 
+        data={clients} 
+        columns={columns} 
+        placeholder="cliente" 
+        onRowClick={handleClickEvent} 
+        newModalContent={createNewModal} 
+        />;
+    </>
 }

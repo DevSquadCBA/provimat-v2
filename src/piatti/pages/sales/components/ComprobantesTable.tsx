@@ -1,11 +1,9 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { cleanAdminToken,  setSales } from "@/reducers/localDataReducer";
+import { cleanAdminToken,  setComprobantes } from "@/reducers/localDataReducer";
 import API from "@/services/API";
-import { formatPrice, getPercentOfState, getUserData, removeToken } from "@/services/common";
+import { formatPrice, getPercentOfState} from "@/services/common";
 import { ISale } from "@/interfaces/dbModels";
 import { Table } from "@/piatti/components/Table";
-import { useNavigate } from "react-router-dom";
 import { CreateModalProps, IHistorySales } from "@/interfaces/interfaces";
 import { CreateNewSaleElement } from "@/piatti/modals/creational/partial/CreateNewSaleElement";
 import { changeVisibilityModalHistory } from "@/reducers/modalsSlice";
@@ -16,50 +14,21 @@ import moment from "moment";
 import { SaleStates } from "@/interfaces/enums";
 import { ProgressBar } from "primereact/progressbar";
 import { Chip } from "primereact/chip";
-
-
-interface RootState {
-    localData: {
-        sales: ISale[]
-    }
-}
-
+import { APIComponent } from "@/services/APIComponent";
 
 export function ComprobantesTable() {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const comprobantes = useSelector((state:RootState)=>state.localData.sales);
+    const {comprobantes} = useSelector((state:reducers)=>state.localData as unknown as {comprobantes: ISale[]});
     const {modalHistoryVisible,modalHistorySale} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalHistoryVisible: boolean,modalHistorySale: null| IHistorySales, stateSelected: string});
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const userData = getUserData();
-                if (!userData || !userData.token) {
-                    removeToken();
-                    navigate('/');
-                    return;
-                }
-                let response = await API.Sale.get('comprobante',userData.token);
-                if(!response) return;
-                response = response.map((e:ISale) =>({
-                    ...e,
-                    totalFormatted: '$'+ formatPrice(e.total || 0),
-                    createdAtFormatted: moment(e.createdAt).format('DD/MM/YYYY'),
-                    percent: e.state == SaleStates.canceled
-                    ? <Chip label="Cancelado" icon="pi pi-times" className="bg-red-400 text-white mt-0 mb-0 pt-0 pb-0 leading-none"/>
-                    : <ProgressBar value={getPercentOfState(e.state)} className="progressBar" />
-                        
-                }))
-                dispatch(setSales(response));
-            }catch(e){
-                removeToken();
-                navigate('/');
-            } 
-            
-        })();
-    }, [dispatch, navigate]);
-
+    const mappingFunction = (comprobantes:ISale[])=>comprobantes.map((e:ISale) =>({
+        ...e,
+        totalFormatted: '$'+ formatPrice(e.total || 0),
+        createdAtFormatted: moment(e.createdAt).format('DD/MM/YYYY'),
+        percent: e.state == SaleStates.canceled
+        ? <Chip label="Cancelado" icon="pi pi-times" className="bg-red-400 text-white mt-0 mb-0 pt-0 pb-0 leading-none"/>
+        : <ProgressBar value={getPercentOfState(e.state)} className="progressBar" />    
+    }))
+       
     const columns = [
         { isKey: true, order: false, field: 'id', header: 'ID '},
         { isKey: false, order: false, field: 'client.name', header: 'Cliente'},
@@ -72,19 +41,27 @@ export function ComprobantesTable() {
             dispatch(changeVisibilityModalHistory({modalHistoryVisible: true, modalHistorySale: event.data as IHistorySales}));
         }
     }
-   const body = (<CreateNewSaleElement />);
-       const createNewModal:CreateModalProps = (
-               {
-                   header: <h3>Nuevo (Presupuesto)</h3>,
-                   body,
-                   primaryButtonEvent: () => {},
-                   resizable: false,
-                   footer: <div></div>,
-                   onHide: ()=>window.location.reload(),
-                   onShow: ()=>cleanAdminToken()
-               }
-           )
+    const body = (<CreateNewSaleElement />);
+    const createNewModal:CreateModalProps = (
+            {
+                header: <h3>Nuevo (Presupuesto)</h3>,
+                body,
+                primaryButtonEvent: () => {},
+                resizable: false,
+                footer: <div></div>,
+                onHide: ()=>window.location.reload(),
+                onShow: ()=>cleanAdminToken()
+            }
+        )
     return <>
+        {!comprobantes && 
+            <APIComponent 
+            callBack={API.Sale.get} 
+            data={'comprobante'} 
+            mapping={mappingFunction}
+            onSuccess={(data:ISale[])=>dispatch(setComprobantes(data))}
+            />
+        }
         <Table key={'comprobante'} data={comprobantes} columns={columns} placeholder="venta" onRowClick={handleRowClick} newModalContent={createNewModal} />
            {(modalHistoryVisible && <SaleHistoryModal sale={modalHistorySale!}></SaleHistoryModal>)}
        </>

@@ -1,11 +1,9 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { cleanAdminToken, setSales} from "@/reducers/localDataReducer";
+import { cleanAdminToken, setPresupuestos} from "@/reducers/localDataReducer";
 import API from "@/services/API";
-import { formatPrice, getUserData, removeToken } from "@/services/common";
+import { formatPrice } from "@/services/common";
 import { ISale } from "@/interfaces/dbModels";
 import { Table } from "@/piatti/components/Table";
-import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { CreateModalProps, IHistorySales } from "@/interfaces/interfaces";
 import { reducers } from "@/store";
@@ -15,48 +13,23 @@ import { CreateNewSaleElement } from "@/piatti/modals/creational/partial/CreateN
 import { DataTableRowClickEvent } from "primereact/datatable";
 import { SaleHistoryModal } from "../../clients/components/SaleHistoryModal";
 import moment from "moment";
-
-interface RootState {
-    localData: {
-        sales: ISale[]
-    }
-}
+import { APIComponent } from "@/services/APIComponent";
 
 export function PresupuestosTable() {
     const {modalPresupuestoToProformaVisible} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalPresupuestoToProformaVisible: boolean});
     const {modalHistoryVisible,modalHistorySale} = useSelector((state:reducers)=>state.modalsSlice as unknown as {modalHistoryVisible: boolean,modalHistorySale: null| IHistorySales, stateSelected: string});
-    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const prespuestos = useSelector((state: RootState) => state.localData.sales);
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const userData = getUserData();
-                if (!userData || !userData.token) {
-                    removeToken();
-                    navigate('/');
-                    return;
-                }
-                let response:ISale[] = await API.Sale.get('presupuesto',userData.token);
-                response = response.map((e:ISale) =>({
-                    ...e, 
-                    totalFormatted: '$'+ formatPrice(e.total || 0),
-                    createdAtFormatted: moment(e.createdAt).format('DD/MM/YYYY'),
-                    updateToProforma: <Button className="updateToProforma" size="small" onClick={
-                        () => {
-                            dispatch(changeVisibilityModalPresupuestoToProforma({modalPresupuestoToProformaVisible: true, idSaleForModals: e.id || 0}));
-                        }
-                    }>Actualizar a Proforma</Button>
-                }));
-
-                dispatch(setSales(response));
-            }catch(e){
-                removeToken();
-                navigate('/');
-            }         
-        })();
-    }, [dispatch, navigate]);
+    const {presupuestos} = useSelector((state: reducers) => state.localData as unknown as {presupuestos: ISale[]});
+    const mappingFunction =(presupuestos:ISale[])=>presupuestos.map((e:ISale) =>({
+        ...e, 
+        totalFormatted: '$'+ formatPrice(e.total || 0),
+        createdAtFormatted: moment(e.createdAt).format('DD/MM/YYYY'),
+        updateToProforma: <Button className="updateToProforma" size="small" onClick={
+            () => {
+                 dispatch(changeVisibilityModalPresupuestoToProforma({modalPresupuestoToProformaVisible: true, idSaleForModals: e.id || 0}));
+            }
+        }>Actualizar a Proforma</Button>
+    }));
 
     const columns = [
         { isKey: true, order: false, field: 'id', header: 'ID '},
@@ -66,7 +39,6 @@ export function PresupuestosTable() {
         { isKey: false, order: false, field: 'totalFormatted', header: 'Total'}
     ];
     const handleRowClick = (event:DataTableRowClickEvent)=>{
-        console.log(event);
         if (event.data && 'id' in event.data) {
             dispatch(changeVisibilityModalHistory({modalHistoryVisible: true, modalHistorySale: event.data as IHistorySales}));
         }
@@ -84,7 +56,14 @@ export function PresupuestosTable() {
             }
         )
     return <>
-    <Table key={'presupuesto'} data={prespuestos} columns={columns} placeholder="venta" onRowClick={handleRowClick} newModalContent={createNewModal}/>
+    {!presupuestos && 
+        <APIComponent 
+            callBack={API.Sale.get} 
+            data={'presupuesto'} 
+            mapping={mappingFunction}
+            onSuccess={(data:ISale[])=>dispatch(setPresupuestos(data))}
+            />}
+    <Table key={'presupuesto'} data={presupuestos} columns={columns} placeholder="venta" onRowClick={handleRowClick} newModalContent={createNewModal}/>
     {modalPresupuestoToProformaVisible && <PresupuestoToProformaModal/>}
     {(modalHistoryVisible && <SaleHistoryModal sale={modalHistorySale!}></SaleHistoryModal>)}
     </>

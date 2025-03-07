@@ -22,10 +22,11 @@ type Props ={
     onRowClick?: (e:DataTableRowClickEvent) => void,
     newModalContent: CreateModalProps,
     footer?: JSX.Element,
-    minimalQuantity?: number
+    minimalQuantity?: number,
+    emptyMessage?:string
 }
 
-export function Table({columns, data, placeholder, onRowClick, footer,newModalContent, minimalQuantity=30}:Props) {
+export function Table({columns, data, placeholder, onRowClick, footer,newModalContent,emptyMessage, minimalQuantity=30}:Props) {
     const {modalCreationVisible} = useSelector((state:reducers) => state.modalsSlice as unknown as {modalCreationVisible: boolean});
     const dispatch = useDispatch();
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
@@ -82,6 +83,7 @@ export function Table({columns, data, placeholder, onRowClick, footer,newModalCo
                 filterLocale='es'
                 onRowClick={onRowClick}
                 footer={footer}
+                emptyMessage={emptyMessage? emptyMessage : "No se encontraron resultados"}
                 >
             {columns.map((column) => 
                 <Column 
