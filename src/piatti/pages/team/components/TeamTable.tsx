@@ -17,6 +17,7 @@ import React, { Ref, useCallback, useEffect, useMemo, useRef, useState } from "r
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import  pencil  from '../../../../assets/pencil.svg';
+import { ErrorResponse } from "@/interfaces/Errors";
 
 
 /*
@@ -79,8 +80,16 @@ export function TeamTable() {
                     }, 500);
                 
                 } catch (e) {
-                    removeToken();
-                    navigate('/');
+                    if(e instanceof ErrorResponse) {
+                        dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                        if(e.getCode() === 401){
+                            removeToken();
+                            navigate('/');
+                        }
+                    }else{
+                        dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo crear el usuario", life: 3000 }));
+                    }
+                    console.error(e);
                     
                 }
             })()    
@@ -107,8 +116,16 @@ export function TeamTable() {
                 dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
                 dispatch(showToast({ severity: "success", summary: "Usuario actualizado", detail: "Se ha actualizado el usuario", life: 3000 }));
             } catch (e) {
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudieron obtener los usuarios", life: 3000 }));
+                }
+                console.error(e);
             }
         })();
     } 
@@ -133,8 +150,16 @@ export function TeamTable() {
                 })
 
             } catch (e) {
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo eliminar el usuario", life: 3000 }));
+                }
+                console.error(e);
             }
         })();
         
@@ -285,8 +310,16 @@ export function TeamTable() {
             }))
                 dispatch(setTeam(response));
             }catch(e){
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudieron obtener los usuarios", life: 3000 }));
+                }
+                console.error(e);
             }
         })();
     // eslint-disable-next-line react-hooks/exhaustive-deps

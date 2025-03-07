@@ -10,12 +10,14 @@ import { CreateModalProps, IHistorySales } from "@/interfaces/interfaces";
 import { CreateNewSaleElement } from "@/piatti/modals/creational/partial/CreateNewSaleElement";
 import { changeVisibilityModalHistory } from "@/reducers/modalsSlice";
 import { DataTableRowClickEvent } from "primereact/datatable";
-import { SaleHistoryModal } from "../../clients/components/SaleHistoryModal";
+import { SaleHistoryModal } from "../../clients/components/modal/SaleHistoryModal";
 import { reducers } from "@/store";
 import moment from "moment";
 import { SaleStates } from "@/interfaces/enums";
 import { ProgressBar } from "primereact/progressbar";
 import { Chip } from "primereact/chip";
+import { ErrorResponse } from "@/interfaces/Errors";
+import { showToast } from "@/reducers/toastSlice";
 
 
 interface RootState {
@@ -53,8 +55,16 @@ export function ComprobantesTable() {
                 }))
                 dispatch(setSales(response));
             }catch(e){
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudieron obtener las ventas", life: 3000 }));
+                }
+                console.error(e);
             } 
             
         })();

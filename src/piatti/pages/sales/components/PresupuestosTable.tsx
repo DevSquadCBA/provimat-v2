@@ -13,8 +13,10 @@ import { PresupuestoToProformaModal } from "@/piatti/modals/sales/PresupuestoToP
 import { changeVisibilityModalHistory, changeVisibilityModalPresupuestoToProforma } from "@/reducers/modalsSlice";
 import { CreateNewSaleElement } from "@/piatti/modals/creational/partial/CreateNewSaleElement";
 import { DataTableRowClickEvent } from "primereact/datatable";
-import { SaleHistoryModal } from "../../clients/components/SaleHistoryModal";
+import { SaleHistoryModal } from "../../clients/components/modal/SaleHistoryModal";
 import moment from "moment";
+import { ErrorResponse } from "@/interfaces/Errors";
+import { showToast } from "@/reducers/toastSlice";
 
 interface RootState {
     localData: {
@@ -52,8 +54,16 @@ export function PresupuestosTable() {
 
                 dispatch(setSales(response));
             }catch(e){
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudieron obtener las ventas", life: 3000 }));
+                }
+                console.error(e);
             }         
         })();
     }, [dispatch, navigate]);

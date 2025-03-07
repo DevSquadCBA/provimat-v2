@@ -6,7 +6,7 @@ import { formatPrice, getColorOfState, getTranslationOfState, getUserData, remov
 import { DataTableRowClickEvent } from "primereact/datatable"
 import { useDispatch, useSelector } from "react-redux"
 import { reducers } from "@/store"
-import { SaleHistoryModal } from "./SaleHistoryModal"
+import { SaleHistoryModal } from "./modal/SaleHistoryModal"
 import { changeVisibilityModalHistory } from "@/reducers/modalsSlice"
 import moment from "moment"
 import { Avatar } from "primereact/avatar"
@@ -18,6 +18,7 @@ import { ClientWithBudgetData } from "@/interfaces/dto"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { showToast } from "@/reducers/toastSlice"
+import { ErrorResponse } from "@/interfaces/Errors"
 
 type Props = {
     client:ClientWithBudgetData & { id: number } | undefined
@@ -78,9 +79,16 @@ export function ClientHistory({client}:Props) {
                 }
                 dispatch(setSales(mappingFunction(response)));
             }catch(e){
-                dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudieron obtener las ventas", life: 3000 }));
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudieron obtener las ventas", life: 3000 }));
+                }
+                console.error(e);
             }
         })();
     },[dispatch,navigate, client?.id]);

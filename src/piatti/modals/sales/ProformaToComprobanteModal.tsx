@@ -18,6 +18,7 @@ import { InputTextarea } from "primereact/inputtextarea"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { ErrorResponse } from "@/interfaces/Errors"
 
 type SaleWithProductAndClient = SaleWithProduct & {client: IClient};
 
@@ -61,8 +62,16 @@ export function ProformaToComprobanteModal(){
                     window.location.reload();
                 },500)
             } catch (e) {
-                removeToken();
-                navigate('/');
+                 if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "Mo se pudo actualizar la venta", life: 3000 }));
+                }
+                console.error(e);
             }
         })();
     }
@@ -156,12 +165,19 @@ export function ProformaToComprobanteModal(){
                 const salesProducts = await API.Sale.getSalesWithProducts(userData.token,idSaleForModals);
                 setSalesProducts(salesProducts);
             }catch(e){
-                console.log(e);
-                removeToken();
-                navigate('/');
+                 if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo obtener las ventas", life: 3000 }));
+                }
+                console.error(e);
             }
         })()
-    },[idSaleForModals, modalProformaToComprobanteVisible, navigate])
+    },[dispatch, idSaleForModals, modalProformaToComprobanteVisible, navigate])
     return (<>
         {salesProducts &&
         <Dialog

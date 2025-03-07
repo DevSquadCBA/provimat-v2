@@ -13,6 +13,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import  pencil  from '../../../../assets/pencil.svg';
+import { ErrorResponse } from "@/interfaces/Errors";
 
 
 interface RootState {
@@ -48,8 +49,16 @@ export function ProvidersTable() {
                 dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
                 dispatch(showToast({ severity: "success", summary: "Proveedor creado", detail: "Se ha creado el nuevo proveedor", life: 3000 }));
             }catch(e){
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se ha podido crear el proveedor", life: 3000 }));
+                }
+                console.error(e);
             }
         })();
     },[dispatch, navigate, providers])
@@ -68,12 +77,24 @@ export function ProvidersTable() {
                         return;
                     }
                     const response = await API.Provider.update(userData.token, data);
+                    // if(!response.id){
+                    //     dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo actualizar el proveedor", life: 3000 }));
+                    //     return;
+                    // }
                     dispatch(setProviders(providers.map((provider) => provider.id === response.id ? response : provider)));
                     dispatch(changeVisibilityModalCreation({ modalCreationVisible: false }));
                     dispatch(showToast({ severity: "success", summary: "Proveedor actualizado", detail: "Se ha actualizado el proveedor", life: 3000 }));
                 } catch (e) {
-                    removeToken();
-                    navigate('/');
+                    if(e instanceof ErrorResponse) {
+                        dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                        if(e.getCode() === 401){
+                            removeToken();
+                            navigate('/');
+                        }
+                    }else{
+                        dispatch(showToast({ severity: "error", summary: "Error", detail: "No se ha podido actualizar el proveedor", life: 3000 }));
+                    }
+                    console.error(e);
                 }
             })();
     }
@@ -92,8 +113,16 @@ export function ProvidersTable() {
                     dispatch(changeVisibilityModalCreation({ modalCreationVisible: false }));
                     dispatch(showToast({ severity: "success", summary: "Proveedor eliminado", detail: "Se ha eliminado el proveedor", life: 3000 }));
                 } catch (e) {
-                    removeToken();
-                    navigate('/');
+                    if(e instanceof ErrorResponse) {
+                        dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                        if(e.getCode() === 401){
+                            removeToken();
+                            navigate('/');
+                        }
+                    }else{
+                        dispatch(showToast({ severity: "error", summary: "Error", detail: "No se ha eliminado el proveedor", life: 3000 }));
+                    }
+                    console.error(e);
                 }
             })();
     }
@@ -237,8 +266,16 @@ export function ProvidersTable() {
                 }));
                 dispatch(setProviders(response));
             } catch (e) {
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudieron obtener los proveedores", life: 3000 }));
+                }
+                console.error(e);
             }
         })();
     // eslint-disable-next-line react-hooks/exhaustive-deps

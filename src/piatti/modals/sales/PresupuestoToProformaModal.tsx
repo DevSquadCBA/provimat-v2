@@ -1,6 +1,7 @@
 
 import { IClient, SaleWithProduct } from "@/interfaces/dbModels"
 import { SaleStates } from "@/interfaces/enums"
+import { ErrorResponse } from "@/interfaces/Errors"
 import { ToPayTotal } from "@/piatti/components/ToPayTotal"
 import { removeSaleFromSales } from "@/reducers/localDataReducer"
 import { changeVisibilityModalPresupuestoToProforma } from "@/reducers/modalsSlice"
@@ -56,8 +57,16 @@ export function PresupuestoToProformaModal(){
                     window.location.reload();
                 },500)
             } catch (e) {
-                removeToken();
-                navigate('/');
+                 if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo actualizar la venta", life: 3000 }));
+                }
+                console.error(e);
             }
         })();
     }
@@ -113,9 +122,16 @@ export function PresupuestoToProformaModal(){
                 const salesProducts = await API.Sale.getSalesWithProducts(userData.token,idSaleForModals);
                 setSalesProducts(salesProducts);
             }catch(e){
-                console.log(e);
-                removeToken();
-                navigate('/');
+                if(e instanceof ErrorResponse) {
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                    if(e.getCode() === 401){
+                        removeToken();
+                        navigate('/');
+                    }
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo obtener las ventas", life: 3000 }));
+                }
+                console.error(e);
             }
         })()
     },[idSaleForModals, modalPresupuestoToProformaVisible, navigate])

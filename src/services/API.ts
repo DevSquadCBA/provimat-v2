@@ -3,7 +3,7 @@ import { API_URL } from "../piatti/config/config";
 import { convertToVerboseDay } from "./common";
 import { ClientWithBudgetData } from "@/interfaces/dto";
 import { IClient, IProduct, IProvider, IUser } from "@/interfaces/dbModels";
-import { Forbidden } from "@/interfaces/errors";
+import { ErrorResponse, Forbidden } from "@/interfaces/Errors";
 
 const entity = EntityList.muebles
 
@@ -101,7 +101,9 @@ class Client {
             return await DELETE(`${API_URL}/client/${id}`, token);
         }catch(e){
             console.error(e);
-            if(e instanceof Error) throw new Error(e.message);
+            if(e instanceof ErrorResponse){
+                throw e;
+            }
         }
     }
 }
@@ -165,7 +167,14 @@ class Sale {
         return await PUT(`${API_URL}/sale/${id}`, token,data);
     }
     addPayment = async(token:string|null,id:number|undefined,data: unknown)=>{
-        return await POST(`${API_URL}/sale/${id}/addPayment`, token,data);
+        try{
+            return await POST(`${API_URL}/sale/${id}/addPayment`, token,data);
+        }catch(e){
+            console.error(e);
+            if(e instanceof ErrorResponse){
+                throw e;
+            }
+        }
     }
     updateDetails = async(token:string|null,id:number|undefined, data:unknown)=>{
         return await POST(`${API_URL}/sale/${id}/updateDetails`, token,data);
