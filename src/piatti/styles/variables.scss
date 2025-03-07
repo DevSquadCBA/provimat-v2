@@ -43,21 +43,7 @@ $primary-font: "Sofia Sans", sans-serif;
 // SIZES
 $menu-width: 240px;
 
-// IMAGES
 
-$menu-item-normal: (
-    clients: url('src/assets/sidebar/logoclientes.svg'),
-    providers: url('src/assets/sidebar/logoproveedores.svg'),
-    products: url('src/assets/sidebar/logoproductos.svg'),
-    sales: url('src/assets/sidebar/logopresupuestos.svg'), 
-    team: url('src/assets/sidebar/logoteam.svg')
-);
 
-$menu-item-selected: (
-    clients: url('src/assets/sidebar/logoclientesselect.svg'),
-    providers: url('src/assets/sidebar/logoproveedoresselect.svg'),
-    products: url('src/assets/sidebar/logoproductosselect.svg'),
-    sales: url('src/assets/sidebar/logopresupuestosselect.svg'), 
-    team: url('src/assets/sidebar/logoteamselect.svg')
-);
+
 

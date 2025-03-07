@@ -2,6 +2,24 @@
 @import './piatti/styles/variables.scss';
 @import './piatti/styles/global.scss';
 
+// IMAGES
+$menu-item-normal: (
+    clients: url('src/assets/sidebar/logoclientes.svg'),
+    providers: url('src/assets/sidebar/logoproveedores.svg'),
+    products: url('src/assets/sidebar/logoproductos.svg'),
+    sales: url('src/assets/sidebar/logopresupuestos.svg'), 
+    team: url('src/assets/sidebar/logoteam.svg')
+);
+
+$menu-item-selected: (
+    clients: url('src/assets/sidebar/logoclientesselect.svg'),
+    providers: url('src/assets/sidebar/logoproveedoresselect.svg'),
+    products: url('src/assets/sidebar/logoproductosselect.svg'),
+    sales: url('src/assets/sidebar/logopresupuestosselect.svg'), 
+    team: url('src/assets/sidebar/logoteamselect.svg')
+);
+
+
 div#root {
   display: contents;
   .layout-container {
@@ -226,6 +244,7 @@ button.updateToProforma, button.updateToComprobante {
   .view{
     &__user.history-client{
       margin-bottom: 2rem;
+      align-items: center;
 
       .data{
         width: 100%;
@@ -334,6 +353,40 @@ button.updateToProforma, button.updateToComprobante {
             h3 {
               margin: 0;
               font-size: x-large;
+            }
+          }
+
+          &_progress {
+            display: flex;
+            align-items: unset;
+            width: 41%;
+            padding: 1.5rem;
+            margin: 0 auto;
+          }
+          .CircularProgressbar-trail {
+            stroke-width: 8;
+            stroke:white
+          }
+          .CircularProgressbar-path {
+            stroke-width: 4;
+            stroke:var(--primary-light-color);
+          }
+          .info-amount {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            div {
+              font-weight: 500;
+            }
+            span {
+              font-weight: 800;
+              &.remaining-amount {
+                font-size: xx-large;
+              }
+              &.total-amount {
+                font-size: x-large;
+              }
             }
           }
         }  

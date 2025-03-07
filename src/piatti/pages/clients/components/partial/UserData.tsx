@@ -4,9 +4,9 @@ import whatsapp from '@/assets/clients/whatsapp.svg'
 import address from '@/assets/clients/address.svg'
 import phone from '@/assets/clients/phone.svg'
 import user from '@/assets/clients/user.svg'
-import pencil from '@/assets/pencil.svg'
-import trash from '@/assets/trash.svg'
 import calendar from '@/assets/calendar.svg'
+import { HistoryGraph } from "./HistoryGraph";
+import moment from "moment";
 
 //import {assets} from "../../../../assets/imagese"
 type Props = {
@@ -25,10 +25,6 @@ export function UserData({clientData}:Props) {
             { clientData &&
                 <>
                     <div className="data_user">
-                    <div className="data_user_update">
-                        <img src={pencil} alt="edit" />
-                        <img src={trash} alt="delete" />
-                    </div>
                     <div className="data_user_container">
                         <div className="user_icon">
                             <img src={user} alt="" />
@@ -63,9 +59,11 @@ export function UserData({clientData}:Props) {
                         <div className="data_graph_date">
                             <img src={calendar} alt=""/>
                             <p>Próxima Entrega Estimada:</p>
-                            <h3>21-07-2023 harcode</h3>
+                            { clientData.closestSale.deadline && <h3>{moment(clientData.closestSale.deadline).format('DD/MM/YYYY')}</h3>}
                         </div>
-                        <div className="data_graph_progress"></div>
+                        <div className="data_graph_progress">
+                            <HistoryGraph clientData = {clientData}/>
+                        </div>
                     </div>         
                 </>
             }
