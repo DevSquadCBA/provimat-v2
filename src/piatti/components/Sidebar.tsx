@@ -4,6 +4,7 @@ import { reducers } from '@/store';
 import { MenuView } from "@/interfaces/interfaces";
 import logo from '@/assets/sidebar/SIP.svg';
 import { useNavigate } from "react-router-dom";
+import logoPiatti from '../../assets/Piatti.png'
 
 export function Sidebar() {
     const dispatch = useDispatch();
@@ -59,7 +60,7 @@ export function Sidebar() {
     }
 
     return (
-        <div className="sidebar">
+        <div className="sidebar flex flex_column" >
            <div className="sidebar_container">
             <img src={logo} className="sidebar__logo" alt="logo PROVIMAT"></img>
                 <nav className="sidebar__nav">
@@ -80,6 +81,12 @@ export function Sidebar() {
                         <li className={`menu_item ${setClass(state, 'emptyAfter')}`} ><div className="emptyAfter"></div></li>
                     </ul>
                 </nav>
+           </div>
+           <div className="company__container">
+           <li className="previous_company" ><div className="emptyBefore_company"></div></li>
+                <div className="sidebar__company" onClick={()=>navigate(`/home`) }>
+                    <img src={logoPiatti} className="sidebar__company__logo" alt="logo PIATTI" />
+                </div>
            </div>
         </div>
     )

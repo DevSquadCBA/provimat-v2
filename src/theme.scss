@@ -22,6 +22,7 @@ $rojo: #E02D39;
 $disabled: #89A9A4;
 $fontFamily: "Sofia Sans", sans-serif !default;
 $rounded-radius: 2rem;
+$claro: #F4F5FA;
 
 :root{
   --primary-color: #{$primaryColor}!important; 
@@ -34,6 +35,7 @@ $rounded-radius: 2rem;
   --secondary-text-color: #{$secondaryTextColor}!important;
   --primary-background-color: #{$primaryBackgroundColor}!important;
   --menu-selected-color: #{$menuSelectedColor}!important;
+  --claro: #{$claro}!important;
   --font-family: #{$fontFamily};
   --rojo: #{$rojo};
   --disabled: #{$disabled};
@@ -124,6 +126,10 @@ $rounded-radius: 2rem;
     font-weight: bolder!important;
     font-variant: all-petite-caps;
 }
+.text-xxs {
+  font-size: 0.6rem!important;
+}
+
 .big-text{
   font-size: 2rem;
 }

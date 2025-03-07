@@ -62,7 +62,7 @@ export function ProvidersTable() {
             }
         })();
     },[dispatch, navigate, providers])
-    const updateProviderHandle = (e: React.FormEvent) => {
+    const updateProviderHandle = (e: MouseEvent, idProvider: number) => {
             const form = document.getElementById('createProviderForm') as HTMLFormElement;
             e.preventDefault();
             if (!form.reportValidity()) return;
@@ -76,11 +76,8 @@ export function ProvidersTable() {
                         navigate('/');
                         return;
                     }
-                    const response = await API.Provider.update(userData.token, data);
-                    // if(!response.id){
-                    //     dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudo actualizar el proveedor", life: 3000 }));
-                    //     return;
-                    // }
+                    console.log(data);
+                    const response = await API.Provider.update(userData.token, data, idProvider);
                     dispatch(setProviders(providers.map((provider) => provider.id === response.id ? response : provider)));
                     dispatch(changeVisibilityModalCreation({ modalCreationVisible: false }));
                     dispatch(showToast({ severity: "success", summary: "Proveedor actualizado", detail: "Se ha actualizado el proveedor", life: 3000 }));
@@ -216,9 +213,10 @@ export function ProvidersTable() {
         const button = document.querySelector('#submitButton') as HTMLButtonElement;
         if(button){
             // create updateButton
+            const idProvider = provider.id as number;
             const newButtonUpdate = button.cloneNode(true) as HTMLButtonElement;
             newButtonUpdate.id = 'updateButton';
-            newButtonUpdate.addEventListener('click', updateProviderHandle as ()=>void);
+            newButtonUpdate.addEventListener('click', (e:MouseEvent) =>updateProviderHandle(e, idProvider));
             newButtonUpdate.classList.add('p-button-secondary');
             const label = newButtonUpdate?.querySelector('.p-button-label');
             if(label) {

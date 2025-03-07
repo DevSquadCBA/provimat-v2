@@ -238,7 +238,7 @@ export function TeamTable() {
             footer: <div>
             <Button rounded label="Crear" id="submitButton" onClick={createTeamHandler}></Button>
             </div>,
-            onShow:() => dispatch(setSelectedRole(null))
+            onShow: () => dispatch(setSelectedRole(null)),
     }), [body, createTeamHandler, dispatch]);
 
     const fillFieldWithCurentUserAndEditModal = ( user: IUser ) => {
