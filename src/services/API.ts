@@ -214,6 +214,9 @@ class Auth{
 class Log{
     get = async(token:string|null) => await GET(`${API_URL}/log`, token);
 }
+class Metric{
+    home = async(token:string|null) => await GET(`${API_URL}/home`, token);
+}
 export default class API {
     static Client: Client = new Client();
     static Provider: Provider = new Provider();
@@ -222,4 +225,5 @@ export default class API {
     static User:User = new User();
     static Auth:Auth = new Auth();
     static Log:Log = new Log();
+    static Metric:Metric = new Metric();
 }

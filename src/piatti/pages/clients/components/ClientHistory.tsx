@@ -35,7 +35,7 @@ export function ClientHistory({client}:Props) {
     const navigate = useNavigate();
     const mappingFunction = (sales:IHistorySales[])=>sales.map(e=>({
         ...e,
-        createdAt: moment(e.createdAt).format('DD/MM/YYYY'),
+        createdAtFormatted: moment(e.createdAt).format('DD/MM/YYYY'),
         granTotal: '$ '+ formatPrice(e.total || 0),
         stateFormatted: <div className="state-selector_option">
                         <Avatar className="circle-state" style={{ backgroundColor: getColorOfState(e.state as SaleStates) || '#19E052' }} shape="circle"></Avatar>
@@ -50,7 +50,7 @@ export function ClientHistory({client}:Props) {
     const columns = [
         { isKey: true,  order: false, field: 'id', header: 'Referencia' },
         { isKey: false, order: false, field: 'stateFormatted', header: 'Estado' },
-        { isKey: false, order: false, field: 'createdAt', header: 'Fecha de Inicio' },
+        { isKey: false, order: false, field: 'createdAtFormatted', header: 'Fecha de Inicio' },
         { isKey: false, order: false, field: 'distinctProviders', header: 'Proveedores involucrados' },
         { isKey: false, order: false, field: 'productsCount', header: 'Num Productos' },
         { isKey: false, order: false, field: 'granTotal', header: 'Total' },
