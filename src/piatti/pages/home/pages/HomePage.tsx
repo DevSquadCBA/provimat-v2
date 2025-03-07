@@ -1,7 +1,9 @@
+import { LayoutContainer } from "@/piatti/layout/LayoutContainer"
+import { HomeComponent } from "../components/HomeComponent"
 
 
 export function HomePage() {
-    return <>
-    <h2>Hola soy una Home</h2>
-    </>
+    return <LayoutContainer>
+            <HomeComponent></HomeComponent>
+        </LayoutContainer>
 }
