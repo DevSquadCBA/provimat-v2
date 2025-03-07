@@ -3,6 +3,7 @@ import { API_URL } from "../piatti/config/config";
 import { convertToVerboseDay } from "./common";
 import { ClientWithBudgetData } from "@/interfaces/dto";
 import { IClient, IProduct, IProvider, IUser } from "@/interfaces/dbModels";
+import { Forbidden } from "@/interfaces/errors";
 
 const entity = EntityList.muebles
 
@@ -34,7 +35,8 @@ const POST = async (url:string, token:string|null,data:unknown)=>{
     const dataResponse = await response.json();
     if(dataResponse.statusCode == 401) return redirectToLogin();
     if(dataResponse.statusCode == 403) {
-        throw new Error(dataResponse.message);
+        console.log('Usuario sin acceso');
+        throw new Forbidden(dataResponse.message);
     }
     if(dataResponse.statusCode && [200,201].includes(dataResponse.statusCode) ){
         throw new Error(dataResponse.message);
@@ -50,7 +52,14 @@ const PUT = async (url:string, token:string|null,data:unknown)=>{
     }, method: 'PUT', body: JSON.stringify(data)});
     const dataResponse = await response.json();
     if(dataResponse.statusCode == 401) return redirectToLogin();
-    if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
+    if(dataResponse.statusCode == 403) {
+        console.log('Usuario sin acceso');
+        throw new Forbidden(dataResponse.message);
+    }
+    if(dataResponse.statusCode && [200,201].includes(dataResponse.statusCode) ){
+        throw new Error(dataResponse.message);
+        return redirectToLogin();
+    }
     return dataResponse;
 }
 const DELETE = async (url:string, token:string|null)=>{
@@ -61,7 +70,14 @@ const DELETE = async (url:string, token:string|null)=>{
     }, method: 'DELETE'});
     const dataResponse = await response.json();
     if(dataResponse.statusCode == 401) return redirectToLogin();
-    if(dataResponse.statusCode && dataResponse.statusCode !== 200) throw new Error(dataResponse.message);
+    if(dataResponse.statusCode == 403) {
+        console.log('Usuario sin acceso');
+        throw new Forbidden(dataResponse.message);
+    }
+    if(dataResponse.statusCode && [200,201].includes(dataResponse.statusCode) ){
+        throw new Error(dataResponse.message);
+        return redirectToLogin();
+    }
     return dataResponse;
 }
 
@@ -81,7 +97,12 @@ class Client {
         return await PUT(`${API_URL}/client/${id}`, token,data);
     }
     delete = async(token:string|null,id:number)=>{
-        return await DELETE(`${API_URL}/client/${id}`, token);
+        try{
+            return await DELETE(`${API_URL}/client/${id}`, token);
+        }catch(e){
+            console.error(e);
+            if(e instanceof Error) throw new Error(e.message);
+        }
     }
 }
 
@@ -171,8 +192,15 @@ class User {
 }
 
 class Auth{
-    login = async (credentials:{username:string, password:string})=>
-        await POST(`${API_URL}/auth/login`, null,{email: credentials.username, password: credentials.password});
+    login = async (credentials:{username:string, password:string})=>{
+        // eslint-disable-next-line no-useless-catch
+        try{
+            return await POST(`${API_URL}/auth/login`, null,{email: credentials.username, password: credentials.password});
+        }catch(e){
+            throw e;
+        }
+    }
+        
 }
 class Log{
     get = async(token:string|null) => await GET(`${API_URL}/log`, token);

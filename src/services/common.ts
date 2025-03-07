@@ -1,6 +1,7 @@
 import { SaleStates, StateProduct } from "@/interfaces/enums";
 import { StateOption, UserData } from "@/interfaces/interfaces";
 import moment from "moment";
+import { redirect } from "react-router-dom";
 
 export function convertToVerboseDay(date: string|null): string|null {
     if (!date) {
@@ -48,13 +49,23 @@ export function decodeJWTToken(token: string):UserData{
 
 export function getUserData():UserData|null{
     const token = localStorage.getItem('token');
-    if (!token) {
+    if(typeof token !== 'string') {
+        removeToken();
+        redirect('/');
         return null;
     }
-    return decodeJWTToken(token);
+    if (!token) {throw new Error('No token found');}
+    try{
+        return decodeJWTToken(token);
+    }catch(e){
+        removeToken();
+        redirect('/');
+        return null;
+    }
 }
 
 export function setToken(token: string) {
+    if(typeof token !== 'string') throw new Error('Token must be a string');
     localStorage.setItem('token', token);
 }
 

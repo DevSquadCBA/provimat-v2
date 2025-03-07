@@ -18,6 +18,7 @@ import { FiscalCategory, FiscalCategoryValues } from "@/interfaces/enums";
 import  pencil  from '../../../../assets/pencil.svg';
 import { reducers } from "@/store";
 import { APIComponent } from "@/services/APIComponent";
+import { Forbidden, Unauthorized } from "@/interfaces/errors";
 
 interface RootState {
     localData: {
@@ -126,15 +127,20 @@ export function ClientsTable() {
                 dispatch(setClients(clients.filter(client => client.id !== response.id)));
                 dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
                 dispatch(showToast({ severity: "success", summary: "Cliente eliminado", detail: "Se ha eliminado el cliente", life: 3000 }));
-
                 setTimeout(() => {
                     window.location.reload();
-
                 }, 500);
-
             } catch (e) {
-                removeToken();
-                navigate('/');
+                if(e instanceof Forbidden){
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                }else if (e instanceof Unauthorized){
+                    removeToken();
+                    navigate('/');
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
+                }else{
+                    dispatch(showToast({ severity: "error", summary: "Error", detail: "Error al eliminar el cliente", life: 3000 }));
+                }
+                
             }
         })();       
     }
@@ -227,6 +233,13 @@ export function ClientsTable() {
 
     const fillFieldWithCurrentClientAndEditModal = ( client: IClient ) => {
         const form: HTMLFormElement = formRef.current as unknown as HTMLFormElement;
+        if(!form){
+            setTimeout(() => {
+                fillFieldWithCurrentClientAndEditModal(client);
+            }, 300);
+        }
+        console.log({client});
+        console.log(form);
         const elementName: HTMLInputElement = form['name'] as unknown as HTMLInputElement;
         elementName.value = client.name;
         form.fantasyName.value = client.fantasyName;
@@ -289,7 +302,6 @@ export function ClientsTable() {
                     fillFieldWithCurrentClientAndEditModal(c);
                 }, 500);
             }}>
-                
             </img>
         )
 

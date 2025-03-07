@@ -1,4 +1,4 @@
-export class ErrorResponse{
+export class ErrorResponse extends Error{
     message = '';
     errorCode = 500;
     getMessage =()=> this.message;
@@ -8,7 +8,10 @@ export class ErrorResponse{
 /**
  * Para cuando el token no es valido o está vencido
  */
-class Unauthorized extends ErrorResponse{
+export class Unauthorized extends ErrorResponse{
+    constructor(message:string){
+        super(message)
+    }
     message = 'El token no es valido';
     errorCode = 401;
 }
@@ -16,39 +19,45 @@ class Unauthorized extends ErrorResponse{
 /**
  * Para cuando el usuario no tiene permisos por su Rol, pero si tiene acceso al resto de las rutas
  */
-class Forbidden extends ErrorResponse{
+export class Forbidden extends ErrorResponse{
+    constructor(message:string){
+        super(message)
+    }
     message = 'No tienes permiso para acceder a esa acción';
     errorCode = 403;
 }
 
-class NotFound extends ErrorResponse{
+export class NotFound extends ErrorResponse{
+    constructor(message:string){
+        super(message)
+    }
     message = 'La ruta no existe';
     errorCode = 404;
 }
 
-class Conflict extends ErrorResponse{
+export class Conflict extends ErrorResponse{
+    constructor(message:string){
+        super(message)
+    }
     message = 'El recurso ya existe';
     errorCode = 409;
 }
 
-class BadRequest extends ErrorResponse{
+export class BadRequest extends ErrorResponse{
+    constructor(message:string){
+        super(message)
+    }
     message = 'La solicitud no es valida';
     errorCode = 400;
 }
 
-class InternalServerError extends ErrorResponse{
+export class InternalServerError extends ErrorResponse{
+    constructor(message:string){
+        super(message)
+    }
     message = 'Error interno del servidor, contacta con soporte si el problema persiste';
     errorCode = 500;
 }
 
-
-export default class Errors{
-    static Unauthorized:Unauthorized = new Unauthorized();
-    static Forbidden:Forbidden = new Forbidden();
-    static NotFound:NotFound = new NotFound();
-    static Conflict:Conflict = new Conflict();
-    static BadRequest:BadRequest = new BadRequest();
-    static InternalServerError:InternalServerError = new InternalServerError();
-}
 
 export type ErrorType = Unauthorized | Forbidden | NotFound | Conflict | BadRequest | InternalServerError;
