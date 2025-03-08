@@ -7,10 +7,10 @@ import { reducers } from "@/store";
 import {  IProduct,  SaleWithProduct } from "@/interfaces/dbModels";
 import { addDiscountToProduct, addQtyToProductinNewSaleData,  removeNewSaleData, removeProductFromNewSaleData, setAdminToken, updateNewSaleData } from "@/reducers/localDataReducer";
 import API from "@/services/API";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DataTable, DataTableFilterMeta, DataTableFilterMetaData, DataTableOperatorFilterMetaData } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { decodeJWTToken, formatPrice, getUserData, removeToken } from "@/services/common";
+import { formatPrice, getUserData, removeToken } from "@/services/common";
 import { useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
 import { IconField } from "primereact/iconfield";
@@ -37,12 +37,6 @@ export function CreateNewSaleElement(){
     });
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const columns = [
-        { field: 'code', header: 'Código'},
-        { field: 'name', header: 'Nombre'},
-        { field: 'formattedPrice', header: 'Precio'},
-        { field: 'addToTheList', header: ''},
-    ];
     const columnsSelectedProducts = [
         { field: 'code', header: 'Código'},
         { field: 'name', header: 'Producto'},
@@ -51,6 +45,11 @@ export function CreateNewSaleElement(){
     ]
     const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
+        if(value === ''){
+            document.querySelector('#searchProductsResults')?.classList.add('hide');
+        }else{
+            document.querySelector('#searchProductsResults')?.classList.remove('hide');
+        }
         const _filters:{ [key: string]: DataTableFilterMetaData | DataTableOperatorFilterMetaData } = { ...filters };
         _filters['global']= { ...filters.global, value: value};
         setFilters(_filters);
@@ -61,6 +60,7 @@ export function CreateNewSaleElement(){
             e.preventDefault();
             if (!(form.current as HTMLFormElement).reportValidity()) return;
             const userData = getUserData();
+            const hasPermissions = [Role.ADMIN, Role.SUPERVISOR].some(r => userData?.role === r) || adminToken !== '';
             if (!userData || !userData.token) {
                 removeToken();
                 navigate('/');
@@ -72,17 +72,13 @@ export function CreateNewSaleElement(){
             if(data.createdAt== '') 
                 data.createdAt = new Date().toISOString();
             const hasDiscount = data.products.some(p=>p.discount && p.discount>0);
-            if(hasDiscount && !adminToken){
+            if(hasDiscount && !hasPermissions){
+                dispatch(showToast({severity: 'error', summary: 'Error', detail: 'No tienes permiso para aplicar descuentos con ese usuario logueado'}));
                 setLoginModalVisible(true);
                 return;
             }
-            const role = decodeJWTToken(adminToken).role;
-            if(hasDiscount && role !== Role.ADMIN && role !== Role.SUPERVISOR){
-                dispatch(showToast({severity: 'error', summary: 'Error', detail: 'No tienes permiso para aplicar descuentos con ese usuario logueado'}));
-                return;
-            }
             let response;
-            if (hasDiscount && (role === Role.ADMIN || role === Role.SUPERVISOR)){
+            if (hasDiscount && hasPermissions ){
                 response = await API.Sale.create(adminToken,data);
             }else{
                 response = await API.Sale.create(userData.token,data)
@@ -102,16 +98,15 @@ export function CreateNewSaleElement(){
                     navigate('/');
                 }
             }else{
+                console.error(e);
                 dispatch(showToast({ severity: "error", summary: "Error", detail: "Ocurrio un error al crear la venta", life: 3000 }));
             }
-            console.error(e);
-            dispatch(removeNewSaleData());
-            dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
+            // dispatch(removeNewSaleData());
+            // dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
         }
     }
     const deleteElement = (e: React.FormEvent,id: number | undefined) => {
         e.preventDefault();
-        console.log({e,id});
         // refresh the newSaleData
         const index = newSaleData.products.findIndex(product=>product.id===id);
         if(index!==-1){
@@ -140,6 +135,7 @@ export function CreateNewSaleElement(){
         setLoginModalVisible(false);
     }
     useEffect(() => {
+        if(products && products.length > 0) return;
         (async () => {
             try {
                 //form validate
@@ -152,28 +148,6 @@ export function CreateNewSaleElement(){
                 const response = await API.Product.all(userData.token)as unknown as IProductWithAddToTheList[];
                 response.map(element=>{
                     element.formattedPrice = '$ ' + formatPrice(element.salePrice);
-                    element.addToTheList= 
-                        <Button rounded onClick={(e)=>{
-                                e.preventDefault();
-                                const index = newSaleData.products.findIndex(product=>product.id===element.id);
-                                if(index!==-1){
-                                    // aumento la cantidad del producto ya existente
-                                    return dispatch(addQtyToProductinNewSaleData({index}));
-                                }
-                                // agrego el producto al detalle presupuesto
-                                return dispatch(updateNewSaleData({
-                                        ...newSaleData,
-                                        products: [
-                                            ...newSaleData.products,
-                                            {...element,
-                                                quantity: 1,
-                                                total: element.salePrice,
-                                                // desc:<InputNumber size={0} value={0}/>,
-                                                // delete:<Button rounded onClick={(e)=>deleteElement(e,element.id)}>Delete</Button>
-                                            }
-                                        ]}));
-                        }}
-                        >+</Button>
                     return element;
                 })
                 setProducts(response);
@@ -190,9 +164,29 @@ export function CreateNewSaleElement(){
                 console.error(e);
             } 
         })();
-    },[dispatch, navigate, newSaleData]);
+    },[dispatch, navigate, products]);
     const rowInputDesc = (rowData: IProductWithAddToTheList) =><div><InputNumber className="discount-input" value={0} max={100} onChange={(e) => addDiscount(e, rowData.id)}/>%</div> ;
-    const rowButtonDelete = (rowData: IProductWithAddToTheList) => <img className="delete-button" src={trash} onClick={(e)=>deleteElement(e, rowData.id)} />;
+    const rowButtonDelete = (rowData: IProductWithAddToTheList) =><img className="delete-button" src={trash} onClick={(e)=>deleteElement(e, rowData.id)}/>;
+    const handleAddProduct = useCallback((e: React.FormEvent, rowData: IProduct) =>{
+            e.preventDefault()
+            const index = newSaleData.products.findIndex(product=>product.id===rowData.id);
+            if(index!==-1){
+                // aumento la cantidad del producto ya existente
+                dispatch(addQtyToProductinNewSaleData({index}));
+                return null
+            }
+            // agrego el producto al detalle presupuesto
+            dispatch(updateNewSaleData({
+                    ...newSaleData,
+                    products: [
+                        ...newSaleData.products,
+                        {...rowData,
+                            quantity: 1,
+                            total: rowData.salePrice,
+                        }
+                    ]}));
+            return null;
+    },[dispatch, newSaleData]);
     return <>
         <form ref={form}>
         <div className="flex flex_columns p-4 pl-5 pr-5">
@@ -218,17 +212,21 @@ export function CreateNewSaleElement(){
                             <span>Lista de productos</span>
                             <DataTable
                                 id="searchProductsResults"
-                                className="table-container mt-2 p-inputwrapper-filled"
+                                className="table-container mt-2 p-inputwrapper-filled hide"
                                 style={{height: "40vh","overflowY": "scroll"}}
                                 showHeaders={false}
                                 lang="es"
+                                paginator rows={4}
                                 emptyMessage="No hay productos"
                                 value={products}
                                 scrollable
-                                max={300}
+                                max={5}
                                 filters={filters}
                             >
-                                {columns.map((e,i)=><Column key={i} field={e.field} header={e.header}></Column>)}
+                                <Column key="code" field="code" header="Código"></Column>
+                                <Column key="name" field="name" header="Nombre"></Column>
+                                <Column key="formattedPrice" field="formattedPrice" header="Precio"></Column>
+                                <Column key="addToTheList" field="addToTheList" header="" body={rowData=><Button rounded onClick={(e)=>{handleAddProduct(e,rowData)}}>+</Button>}></Column>
                             </DataTable>
                         </span>
                     </div>

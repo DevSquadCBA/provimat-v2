@@ -868,3 +868,11 @@ p.icon, .p-input-icon, .p-icon {
   }
   
 }
+#searchProductsResults .p-paginator {
+  display: none!important;
+}
+#searchProductsResults.hide{
+  .p-datatable-tbody{
+    opacity: 0;
+  }
+}

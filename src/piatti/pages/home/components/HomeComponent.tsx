@@ -227,11 +227,14 @@ export function HomeComponent(){
                                         <img src={productIcon} alt="product" />
                                     </div>
                                 </div>
-                                <div className="product-with-hight-demand-name">
-                                    {product.productName}
-                                </div>
-                                <div className="product-with-hight-demand-quantity">
-                                    {product.total_quantity}
+                                <div className="product-with-hight-demand-data">
+                                    <div className="product-with-hight-demand-name">
+                                        {product.productName}
+                                    </div>
+                                    <div className="product-with-hight-demand-quantity">
+                                        {product.total_quantity}
+                                    </div>
+
                                 </div>
                             </div>
                         ))}
