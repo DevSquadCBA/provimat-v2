@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} HACE DEPLOY A PRODUCCIÓN
 on:
   push:
     branches:
-      - "main"
+      - "master"
 
 jobs:
   deploy:
