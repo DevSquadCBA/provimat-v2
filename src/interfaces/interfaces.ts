@@ -1,7 +1,7 @@
 import { IProduct, IClient,IProvider, ISale, ISaleProduct, IUser, SaleWithProduct } from "./dbModels"
 import { FiscalCategory,SaleStates } from "./enums"
 
-type MenuItems = 'emptyAfter'|'emptyBefore'|'clients'| 'products' | 'providers' | 'sales' | 'submenu'
+type MenuItems = 'emptyAfter'|'emptyBefore'|'clients'| 'products' | 'providers' | 'sales' | 'submenu'| 'home'
 type MenuSubItems = 'empty'|'presupuesto'|'proforma'|'comprobante'
 export type MenuView = {
     selectedView:MenuItems,

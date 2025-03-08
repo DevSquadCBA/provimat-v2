@@ -1,3 +1,46 @@
+*-column{
+    width: 30rem;
+}
+.month-sales-column{
+    width: 30rem;
+    .card{
+        border-radius: var(--rounded-radius);
+        padding: 3rem 0.5rem 1rem;
+        background-color: white;
+    }
+    .month-sales-legend{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem auto;
+        padding: 0rem 3rem 0 3rem;
+        width: 30rem;
+        img{
+            width: 3rem;
+            height: 3rem;
+            filter: brightness(0.9);
+        }
+        .month-sales-legends{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-left: 2rem;
+            width: 100%;
+            .month-sales-legend-item{
+                display: flex;
+                flex-direction: row;
+                margin:0;
+                p{
+                    margin: 0 0.5rem;
+                    font-variant: all-small-caps;
+                    font-size: 2rem;
+                }
+            }
+        }
+    }
+}
 .closest-next-delivery{
     display: flex;
     flex-direction: row;
@@ -8,7 +51,7 @@
     background-color: #fff;
     border-radius: var(--rounded-radius);
     padding:0rem;
-    width: 20rem;
+    width: 24rem;
     text-overflow: ellipsis;
     .truckIcon-container{
         padding:0;
@@ -65,15 +108,51 @@
     display: flex;
     flex-direction: column;
     justify-content: start;
-    align-items: center;
+    align-items: start;
     margin-top: 2rem;
     margin-bottom: 2rem;;
-    background-color: #fff;
+    background-color: #4CB3A05C;
     border-radius: var(--rounded-radius);
-    padding: 2rem 1rem 1rem 0rem;
-    width: 20rem;
+    padding: 2rem 1rem 1rem 2rem;
+    width: 24rem;
     text-overflow: ellipsis;
     .next-delivery{
+        margin-bottom: 1rem;
+        .clientName{
+            padding-left: 0.5rem;
+        }
+    }
+}
 
+.products-with-hight-demand-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    margin-top: 2rem;
+    width: 24rem;
+    .product-with-hight-demand{
+        background-color: white;
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 2rem;
+        border-radius: 4rem;
+        width: 18rem;
+        max-width: 24rem;
+        .product-with-hight-demand-icon{
+            padding:0;
+            margin: 0;
+            border-radius: var(--rounded-radius) 1rem 1rem var(--rounded-radius);
+            // background-color: #4CB3A05C;
+            display: flex;
+            margin-right: 1rem;
+            img{
+                width: 2rem;
+                height: 2rem;
+            }
+        }
     }
 }
