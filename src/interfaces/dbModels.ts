@@ -1,5 +1,6 @@
 import { EntityList,  SaleStates,  StateProduct} from './enums';
 export type IClient = {
+    id?: number,
     name: string,
     fantasyName?: string,
     fiscalCategory: string,
@@ -9,8 +10,10 @@ export type IClient = {
     whatsapp?: string,
     province?: string,
     localidad?: string,
-    direction?: string,
+    address?: string,
     deleted?: boolean,
+    updatedAt?: string | number | Date;
+    createdAt?: string | number | Date;
 }
 
 export type IProduct = {
@@ -36,7 +39,7 @@ export type IProvider = {
     email: string,
     province: string,
     locality: string,
-    direction: string,
+    address: string,
     phone: string,
     voucherType: string,
     daysDelays: number,
@@ -56,6 +59,8 @@ export type ISale = {
     estimatedDays: number,
     deadline: Date|null,
     entity: EntityList
+    createdAt: string;
+    updatedAt: string;
 }
 export type ProductsInSale = {
     id:number,
@@ -69,10 +74,12 @@ export type ProductsInSale = {
         state: StateProduct, 
         details?: string
     },
+    discount?: number,
     quantity?: number,
     state?: StateProduct,
     details?: string,
-    entity: EntityList
+    entity: EntityList,
+    total?: number
 }
 export type SaleWithProduct = ISale & {products: ProductsInSale[]}
 
@@ -80,13 +87,31 @@ export type ISaleProduct = {
     saleId: number,
     productId: number,
     quantity: number,
+    discount: number,
+    price: number,
     state: StateProduct
     details?: string|null
 }
-
 
 export type IProductToAdd = {
     id: number,
     quantity: number,
     details?: string|null
+}
+
+
+export type IUser = {
+    id: number,
+    name: string,
+    email: string,
+    phone: string,
+    whatsapp: string,
+    address: string,
+    role: IRol,
+}
+
+export type IRol = {
+    id: number,
+    name: string
+    description: string
 }

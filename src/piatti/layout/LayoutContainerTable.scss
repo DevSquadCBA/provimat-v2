@@ -1,0 +1,21 @@
+.layout-container{
+    .header{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .content {
+        .view.history-client {
+            .p-datatable {
+                table.p-datatable-table thead tr th:last-child {
+                    display: none!important;
+                }
+                tbody.p-datatable-tbody tr td:last-child  {
+                    display: none;
+                }
+            }
+            
+        }
+    }
+}

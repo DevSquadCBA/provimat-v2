@@ -1,0 +1,170 @@
+*-column{
+    width: 30rem;
+}
+.month-sales-column{
+    width: 30rem;
+    .card{
+        border-radius: var(--rounded-radius);
+        padding: 3rem 0.5rem 1rem;
+        background-color: white;
+    }
+    .month-sales-legend{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem auto;
+        padding: 0rem 3rem 0 3rem;
+        width: 30rem;
+        img{
+            width: 3rem;
+            height: 3rem;
+            filter: brightness(0.9);
+        }
+        .month-sales-legends{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-left: 2rem;
+            width: 100%;
+            .month-sales-legend-item{
+                display: flex;
+                flex-direction: row;
+                margin:0;
+                p{
+                    margin: 0 0.5rem;
+                    font-variant: all-small-caps;
+                    font-size: 2rem;
+                }
+            }
+        }
+    }
+}
+.closest-next-delivery{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    background-color: #fff;
+    border-radius: var(--rounded-radius);
+    padding:0rem;
+    width: 24rem;
+    text-overflow: ellipsis;
+    .truckIcon-container{
+        padding:0;
+        margin: 0;
+        border-radius: var(--rounded-radius) 1rem 1rem var(--rounded-radius);
+        background-color: #4CB3A05C;
+        display: flex;
+        height: 10rem;
+        img{
+            padding: 1rem;
+            margin: auto;
+            width: 5rem;
+        }
+    }
+    .closest-next-delivery-info{
+        padding: 1rem 2rem 0 2rem ;
+        margin: 0;
+    }
+}
+.date{
+    color: var(--primary-dark-color);
+    font-variant: all-small-caps;
+    font-size: 3rem;
+    line-height: 1rem;
+    margin: 0rem 0rem 1rem;
+    font-weight: bold;
+}
+.clientName{
+    margin: 0.5rem 0 0 0 ;
+    font-variant: all-small-caps;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 0.8rem;
+    color: var(--primary-dark-color);
+    height: 1rem;
+    width: 10rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    span{
+        height: 1rem;
+        width: 10rem;
+        text-overflow: ellipsis;
+    }
+}
+.clientName::before{
+    content: " · ";
+    margin: 0rem 0.5rem 0 0.5rem;
+    font-weight: bolder;
+    font-size: 2rem;
+    line-height: 0rem;
+
+}
+.next-deliveries{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    margin-top: 2rem;
+    margin-bottom: 2rem;;
+    background-color: #4CB3A05C;
+    border-radius: var(--rounded-radius);
+    padding: 2rem 1rem 1rem 2rem;
+    width: 24rem;
+    text-overflow: ellipsis;
+    .next-delivery{
+        margin-bottom: 1rem;
+        .clientName{
+            padding-left: 0.5rem;
+        }
+    }
+}
+
+.products-with-hight-demand-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    margin-top: 2rem;
+    width: 24rem;
+    .product-with-hight-demand{
+        background-color: white;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 1rem;
+        border-radius: 4rem;
+        width: 20rem;
+        .product-with-hight-demand-icon{
+            margin: 0;
+            border-radius: var(--rounded-radius) 1rem 1rem var(--rounded-radius);
+            background-color: #4CB3A05C;
+            display: flex;
+            margin-right: 1rem;
+            height: 10vh;
+            align-items: center;
+            width: 3rem;
+            justify-content: center;
+            padding: 2rem;
+            img{
+                width: 2rem;
+                height: 2rem;
+            }
+        }
+        .product-with-hight-demand-data{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: start;
+            width: 100%;
+        }
+        .product-with-hight-demand-quantity{
+            padding-right: 2rem;
+        }
+    }
+}

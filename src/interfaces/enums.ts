@@ -37,6 +37,22 @@ export const StateProductValues:StateProduct[] = [
     StateProduct.on_deposit
 ];
 
+export enum FiscalCategory{
+    consumidor_final='Consumidor Final', 
+    monotributista='Monotributista', 
+    responsable_inscripto='Responsable Inscripto', 
+    exento='Exento', 
+    no_categorizado='No categorizado'
+}
+
+export const FiscalCategoryValues:FiscalCategory[] = [
+    FiscalCategory.consumidor_final,
+    FiscalCategory.monotributista,
+    FiscalCategory.responsable_inscripto,
+    FiscalCategory.exento,
+    FiscalCategory.no_categorizado
+]
+
 export enum EntityList{
     muebles = 'muebles',
     instalaciones = 'instalaciones',
@@ -52,3 +68,14 @@ export function getEntityList(entity:string):EntityList{
     }
     return Object.entries(EntityList).find(([, v]) => v === entity)?.[0] as EntityList | EntityList.muebles
 }
+export enum Role{
+    ADMIN = 'Administrador',
+    SUPERVISOR = 'Supervisor',
+    SELLER = 'Vendedor',
+}
+
+export const RoleData = {
+    [Role.ADMIN]: { id: 1, name: Role.ADMIN },
+    [Role.SUPERVISOR]: { id: 2, name: Role.SUPERVISOR },
+    [Role.SELLER]: { id: 3, name: Role.SELLER },
+};
