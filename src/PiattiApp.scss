@@ -756,3 +756,115 @@ p.icon, .p-input-icon, .p-icon {
   font-size: 0.5rem;
 }
 
+#searchProductsResults{
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 16px !important;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-light-color) transparent;
+    border-radius: 40px;
+    background-color: transparent!important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--primary-light-color); 
+    border-radius: 40px;
+    border: 3px solid var(--claro);
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent; 
+  }
+
+  &::-webkit-scrollbar-track-piece:start {
+    background-color: transparent;
+    margin-top: 3vh;
+  }
+
+  &::-webkit-scrollbar-track-piece:end {
+    background-color: transparent;
+    margin-bottom: 3vh;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none!important // 🔥 Oculta las flechas arriba y abajo
+  }
+
+  .p-datatable-table {
+    .p-datatable-tbody > tr > td {
+      border: none !important;
+      padding: 0.5rem 1rem !important;
+    }
+  }
+
+  tr td button {
+    padding: 1px 6px
+  }
+  
+}
+
+#detailBudgetTable {
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 16px !important;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-light-color) transparent;
+    border-radius: 40px;
+    background-color: transparent!important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--primary-light-color); 
+    border-radius: 40px;
+    border: 3px solid var(--claro);
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent; 
+  }
+
+  &::-webkit-scrollbar-track-piece:start {
+    background-color: transparent;
+    margin-top: 3vh;
+  }
+
+  &::-webkit-scrollbar-track-piece:end {
+    background-color: transparent;
+    margin-bottom: 3vh;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none!important // 🔥 Oculta las flechas arriba y abajo
+  }
+
+  .delete-button {
+    cursor: pointer;
+  }
+
+  .p-datatable-table {
+    .p-datatable-tbody > tr {
+      &.even-row{
+        background-color: #497b736d;
+      }
+      &.odd-row{
+        background-color: white;
+      }
+      
+      td {
+        border: none !important;
+        padding: 0.5rem 1rem !important;
+        font-variant: all-small-caps;
+        font-size: 1.1rem;
+        color: black;
+
+      .p-inputnumber-input {
+        padding: 0.2rem;
+      }
+    
+        
+      }
+    }
+  }
+  
+}
