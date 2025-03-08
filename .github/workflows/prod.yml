@@ -29,7 +29,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
       - name: Install Serverless Framework and Packages
         run: |
-          npm i -g serverless
+          npm i -g serverless@3.32.0
           npm i
           npm i -g yarn
       - name: Install s3 plugin
