@@ -1,3 +1,5 @@
+import { ISale } from "./dbModels"
+
 export type ClientWithBudgetData = {
     id: number
     name: string
@@ -12,4 +14,7 @@ export type ClientWithBudgetData = {
     address: string
     lastModification: string
     budget: number
+    totalDue: number
+    totalPaid: number
+    closestSale: ISale
 }

@@ -20,6 +20,10 @@
     .p-highlight{
         color: var(--primary-light-color);
     }
+    .p-datatable-tbody > tr.p-highlight{
+        background-color: var(--primary-dark-color) !important;
+        color: white !important;
+    }
     .p-column-title{
         font-family: var(--sofia-sans);
     }

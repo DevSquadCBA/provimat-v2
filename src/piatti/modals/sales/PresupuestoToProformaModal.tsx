@@ -73,7 +73,7 @@ export function PresupuestoToProformaModal(){
     const headerElement = (
         <h2 className="modal-title m-1 mt-2 mb-0 pl-3 pr-3">
             <span className="mr-2">ACTUALIZAR PRESUPUESTO</span>
-            <svg width="36" height="22" viewBox="0 0 36 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="29.17" height="17.5" viewBox="0 0 36 22" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M35.4999 11.009L35.5 11.009V11C35.5 10.782 35.4327 10.5671 35.3554 10.3979C35.2777 10.2276 35.1662 10.0519 35.031 9.9195C35.0305 9.91903 35.03 9.91856 35.0296 9.91809L25.9651 0.972657L25.9652 0.972624L25.9602 0.967889C25.3556 0.387321 24.3826 0.325452 23.6907 0.903859C23.0115 1.47159 23.0086 2.53554 23.6167 3.13264C23.6168 3.1327 23.6168 3.13277 23.6169 3.13283L30.0253 9.44716H2.13334C1.26668 9.44716 0.5 10.1081 0.5 10.9998C0.5 11.8914 1.26666 12.5525 2.13334 12.5525H30.0253L23.6169 18.8668C23.6167 18.8669 23.6166 18.8671 23.6165 18.8672C22.9937 19.479 23.0504 20.5116 23.6742 21.0813L23.6742 21.0813C24.3264 21.6768 25.368 21.6181 25.9657 21.0263L35.0251 12.086C35.2048 11.9204 35.3292 11.7404 35.4051 11.543C35.4805 11.3469 35.4972 11.1615 35.4999 11.009Z" fill="#0D3831" stroke="#0D3831"/>
             </svg>
             <span className="ml-2">PROFORMA</span>
@@ -99,7 +99,7 @@ export function PresupuestoToProformaModal(){
     const footerElement = (
         <div className="flex justify-content-end ">
             {salesProducts.paid != salesProducts.total &&
-                <Button rounded onClick={handleAddPaymentButton}>Agregar un pago</Button>
+                <Button className="secondary" rounded onClick={handleAddPaymentButton}><span className="p-button-label p-c ">Agregar un pago</span></Button>
             }
             <Button label="Actualizar a Proforma" rounded onClick={handleClick}></Button>
         </div>
@@ -134,7 +134,7 @@ export function PresupuestoToProformaModal(){
                 console.error(e);
             }
         })()
-    },[idSaleForModals, modalPresupuestoToProformaVisible, navigate])
+    },[dispatch, idSaleForModals, modalPresupuestoToProformaVisible, navigate])
     return (<>
         {salesProducts &&
         <Dialog
@@ -147,12 +147,12 @@ export function PresupuestoToProformaModal(){
             >
                 <div className="pr-6 pl-6">
                     <div className="flex space-between">
-                        <p><span className="text-important">Fecha de Presupuesto:</span><span>{formatDate(salesProducts.createdAt)}</span></p>
-                        <p><span className="text-important">Cliente:</span><span>{salesProducts.client?.name}</span></p>
+                        <p><span className="text-important modals-details">Fecha de Presupuesto:</span><span className="modals-info">{formatDate(salesProducts.createdAt)}</span></p>
+                        <p><span className="text-important modals-details">Cliente:</span><span className="modals-info">{salesProducts.client?.name}</span></p>
                         <p className="dummy"></p>
                     </div>
                     <div className="flex justify-content-start text-important text-xl m-0 p-0 mb-2">
-                        <p className="m-0 p-0 ">Productos</p>
+                        <p className="m-0 p-0 modals-title">Productos</p>
                     </div>
                     <DataTable 
                         key="products_table"
