@@ -1,4 +1,4 @@
-service: prod-piatti-front-react
+service: piatti-front-react
 
 provider:
   name: aws
@@ -9,10 +9,12 @@ plugins:
   - serverless-s3-sync
 
 custom:
-  bucketName: prod-piatti-front-react
+  stage: ${opt:stage, 'prod'}
+  bucketName: ${self:custom.stage}-piatti-front-react
+  domainName: piatti-erp.com
   s3Sync:
-    - bucketName: prod-piatti-front-react
-      localDir: build/
+    - bucketName: ${self:custom.bucketName}
+      localDir: dist/
 
 resources:
   Conditions:
@@ -21,7 +23,7 @@ resources:
     PiattiBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: prod-piatti-front-react
+        BucketName: ${self:custom.bucketName}
         # AccessControl: PublicRead
         PublicAccessBlockConfiguration:
           BlockPublicAcls: false
@@ -44,26 +46,26 @@ resources:
               Action: 
                 - s3:GetObject
                 - s3:PutObject
-              Resource: arn:aws:s3:::prod-piatti-front-react/*
+              Resource: arn:aws:s3:::${self:custom.bucketName}/*
     CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
         DistributionConfig:
           CNAMEs:
-            - "piatti-erp.com"
+            - "${self:custom.domainName}"
           Origins:
-            - DomainName: prod-piatti-front-react.s3.amazonaws.com
+            - DomainName: ${self:custom.bucketName}.s3.amazonaws.com
               #OriginPath: "/index.html"
-              Id:  prod-piattiAPP
+              Id:   ${self:custom.stage}-piattiAPP
               CustomOriginConfig:
                 HTTPPort: 80
                 HTTPSPort: 443
                 OriginProtocolPolicy: https-only
                 OriginKeepaliveTimeout: 5
                 OriginReadTimeout: 30
-            - DomainName: prod-piatti-front-react.s3-website-us-east-1.amazonaws.com
+            - DomainName: ${self:custom.bucketName}.s3-website-us-east-1.amazonaws.com
               #OriginPath: "/index.html"
-              Id:  prod-piattiAPP-website
+              Id:   ${self:custom.stage}-piattiAPP-website
               CustomOriginConfig:
                 HTTPPort: 80
                 HTTPSPort: 443
@@ -72,7 +74,7 @@ resources:
                 OriginReadTimeout: 30
           Enabled: true
           Aliases:
-            - "piatti-erp.com"
+            - "${self:custom.domainName}"
           DefaultRootObject: index.html
           CustomErrorResponses:
             - ErrorCode: 404
@@ -87,7 +89,7 @@ resources:
               - PATCH
               - POST
               - PUT
-            TargetOriginId: prod-piattiAPP
+            TargetOriginId:  ${self:custom.stage}-piattiAPP
             ForwardedValues:
               QueryString: false
               Cookies:

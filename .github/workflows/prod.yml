@@ -31,6 +31,7 @@ jobs:
         run: |
           npm i -g serverless
           npm i
+          npm i -g yarn
       - name: Install s3 plugin
         run: |
           sls plugin install -n serverless-s3-sync
@@ -38,11 +39,16 @@ jobs:
         run: |
           touch .env
           echo VITE_API_URL=$BASEURL >.env
-      - name: Change variables in serverless.yml with sed
+      - name: Create bucket if not exists
         run: |
-          sed -i -e 's/\${param:stage}-piatti-front-react/prod-piatti-front-react/' serverless.yml
-          sed -i -e 's/\${param:stage}/prod/g' serverless.yml
-          sed -i -e 's/\${self:custom.bucketName}/prod-piatti-front-react/g' serverless.yml
+            # read the bucket name from the serverless.yml file
+            bucket_name=$(grep -oP '(?<=custom:\s*\n\s*bucketName:\s*")[^"]*' serverless.yml)
+            aws s3api create-bucket --bucket $bucket_name --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
+    #   - name: Change variables in serverless.yml with sed
+    #     run: |
+        #   sed -i -e 's/\${param:stage}-piatti-front-react/prod-piatti-front-react/' serverless.yml
+        #   sed -i -e 's/\${param:stage}/prod/g' serverless.yml
+        #   sed -i -e 's/\${self:custom.bucketName}/prod-piatti-front-react/g' serverless.yml
 
         #   sed -i -e 's/develop-piatti-front-react.s3.amazonaws.com/prod-piatti-front-react.s3.amazonaws.com/g' serverless.yml
         #   sed -i -e 's/develop-piatti-front-react.s3-website-us-east-1.amazonaws.com/prod-piatti-front-react.s3-website-us-east-1.amazonaws.com/g' serverless.yml
@@ -53,7 +59,7 @@ jobs:
         
       - name: Build React App
         run: |
-          npm run build
+          yarn run build
       - name: Deploys serverless Framework
         run: |
           sls deploy --param="stage=prod" --verbose
