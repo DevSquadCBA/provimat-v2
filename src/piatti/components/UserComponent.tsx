@@ -15,9 +15,9 @@ export function UserComponent(){
     const getPermissionsColor = (permission:string) =>{
         switch(permission){
             case 'Administrador':
-                return '#9B00E0';
-            case 'Supervisor':
                 return '#e85300';
+            case 'Supervisor':
+                return '#0d3831';
             case 'Vendedor':
                 return '#4CB3A0';
             default:

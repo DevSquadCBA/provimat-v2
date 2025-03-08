@@ -23,6 +23,7 @@ import { InputNumber, InputNumberChangeEvent } from "primereact/inputnumber";
 import { Role } from "@/interfaces/enums";
 import { LoginByAdminModal } from "../../dialog/LoginByAdminModal";
 import { ErrorResponse } from "@/interfaces/Errors";
+import trash from '@/assets/trash.svg';
 type IProductWithAddToTheList = IProduct & {addToTheList: React.ReactNode, formattedPrice: string, discount: number};
 export function CreateNewSaleElement(){
     const {newSaleData, adminToken} = useSelector((state:reducers)=>state.localData as unknown as {newSaleData: SaleWithProduct, adminToken: string});
@@ -165,7 +166,7 @@ export function CreateNewSaleElement(){
         })();
     },[dispatch, navigate, products]);
     const rowInputDesc = (rowData: IProductWithAddToTheList) =><div><InputNumber className="discount-input" value={0} max={100} onChange={(e) => addDiscount(e, rowData.id)}/>%</div> ;
-    const rowButtonDelete = (rowData: IProductWithAddToTheList) => <Button rounded onClick={(e)=>deleteElement(e, rowData.id)}>X</Button>;
+    const rowButtonDelete = (rowData: IProductWithAddToTheList) =><img className="delete-button" src={trash} onClick={(e)=>deleteElement(e, rowData.id)}/>;
     const handleAddProduct = useCallback((e: React.FormEvent, rowData: IProduct) =>{
             e.preventDefault()
             const index = newSaleData.products.findIndex(product=>product.id===rowData.id);
@@ -215,7 +216,7 @@ export function CreateNewSaleElement(){
                                 style={{height: "40vh","overflowY": "scroll"}}
                                 showHeaders={false}
                                 lang="es"
-                                paginator rows={4}
+                                paginator rows={10}
                                 emptyMessage="No hay productos"
                                 value={products}
                                 scrollable
@@ -241,8 +242,14 @@ export function CreateNewSaleElement(){
                         value={newSaleData?.products}
                         scrollable
                         max={300}
+                        id="detailBudgetTable"
+                        rowClassName={(rowData) => {
+                            const index = newSaleData?.products.indexOf(rowData);
+                            return index % 2 === 0 ? 'even-row' : 'odd-row';
+                        }}
                     >
-                    {columnsSelectedProducts.map((e,i)=><Column key={i} field={e.field} header={e.header}></Column>)}
+                    {columnsSelectedProducts.map((e,i)=>
+                    <Column key={i} field={e.field} header={e.header}></Column>)}
                     <Column key={"desc"} header={"Desc."} body={rowInputDesc}></Column>
                     <Column key={"delete"} header={""} body={rowButtonDelete}></Column>
                     </DataTable>
