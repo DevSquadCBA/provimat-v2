@@ -135,24 +135,36 @@
         background-color: white;
         display: flex;
         flex-direction: row;
-        justify-content: start;
+        justify-content: flex-start;
         align-items: center;
         margin-bottom: 1rem;
-        padding: 2rem;
         border-radius: 4rem;
-        width: 18rem;
-        max-width: 24rem;
+        width: 20rem;
         .product-with-hight-demand-icon{
-            padding:0;
             margin: 0;
             border-radius: var(--rounded-radius) 1rem 1rem var(--rounded-radius);
-            // background-color: #4CB3A05C;
+            background-color: #4CB3A05C;
             display: flex;
             margin-right: 1rem;
+            height: 10vh;
+            align-items: center;
+            width: 3rem;
+            justify-content: center;
+            padding: 2rem;
             img{
                 width: 2rem;
                 height: 2rem;
             }
+        }
+        .product-with-hight-demand-data{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: start;
+            width: 100%;
+        }
+        .product-with-hight-demand-quantity{
+            padding-right: 2rem;
         }
     }
 }

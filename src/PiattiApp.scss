@@ -756,3 +756,11 @@ p.icon, .p-input-icon, .p-icon {
   font-size: 0.5rem;
 }
 
+#searchProductsResults .p-paginator {
+  display: none!important;
+}
+#searchProductsResults.hide{
+  .p-datatable-tbody{
+    opacity: 0;
+  }
+}
