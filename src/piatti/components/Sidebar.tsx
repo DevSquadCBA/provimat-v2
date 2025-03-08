@@ -28,6 +28,9 @@ export function Sidebar() {
             case 'team':
                 navigate(`/equipo`);
                 break;
+            case 'home':
+                navigate(`/home`);
+                break;
             default:
                 break;
         }
@@ -50,6 +53,7 @@ export function Sidebar() {
     }
 
     const setClass = ({selectedView, previous, next, submenu}:MenuView, id:string) => {
+        if(id=='home') return 'empty';
         if(selectedView==id) return 'selected';
         if(previous==id) return 'previous';
         if(next==id) return 'next';
@@ -84,7 +88,7 @@ export function Sidebar() {
            </div>
            <div className="company__container">
            <li className="previous_company" ><div className="emptyBefore_company"></div></li>
-                <div className="sidebar__company" onClick={()=>navigate(`/home`) }>
+                <div className="sidebar__company" onClick={()=>{handleClick('empty','empty','home','empty');navigate(`/home`)}}>
                     <img src={logoPiatti} className="sidebar__company__logo" alt="logo PIATTI" />
                 </div>
            </div>
