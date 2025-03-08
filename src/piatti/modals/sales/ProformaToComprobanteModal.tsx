@@ -190,44 +190,46 @@ export function ProformaToComprobanteModal(){
             >
                 <div className="pr-6 pl-6">
                     <div className="flex space-between">
-                        <p><span className="text-important">Fecha de Presupuesto:</span><span>{formatDate(salesProducts.createdAt)}</span></p>
-                        <p><span className="text-important">Cliente:</span><span>{salesProducts.client?.name}</span></p>
+                        <p><span className="text-important modals-details">Fecha de Presupuesto:</span><span className="modals-info">{formatDate(salesProducts.createdAt)}</span></p>
+                        <p><span className="text-important modals-details">Cliente:</span><span className="modals-info">{salesProducts.client?.name}</span></p>
                         <p className="dummy"></p>
                     </div>
                     <div className="flex justify-content-start text-important text-xl m-0 p-0 mb-2">
                         <p className="m-0 p-0 modals-title">Productos</p>
                     </div>
-                    <DataTable 
-                        key="products_table"
-                        value={salesProducts.products} 
-                        header={null}
-                        footer={null}
-                        className="sales-modal-table"
-                        selectionMode={"single"}
-                        selection={selectedProduct as ProductsInSale | ProductsInSale[] | DataTableCellSelection<ProductsInSale[]>}
-                        onSelectionChange={(e) => setSelectedProduct(e.value as ProductsInSale)}
-                        dataKey="id"
-                        onRowSelect={(e) => console.log(e.data)}
-                    >
-                        {dataColums.map((col,i)=>(
-                            <Column 
-                                key={i} 
-                                field={col.field} 
-                                header={col.header} 
-                                sortable={false}/>
-                        ))}
-                    
-                    </DataTable>
-                    <FloatLabel>
-                        <InputTextarea 
-                            disabled = {!selectedProduct}
-                            id="productDetails" 
-                            value={selectedProduct ?selectedProduct?.details || '':''} 
-                            onChange={(e) => setDetails(e.target.value)} 
-                            rows={5} 
-                            cols={30} />
-                        <label htmlFor="username">Detalles de producto</label>
-                    </FloatLabel>
+                    <div className="flex proforma-comprobante">
+                        <DataTable 
+                            key="products_table"
+                            value={salesProducts.products} 
+                            header={null}
+                            footer={null}
+                            className="sales-modal-table"
+                            selectionMode={"single"}
+                            selection={selectedProduct as ProductsInSale | ProductsInSale[] | DataTableCellSelection<ProductsInSale[]>}
+                            onSelectionChange={(e) => setSelectedProduct(e.value as ProductsInSale)}
+                            dataKey="id"
+                            onRowSelect={(e) => console.log(e.data)}
+                        >
+                            {dataColums.map((col,i)=>(
+                                <Column 
+                                    key={i} 
+                                    field={col.field} 
+                                    header={col.header} 
+                                    sortable={false}/>
+                            ))}
+                        
+                        </DataTable>
+                        <FloatLabel>
+                            <InputTextarea 
+                                disabled = {!selectedProduct}
+                                id="productDetails" 
+                                value={selectedProduct ?selectedProduct?.details || '':''} 
+                                onChange={(e) => setDetails(e.target.value)} 
+                                rows={5} 
+                                cols={30} />
+                            <label htmlFor="username">+ Detalles de producto</label>
+                        </FloatLabel>
+                    </div>
                     <div className="footer">
                         <ToPayTotal salesProducts={salesProducts} montoAPagar={montoAPagar}></ToPayTotal>
                     </div>

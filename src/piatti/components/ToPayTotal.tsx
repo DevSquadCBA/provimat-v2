@@ -23,6 +23,7 @@ export function ToPayTotal({salesProducts,montoAPagar}:Props){
                         min={0} 
                         className="w-full" />
                     </div>
+                    {salesProducts.total && 
                     <div className="flex flex_column ml-8">
                         <div>
                             <p className="text-important text-xl m-1 modals-title-amount">Falta Abonar</p>
@@ -33,6 +34,7 @@ export function ToPayTotal({salesProducts,montoAPagar}:Props){
                             <p className="text text-3xl p-0 m-0 verde-medio">${formatPrice(salesProducts.total)}</p>
                         </div>
                     </div>
+                    }
                 </div>
             </div>
 }

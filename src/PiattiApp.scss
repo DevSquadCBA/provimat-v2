@@ -483,6 +483,31 @@ button.updateToProforma, button.updateToComprobante {
   }
 
   .p-dialog-content {
+
+    .proforma-comprobante{
+      width: 100%;
+      justify-content: space-between;
+      gap: 1rem;
+
+      .sales-modal-table{
+        width: 50%;
+      }
+      
+      span.p-float-label{
+        width: 50%;
+        textarea#productDetails{
+          border-radius: 1rem !important;
+          height: -webkit-fill-available;
+          width: -webkit-fill-available;
+        }
+        label {
+          font-variant: all-small-caps;
+          //color: var(--primary-dark-color)!important;
+          font-weight: 600;
+          font-size: larger;
+        }
+      }
+    }
     span.text-important.modals-details{
       color: black;
       font-size: large;
@@ -514,6 +539,7 @@ button.updateToProforma, button.updateToComprobante {
     overflow-y: auto;
     border: 1px var(--primary-color) solid;
     border-radius: 1rem;
+
     // padding: 0.1rem
     .p-datatable-table{
       padding: 0.3rem 0.9rem !important;
@@ -522,12 +548,14 @@ button.updateToProforma, button.updateToComprobante {
         td {
           font-variant: all-small-caps;
           font-size: larger;
+          
         }
       }
       .p-datatable-tbody > tr > td{
         border : none !important;
         font-variant: all-small-caps;
         font-size: larger;
+        padding: 0.3rem !important;
       }
     }
 
@@ -596,8 +624,8 @@ p.icon, .p-input-icon, .p-icon {
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
-    height: 23vh;
-    width: 25vw; 
+    height: 200px;
+    width: 400px;
     background-color: var(--primary-background-color);
     border-radius: var(--rounded-radius);
     color: var(--primary-text-color);
@@ -610,7 +638,7 @@ p.icon, .p-input-icon, .p-icon {
         height: 100%;
         .confirm-dialog-message{
             color: var(--primary-dark-color);
-            font-size: 2rem;
+            font-size: 1.5rem;
             text-align: center;
             font-weight: bold;
         }

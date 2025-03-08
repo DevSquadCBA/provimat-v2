@@ -177,7 +177,7 @@ export function ProductsTable() {
                 optionLabel="name" 
                 optionValue="id"
                 editable placeholder="Seleccione un Proveedor" 
-                className="w-fit mt_1" />
+                className=" mt_1" />
             <div className="flex flex_row space-between mt_1">
                 <FloatLabel>
                     <InputText id="purchasePrice"
