@@ -216,7 +216,7 @@ export function CreateNewSaleElement(){
                                 style={{height: "40vh","overflowY": "scroll"}}
                                 showHeaders={false}
                                 lang="es"
-                                paginator rows={4}
+                                paginator rows={10}
                                 emptyMessage="No hay productos"
                                 value={products}
                                 scrollable
