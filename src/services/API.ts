@@ -35,7 +35,7 @@ const POST = async (url:string, token:string|null,data:unknown)=>{
     const dataResponse = await response.json();
     if(dataResponse.statusCode == 401) return redirectToLogin();
     if(dataResponse.statusCode == 403) {
-        console.log('Usuario sin acceso');
+       // console.log('Usuario sin acceso');
         throw new Forbidden(dataResponse.message);
     }
     if(dataResponse.statusCode && [200,201].includes(dataResponse.statusCode) ){
@@ -53,7 +53,7 @@ const PUT = async (url:string, token:string|null,data:unknown)=>{
     const dataResponse = await response.json();
     if(dataResponse.statusCode == 401) return redirectToLogin();
     if(dataResponse.statusCode == 403) {
-        console.log('Usuario sin acceso');
+        //console.log('Usuario sin acceso');
         throw new Forbidden(dataResponse.message);
     }
     if(dataResponse.statusCode && [200,201].includes(dataResponse.statusCode) ){
@@ -71,7 +71,7 @@ const DELETE = async (url:string, token:string|null)=>{
     const dataResponse = await response.json();
     if(dataResponse.statusCode == 401) return redirectToLogin();
     if(dataResponse.statusCode == 403) {
-        console.log('Usuario sin acceso');
+        //console.log('Usuario sin acceso');
         throw new Forbidden(dataResponse.message);
     }
     if(dataResponse.statusCode && [200,201].includes(dataResponse.statusCode) ){

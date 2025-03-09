@@ -60,8 +60,8 @@ export function HomeComponent(){
                 }
                 const metricResponse:Metrics = await API.Metric.home(userData.token);
                 const metricsFormatted: MetricsFormatted = {
-                    mostDemandProducts: metricResponse.mostDemandProducts,
-                    nextDeliverySales: metricResponse.nextDeliverySales.reduce((acc:NextSalesGroupedByDay[],sale:(ISale & {client:IClient}))=>{
+                    mostDemandProducts: metricResponse?.mostDemandProducts,
+                    nextDeliverySales: metricResponse.nextDeliverySales?.reduce((acc:NextSalesGroupedByDay[],sale:(ISale & {client:IClient}))=>{
                         const day = moment(sale.deadline).format('MM-DD');
                         const index = acc.findIndex(a=>a.day===day);
                         if(index!==-1){
@@ -74,7 +74,7 @@ export function HomeComponent(){
                             return acc;
                         }
                     },[]),
-                    salesGraph: metricResponse.salesGraph.reduce((acc:SalesGraph,month:{month:string,total:string})=>{
+                    salesGraph: metricResponse.salesGraph?.reduce((acc:SalesGraph,month:{month:string,total:string})=>{
                             if(!acc)acc=[];
                             const year = parseInt(month.month.replace(/(-[0-9]{2})$/,''));
                             const monthName = month.month.replace(/^[0-9]{4}-/,'');
@@ -90,8 +90,6 @@ export function HomeComponent(){
                             }
                     },[]) 
                 }
-                console.log(JSON.stringify(metricsFormatted.mostDemandProducts));
-
                 setMetrics(metricsFormatted);
           } catch (e) {
                 if(e instanceof ErrorResponse) {
@@ -101,7 +99,7 @@ export function HomeComponent(){
                         navigate('/');
                     }
                 }else{
-                    console.log(e);
+                   // console.log(e);
                     dispatch(showToast({ severity: "error", summary: "Error", detail: "No se pudieron obtener las métricas", life: 3000 }));
                 }
                 console.error(e);

@@ -76,7 +76,7 @@ export function PresupuestosTable() {
         { isKey: false, order: false, field: 'totalFormatted', header: 'Total'}
     ];
     const handleRowClick = (event:DataTableRowClickEvent)=>{
-        console.log(event);
+        //console.log(event);
         if (event.data && 'id' in event.data) {
             dispatch(changeVisibilityModalHistory({modalHistoryVisible: true, modalHistorySale: event.data as IHistorySales}));
         }
