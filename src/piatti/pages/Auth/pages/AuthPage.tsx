@@ -19,7 +19,7 @@ export function AuthPage() {
     const dispatch = useDispatch();
     const userData = getUserData();
     if(userData && userData.token){
-        navigate("/clientes");
+        navigate("/home");
     }
     // reiniciar casi todos los estados de la app
     dispatch(hideAll());
@@ -28,11 +28,11 @@ export function AuthPage() {
         try{
             const token = await API.Auth.login({username, password });
             setToken(token);
-            navigate("/clientes");          
+            navigate("/home");          
             setLoginSended(false);
             setWrongCredentials(false);
         }catch(e:unknown){
-            console.log(e);
+            //console.log(e);
             setLoginSended(false);
             setWrongCredentials(true);
         }
