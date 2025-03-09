@@ -41,7 +41,7 @@ export function ProductsTable() {
     const handleProviderChange = useCallback((e: { value: number }) => {
       const provider = providersFilter.find(p => p.id === e.value) || null;
       setSelectedProvider(provider)
-        console.log("Proveedor seleccionado", e.value);
+        //console.log("Proveedor seleccionado", e.value);
     }, [providersFilter]);
     
     const createProductHandler = useCallback((e: React.FormEvent) => {
@@ -177,7 +177,7 @@ export function ProductsTable() {
                 optionLabel="name" 
                 optionValue="id"
                 editable placeholder="Seleccione un Proveedor" 
-                className="w-fit mt_1" />
+                className=" mt_1" />
             <div className="flex flex_row space-between mt_1">
                 <FloatLabel>
                     <InputText id="purchasePrice"

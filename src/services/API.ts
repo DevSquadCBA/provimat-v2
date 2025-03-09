@@ -35,7 +35,7 @@ const POST = async (url:string, token:string|null,data:unknown)=>{
     const dataResponse = await response.json();
     if(dataResponse.statusCode == 401) return redirectToLogin();
     if(dataResponse.statusCode == 403) {
-        console.log('Usuario sin acceso');
+       // console.log('Usuario sin acceso');
         throw new Forbidden(dataResponse.message);
     }
     if(dataResponse.statusCode && [200,201].includes(dataResponse.statusCode) ){
@@ -53,7 +53,7 @@ const PUT = async (url:string, token:string|null,data:unknown)=>{
     const dataResponse = await response.json();
     if(dataResponse.statusCode == 401) return redirectToLogin();
     if(dataResponse.statusCode == 403) {
-        console.log('Usuario sin acceso');
+        //console.log('Usuario sin acceso');
         throw new Forbidden(dataResponse.message);
     }
     if(dataResponse.statusCode && [200,201].includes(dataResponse.statusCode) ){
@@ -71,7 +71,7 @@ const DELETE = async (url:string, token:string|null)=>{
     const dataResponse = await response.json();
     if(dataResponse.statusCode == 401) return redirectToLogin();
     if(dataResponse.statusCode == 403) {
-        console.log('Usuario sin acceso');
+        //console.log('Usuario sin acceso');
         throw new Forbidden(dataResponse.message);
     }
     if(dataResponse.statusCode && [200,201].includes(dataResponse.statusCode) ){
@@ -214,6 +214,9 @@ class Auth{
 class Log{
     get = async(token:string|null) => await GET(`${API_URL}/log`, token);
 }
+class Metric{
+    home = async(token:string|null) => await GET(`${API_URL}/home`, token);
+}
 export default class API {
     static Client: Client = new Client();
     static Provider: Provider = new Provider();
@@ -222,4 +225,5 @@ export default class API {
     static User:User = new User();
     static Auth:Auth = new Auth();
     static Log:Log = new Log();
+    static Metric:Metric = new Metric();
 }

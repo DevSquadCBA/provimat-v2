@@ -1,0 +1,71 @@
+name: PROD-deploy-front-end
+run-name: ${{ github.actor }} HACE DEPLOY A PRODUCCIÓN
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      ENV: 'prod'
+      AWS_REGION: us-east-1
+      CI: false
+      BASEURL: ${{ secrets.baseURLPROD }}
+    steps:
+      - name: 'Checkout to code folder'
+        uses: actions/checkout@v3
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update && \
+          sudo apt-get install -y python3-pip && \
+          pip3 install --upgrade --user awscli
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Install Serverless Framework and Packages
+        run: |
+          npm i -g serverless@3.32.0
+          npm i
+          npm i -g yarn
+      - name: Install s3 plugin
+        run: |
+          sls plugin install -n serverless-s3-sync
+      - name: create .env
+        run: |
+          touch .env
+          echo VITE_API_URL=$BASEURL >.env
+      - name: Create bucket if not exists
+        run: |
+          # Obtenemos el bucketName ya resuelto por serverless
+          bucket_name=$(sls print --param="stage=prod" --path "custom.bucketName")
+          echo "BucketName=${bucket_name}"
+          
+          # Ahora creamos el bucket, solo si no existe
+          aws s3api create-bucket \
+            --bucket "${bucket_name}" \
+            --region $AWS_REGION \
+            --create-bucket-configuration LocationConstraint=$AWS_REGION || true
+    #   - name: Change variables in serverless.yml with sed
+    #     run: |
+        #   sed -i -e 's/\${param:stage}-piatti-front-react/prod-piatti-front-react/' serverless.yml
+        #   sed -i -e 's/\${param:stage}/prod/g' serverless.yml
+        #   sed -i -e 's/\${self:custom.bucketName}/prod-piatti-front-react/g' serverless.yml
+
+        #   sed -i -e 's/develop-piatti-front-react.s3.amazonaws.com/prod-piatti-front-react.s3.amazonaws.com/g' serverless.yml
+        #   sed -i -e 's/develop-piatti-front-react.s3-website-us-east-1.amazonaws.com/prod-piatti-front-react.s3-website-us-east-1.amazonaws.com/g' serverless.yml
+        #   sed -i -e 's/develop-piatti-front-react/prod-piatti-front-react/g' serverless.yml
+        #   sed -i -e 's/dev-piatti.devsquadcba.com/piatti.devsquadcba.com/g' serverless.yml
+        #   sed -i -e 's/develop-piattiAPP-website/prod-piattiAPP-website/g' serverless.yml
+        #   sed -i -e 's/develop-piattiAPP/prod-piattiAPP/g' serverless.yml
+        
+      - name: Build React App
+        run: |
+          yarn run build
+      - name: Deploys serverless Framework
+        run: |
+          sls deploy --param="stage=prod" --verbose

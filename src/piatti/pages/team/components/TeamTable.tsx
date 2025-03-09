@@ -110,9 +110,9 @@ export function TeamTable() {
                     navigate('/');
                     return;
                 }
-                console.log(data)
-                const response = await API.User.update(userData.token,data, idUser);
-                dispatch(setTeam(team.map(user => user.id === response.id ? response : user)));
+                //console.log(data)
+                await API.User.update(userData.token,data, idUser);
+                //dispatch(setTeam(team.map(user => user.id === response.id ? response : user)));
                 dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
                 dispatch(showToast({ severity: "success", summary: "Usuario actualizado", detail: "Se ha actualizado el usuario", life: 3000 }));
             } catch (e) {
@@ -140,8 +140,8 @@ export function TeamTable() {
                     navigate('/');
                     return;
                 }
-                const response = await API.User.delete(userData.token,id);
-                dispatch(setTeam(team.filter(user => user.id !== response.id)));
+                await API.User.delete(userData.token,id);
+                //dispatch(setTeam(team.filter(user => user.id !== response.id)));
                 dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));
                 dispatch(showToast({ severity: "success", summary: "Usuario eliminado", detail: "Se ha eliminado el usuario", life: 3000 }));
            
