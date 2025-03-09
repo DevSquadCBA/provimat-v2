@@ -39,7 +39,7 @@ export function Table({columns, data, placeholder, onRowClick, footer,newModalCo
         const value = e.target.value;
         const _filters:{ [key: string]: DataTableFilterMetaData | DataTableOperatorFilterMetaData } = { ...filters };
 
-        console.log(_filters);
+       // console.log(_filters);
         
         _filters['global']= { ...filters.global, value: value};
         setFilters(_filters);

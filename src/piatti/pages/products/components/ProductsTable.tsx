@@ -41,7 +41,7 @@ export function ProductsTable() {
     const handleProviderChange = useCallback((e: { value: number }) => {
       const provider = providersFilter.find(p => p.id === e.value) || null;
       setSelectedProvider(provider)
-        console.log("Proveedor seleccionado", e.value);
+        //console.log("Proveedor seleccionado", e.value);
     }, [providersFilter]);
     
     const createProductHandler = useCallback((e: React.FormEvent) => {

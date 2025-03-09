@@ -76,7 +76,7 @@ export function ProvidersTable() {
                         navigate('/');
                         return;
                     }
-                    console.log(data);
+                    //console.log(data);
                     const response = await API.Provider.update(userData.token, data, idProvider);
                     dispatch(setProviders(providers.map((provider) => provider.id === response.id ? response : provider)));
                     dispatch(changeVisibilityModalCreation({ modalCreationVisible: false }));

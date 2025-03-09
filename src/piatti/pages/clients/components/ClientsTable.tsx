@@ -119,7 +119,7 @@ export function ClientsTable() {
                     }
                 }else{
                     dispatch(showToast({ severity: "error", summary: "Error", detail: "Error al actualizar el cliente", life: 3000 }));
-                    console.log(e);
+                    //console.log(e);
                 }
                 console.error(e);
             }
@@ -148,7 +148,7 @@ export function ClientsTable() {
                 }, 2000);
 
             } catch (e) {
-                console.log(e);
+                //console.log(e);
                 if(e instanceof ErrorResponse) {
                     dispatch(showToast({ severity: "error", summary: "Error", detail: e.message, life: 3000 }));
                     if(e.getCode() === 401){

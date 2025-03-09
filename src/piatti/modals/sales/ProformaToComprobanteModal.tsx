@@ -150,7 +150,7 @@ export function ProformaToComprobanteModal(){
             setConfirmDialogVisible(false);
             dispatch(changeVisibilityModalModalProformaComprobante({modalProformaToComprobanteVisible: false, idSaleForModals: 0}))
         }catch(e){
-            console.log(e);
+            dispatch(showToast({severity: 'error', summary: 'Error', detail: 'Ocurrio un error al guardar los detalles de los productos'}));
         }
     }
     useEffect(()=>{

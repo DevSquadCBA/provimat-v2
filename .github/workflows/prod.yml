@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} HACE DEPLOY A PRODUCCIÓN
 on:
   push:
     branches:
-      - "main"
+      - "master"
 
 jobs:
   deploy:
@@ -29,7 +29,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
       - name: Install Serverless Framework and Packages
         run: |
-          npm i -g serverless
+          npm i -g serverless@3.32.0
           npm i
           npm i -g yarn
       - name: Install s3 plugin
@@ -41,9 +41,15 @@ jobs:
           echo VITE_API_URL=$BASEURL >.env
       - name: Create bucket if not exists
         run: |
-            # read the bucket name from the serverless.yml file
-            bucket_name=$(grep -oP '(?<=custom:\s*\n\s*bucketName:\s*")[^"]*' serverless.yml)
-            aws s3api create-bucket --bucket $bucket_name --region $AWS_REGION --create-bucket-configuration LocationConstraint=$AWS_REGION
+          # Obtenemos el bucketName ya resuelto por serverless
+          bucket_name=$(sls print --param="stage=prod" --path "custom.bucketName")
+          echo "BucketName=${bucket_name}"
+          
+          # Ahora creamos el bucket, solo si no existe
+          aws s3api create-bucket \
+            --bucket "${bucket_name}" \
+            --region $AWS_REGION \
+            --create-bucket-configuration LocationConstraint=$AWS_REGION || true
     #   - name: Change variables in serverless.yml with sed
     #     run: |
         #   sed -i -e 's/\${param:stage}-piatti-front-react/prod-piatti-front-react/' serverless.yml

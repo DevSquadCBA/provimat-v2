@@ -110,7 +110,7 @@ export function TeamTable() {
                     navigate('/');
                     return;
                 }
-                console.log(data)
+                //console.log(data)
                 await API.User.update(userData.token,data, idUser);
                 //dispatch(setTeam(team.map(user => user.id === response.id ? response : user)));
                 dispatch(changeVisibilityModalCreation({modalCreationVisible: false}));

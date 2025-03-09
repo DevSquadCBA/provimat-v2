@@ -12,6 +12,19 @@ Se buildea la aplicación en un dist, y ésto es lo que se sube a un s3. Luego s
 
 ## Configuración
 Configura tu .env para que apunte al bff-sip-v2.<br>
+```
+VITE_API_URL=http://tubackend.example
+```
+
+# OPCION 1 - Ejecución en local
+Ejecuta
+```bash
+yarn run dev
+```
+
+
+
+# OPCION 2 - Subir a AWS S3 una SPA
 
 ## Modificación de archivos
 El archivo serverless.yml, contiene la configuración del despliegue a AWS.<br>
@@ -38,8 +51,40 @@ resources:
           ViewerCertificate:
             AcmCertificateArn: "arn:ws:acm:us-east-1:12345678:certifcate/111aaa-22bb-33cc-44444cccc" # cambia aquí por tu certficado
 ```
+>Nota
+Antes de subir a s3, asegurate de modificar el archivo vite.config.ts,
+y agrega tu dominio a allowedHosts
 
-## Despliegue manual
+```typescript
+server: {
+    port: 80,
+    allowedHosts: [
+      'aquítohost.example',
+    ],
+  }
+```
+
+
+Para el despliegue de serverless, es recomendable que instales la versión 3.32, que permite utilizar serverles sin credenciales. Y para el proyecto, es recomendable usar yarn.
+```bash
+npm i -g serverless@3.32.0
+npm i
+npm i -g yarn
+```
+
+Debes buildear la aplicación, esto genera un comprimido de todo el proyecto en /dist:
+```bash
+yarn run build
+```
+
+y luego ejecturas serverless para subir a tu bucket s3 el proyecto
+```
+sls deploy --param="stage=prod" --verbose
+```
+
+
+## OPCIÓN 3 - Despliegue manual
+
 Ejecuta
 ```bash
 yarn build
@@ -47,8 +92,3 @@ yarn build
 Esto generará tu proyecto en /dist para poder ser llevado a una web. <br>
 Aquí puede usar nginx, apache o el sistema que prefieras para apuntar al index.html. 
 
-## Ejecución en local
-Ejecuta
-```bash
-yarn run dev
-```
