@@ -19,7 +19,7 @@ export function MainRoutes(){
             <Route path="/productos" element={<ProductsRoutes />} />
             <Route path="/ventas/*" element={<SalesRoutes/>} />
             <Route path="/equipo" element={<TeamRoutes />} />
-            <Route path="/home" element={<AuthRoutes/>} />
+            <Route path="/" element={<AuthRoutes />} />
         </Routes>
     )
 }
