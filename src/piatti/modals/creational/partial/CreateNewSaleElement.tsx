@@ -165,7 +165,7 @@ export function CreateNewSaleElement(){
             } 
         })();
     },[dispatch, navigate, products]);
-    const rowInputDesc = (rowData: IProductWithAddToTheList) =><div><InputNumber className="discount-input" value={0} max={100} onChange={(e) => addDiscount(e, rowData.id)}/>%</div> ;
+    const rowInputDesc = (rowData: IProductWithAddToTheList) =><div className="discount-input-container"><InputNumber className="discount-input" value={0} max={100} onChange={(e) => addDiscount(e, rowData.id)}/>%</div> ;
     const rowButtonDelete = (rowData: IProductWithAddToTheList) =><img className="delete-button" src={trash} onClick={(e)=>deleteElement(e, rowData.id)}/>;
     const handleAddProduct = useCallback((e: React.FormEvent, rowData: IProduct) =>{
             e.preventDefault()
@@ -192,7 +192,7 @@ export function CreateNewSaleElement(){
         <div className="flex flex_columns p-4 pl-5 pr-5">
             <div className="left-column">
                 <div className="flex flex_column">
-                    <div className="flex flex_row align-items-center">
+                    <div className="flex flex_row align-items-center new-sale-header">
                         <FloatLabel className="flex flex_row ">
                             <Calendar locale="es" inputId="createdAt" minDate={new Date()} value={moment(newSaleData?.createdAt|| new Date()).toDate()} onChange={(e) => dispatch(updateNewSaleData({...newSaleData,createdAt: e.value}))} />
                             <label htmlFor="createdAt">Seleccionar la fecha del presupuesto</label>
@@ -232,7 +232,7 @@ export function CreateNewSaleElement(){
                     </div>
                 </div>
             </div>
-            <div className="right-column ml-4">
+            <div className="right-column ml-4 detailBudgetContainer">
                 <div className="table-container">
                     <h3 className="text-important text-3xl font-black" style={{marginTop: "-2rem", marginBottom: 0}}>Detalle Presupuesto</h3>
                     <DataTable

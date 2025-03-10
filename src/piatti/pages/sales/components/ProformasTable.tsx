@@ -83,7 +83,7 @@ export function ProformasTable() {
     const body = (<CreateNewSaleElement />);
     const createNewModal:CreateModalProps = (
             {
-                header: <h3>Nuevo (Presupuesto)</h3>,
+                header: <h3>Nuevo Presupuesto</h3>,
                 body,
                 primaryButtonEvent: () => {},
                 resizable: false,
