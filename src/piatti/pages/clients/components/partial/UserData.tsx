@@ -59,7 +59,9 @@ export function UserData({clientData}:Props) {
                         <div className="data_graph_date">
                             <img src={calendar} alt=""/>
                             <p>Próxima Entrega Estimada:</p>
-                            { clientData.closestSale.deadline && <h3>{moment(clientData.closestSale.deadline).format('DD/MM/YYYY')}</h3>}
+                            { clientData.closestSale 
+                                ? clientData.closestSale?.deadline && <h3>{moment(clientData.closestSale?.deadline).format('DD/MM/YYYY')}</h3>
+                                : <h3>No hay próximas entregas</h3>}
                         </div>
                         <div className="data_graph_progress">
                             <HistoryGraph clientData = {clientData}/>

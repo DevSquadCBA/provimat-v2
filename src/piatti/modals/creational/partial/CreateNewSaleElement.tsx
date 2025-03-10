@@ -60,7 +60,11 @@ export function CreateNewSaleElement(){
             e.preventDefault();
             if (!(form.current as HTMLFormElement).reportValidity()) return;
             const userData = getUserData();
-            const hasPermissions = [Role.ADMIN, Role.SUPERVISOR].some(r => userData?.role === r) || adminToken !== '';
+            
+            const userIsAdmin = [Role.ADMIN, Role.SUPERVISOR].some(r => userData?.role === r);
+            
+            const hasPermissions = adminToken || userIsAdmin;
+                
             if (!userData || !userData.token) {
                 removeToken();
                 navigate('/');
@@ -72,14 +76,15 @@ export function CreateNewSaleElement(){
             if(data.createdAt== '') 
                 data.createdAt = new Date().toISOString();
             const hasDiscount = data.products.some(p=>p.discount && p.discount>0);
+
             if(hasDiscount && !hasPermissions){
                 dispatch(showToast({severity: 'error', summary: 'Error', detail: 'No tienes permiso para aplicar descuentos con ese usuario logueado'}));
                 setLoginModalVisible(true);
                 return;
             }
             let response;
-            if (hasDiscount && hasPermissions ){
-                response = await API.Sale.create(adminToken,data);
+            if (hasDiscount && hasPermissions){
+                response = await API.Sale.create(userIsAdmin? userData.token: adminToken,data);
             }else{
                 response = await API.Sale.create(userData.token,data)
             }

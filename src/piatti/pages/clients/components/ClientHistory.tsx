@@ -36,11 +36,12 @@ export function ClientHistory({client}:Props) {
     const mappingFunction = (sales:IHistorySales[])=>sales.map(e=>({
         ...e,
         createdAtFormatted: moment(e.createdAt).format('DD/MM/YYYY'),
-        granTotal: '$ '+ formatPrice(e.total || 0),
+        granTotal: '$ '+ formatPrice(Math.round(e.total|| 0)),
         stateFormatted: <div className="state-selector_option">
                         <Avatar className="circle-state" style={{ backgroundColor: getColorOfState(e.state as SaleStates) || '#19E052' }} shape="circle"></Avatar>
                         <span className="text-state">{getTranslationOfState(e.state||'')}</span>
                     </div>,
+        states: getTranslationOfState(e.state||''),
     })) as unknown as IHistorySales[];
     const handleClick = (event:DataTableRowClickEvent)=>{
         if (event.data && 'id' in event.data) {
@@ -101,7 +102,14 @@ export function ClientHistory({client}:Props) {
         <SelectButton value={SaleTypes}  />
 
         {client &&
-            <Table key={'clientHistory'} data={sales} columns={columns} onRowClick={handleClick} placeholder="Venta" newModalContent={createNewModal}></Table>
+            <Table 
+                emptyMessage={sales && sales.length>0 ? 'No se encontraron ventas': 'El cliente no posee ventas'} 
+                key={'clientHistory'} 
+                data={sales} 
+                columns={columns} 
+                onRowClick={handleClick} 
+                placeholder="Venta" 
+                newModalContent={createNewModal}></Table>
         }
         {(modalHistoryVisible && <SaleHistoryModal sale={modalHistorySale!}></SaleHistoryModal>)}
         {modalPresupuestoToProformaVisible && <PresupuestoToProformaModal/>}
