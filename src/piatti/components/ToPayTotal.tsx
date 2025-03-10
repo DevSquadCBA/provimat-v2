@@ -27,11 +27,11 @@ export function ToPayTotal({salesProducts,montoAPagar}:Props){
                     <div className="flex flex_column ml-8">
                         <div>
                             <p className="text-important text-xl m-1 modals-title-amount">Falta Abonar</p>
-                            <p className="text text-3xl p-0 m-0 verde-medio">${formatPrice(salesProducts.total - salesProducts.paid)}</p>
+                            <p className="text text-3xl p-0 m-0 verde-medio">${formatPrice(Math.round(salesProducts.total - salesProducts.paid))}</p>
                         </div>
                         <div>
                             <p className="text-important text-xl m-1 modals-title-amount">Total</p>
-                            <p className="text text-3xl p-0 m-0 verde-medio">${formatPrice(salesProducts.total)}</p>
+                            <p className="text text-3xl p-0 m-0 verde-medio">${formatPrice(Math.round(salesProducts.total))}</p>
                         </div>
                     </div>
                     }

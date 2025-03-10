@@ -27,7 +27,7 @@ type Props ={
 }
 
 export function Table({columns, data, placeholder, onRowClick, footer,newModalContent,emptyMessage, minimalQuantity=30}:Props) {
-    const {modalCreationVisible} = useSelector((state:reducers) => state.modalsSlice as unknown as {modalCreationVisible: boolean});
+        const {modalCreationVisible} = useSelector((state:reducers) => state.modalsSlice as unknown as {modalCreationVisible: boolean});
     const dispatch = useDispatch();
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
     const [selectedQty, setSelectedQty] = useState<number>(minimalQuantity);

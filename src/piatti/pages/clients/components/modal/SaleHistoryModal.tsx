@@ -57,7 +57,7 @@ export function SaleHistoryModal({sale}:Props) {
             return (
                 <p className="modal-container">
                     <span className="text-important big-text">Total:</span>
-                    <span className="text-important big-text" style={{color: 'var(--secondaryTextColor)'}}>$ {(sale.total)}</span>
+                    <span className="text-important big-text" style={{color: 'var(--secondaryTextColor)'}}>$ {Math.round(sale.total || 0)}</span>
                 </p>
             );
         else
