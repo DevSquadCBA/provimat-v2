@@ -11,7 +11,7 @@
                 table.p-datatable-table thead tr th:last-child {
                     display: none!important;
                 }
-                tbody.p-datatable-tbody tr td:last-child  {
+                tbody.p-datatable-tbody tr:not(.p-datatable-emptymessage) td:last-child  {
                     display: none;
                 }
             }

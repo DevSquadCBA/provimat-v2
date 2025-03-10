@@ -60,7 +60,11 @@ export function CreateNewSaleElement(){
             e.preventDefault();
             if (!(form.current as HTMLFormElement).reportValidity()) return;
             const userData = getUserData();
-            const hasPermissions = [Role.ADMIN, Role.SUPERVISOR].some(r => userData?.role === r) || adminToken !== '';
+            
+            const userIsAdmin = [Role.ADMIN, Role.SUPERVISOR].some(r => userData?.role === r);
+            
+            const hasPermissions = adminToken || userIsAdmin;
+                
             if (!userData || !userData.token) {
                 removeToken();
                 navigate('/');
@@ -72,14 +76,15 @@ export function CreateNewSaleElement(){
             if(data.createdAt== '') 
                 data.createdAt = new Date().toISOString();
             const hasDiscount = data.products.some(p=>p.discount && p.discount>0);
+
             if(hasDiscount && !hasPermissions){
                 dispatch(showToast({severity: 'error', summary: 'Error', detail: 'No tienes permiso para aplicar descuentos con ese usuario logueado'}));
                 setLoginModalVisible(true);
                 return;
             }
             let response;
-            if (hasDiscount && hasPermissions ){
-                response = await API.Sale.create(adminToken,data);
+            if (hasDiscount && hasPermissions){
+                response = await API.Sale.create(userIsAdmin? userData.token: adminToken,data);
             }else{
                 response = await API.Sale.create(userData.token,data)
             }
@@ -165,7 +170,7 @@ export function CreateNewSaleElement(){
             } 
         })();
     },[dispatch, navigate, products]);
-    const rowInputDesc = (rowData: IProductWithAddToTheList) =><div><InputNumber className="discount-input" value={0} max={100} onChange={(e) => addDiscount(e, rowData.id)}/>%</div> ;
+    const rowInputDesc = (rowData: IProductWithAddToTheList) =><div className="discount-input-container"><InputNumber className="discount-input" value={0} max={100} onChange={(e) => addDiscount(e, rowData.id)}/>%</div> ;
     const rowButtonDelete = (rowData: IProductWithAddToTheList) =><img className="delete-button" src={trash} onClick={(e)=>deleteElement(e, rowData.id)}/>;
     const handleAddProduct = useCallback((e: React.FormEvent, rowData: IProduct) =>{
             e.preventDefault()
@@ -192,7 +197,7 @@ export function CreateNewSaleElement(){
         <div className="flex flex_columns p-4 pl-5 pr-5">
             <div className="left-column">
                 <div className="flex flex_column">
-                    <div className="flex flex_row align-items-center">
+                    <div className="flex flex_row align-items-center new-sale-header">
                         <FloatLabel className="flex flex_row ">
                             <Calendar locale="es" inputId="createdAt" minDate={new Date()} value={moment(newSaleData?.createdAt|| new Date()).toDate()} onChange={(e) => dispatch(updateNewSaleData({...newSaleData,createdAt: e.value}))} />
                             <label htmlFor="createdAt">Seleccionar la fecha del presupuesto</label>
@@ -232,7 +237,7 @@ export function CreateNewSaleElement(){
                     </div>
                 </div>
             </div>
-            <div className="right-column ml-4">
+            <div className="right-column ml-4 detailBudgetContainer">
                 <div className="table-container">
                     <h3 className="text-important text-3xl font-black" style={{marginTop: "-2rem", marginBottom: 0}}>Detalle Presupuesto</h3>
                     <DataTable
