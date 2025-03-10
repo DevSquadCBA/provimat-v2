@@ -129,9 +129,12 @@ export function CreateNewSaleElement(){
             }
         }
         const index = newSaleData.products.findIndex(product=>product.id===id);
-        if(index!==-1 && e.value){
+        if(index!==-1 && e.value && e.value>0){
             if(e.value>100) return;
             const discount = +(1 - (e.value / 100 )).toFixed(2);
+            dispatch(addDiscountToProduct({index, discount}));
+        }else{
+            const discount = 1;
             dispatch(addDiscountToProduct({index, discount}));
         }
     }
