@@ -107,13 +107,13 @@ $claro: #F4F5FA;
 .p-panel{
   border-color: var(--primary-color) !important;
 }
-.p-dropdown .p-inputtext:enabled:focus {
-  box-shadow: none;
+.p-dropdown .p-inputtext:enabled:focus, .p-inputwrapper-focus {
+  box-shadow: none !important;
 }
 #password.p-inputwrapper-focus {
   box-shadow: none;
 }
-.p-inputwrapper-focus,.p-inputtext:enabled:focus {
+.p-inputwrapper-focus,.p-inputtext:enabled:focus, .p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext {
   box-shadow: 0 0 0 0.2rem var(--primary-light-color); 
   border-color: var(--primary-light-color);
 }
@@ -129,6 +129,7 @@ $claro: #F4F5FA;
     color: var(--primary-dark-color);
     font-weight: bolder!important;
     font-variant: all-petite-caps;
+    text-align: left;
 }
 .text-xxs {
   font-size: 0.6rem!important;
@@ -172,6 +173,8 @@ $claro: #F4F5FA;
 }
 .state-selector{
   border: 0px solid var(--primary-dark-color)!important;
+  background: var(--claro);
+  margin-left: 0.5rem;
   &_option{
      min-width: 240px;
     

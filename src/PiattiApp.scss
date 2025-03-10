@@ -31,6 +31,11 @@ div#root {
   }
 }
 
+button.p-button.p-component.p-button-rounded {
+  font-variant: all-small-caps;
+  padding: 0.75rem 1.25rem;
+}
+
 .sidebar {
   .view {
     box-shadow: 11px 11px 17px rgba(30, 30, 30, 0.05);
@@ -739,8 +744,14 @@ p.icon, .p-input-icon, .p-icon {
       border-bottom: var(--primary-color) 0px solid !important;
     }
   }
-  .discount-input, .discount-input input{
-      width: 4rem !important;
+  .discount-input-container {
+    color: var(--primary-dark-color);
+    font-weight: 800;
+    font-size: larger;
+    .discount-input, .discount-input input{
+        width: 3rem !important;
+        margin-right: 0.1rem;
+    }
   }
 }
 .progressBar{
@@ -799,9 +810,63 @@ p.icon, .p-input-icon, .p-icon {
   }
 
   tr td button {
-    padding: 1px 6px
+    padding: 0px 7px
   }
   
+}
+
+.detailBudgetContainer {
+  align-self: end;  
+}
+
+.new-sale-header {
+  justify-content: space-between;
+  .p-calendar .p-inputtext {
+    width: 8rem;
+  }
+}
+
+ul.p-dropdown-items li.cliente-sales-dropdown span {
+  width: 9rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.p-dropdown-items-wrapper {
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 16px !important;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-light-color) transparent;
+    border-radius: 40px;
+    background-color: transparent!important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--primary-light-color); 
+    border-radius: 40px;
+    border: 3px solid var(--claro);
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent; 
+  }
+
+  &::-webkit-scrollbar-track-piece:start {
+    background-color: transparent;
+    margin-top: 0vh;
+  }
+
+  &::-webkit-scrollbar-track-piece:end {
+    background-color: transparent;
+    margin-bottom: 0vh;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none!important // 🔥 Oculta las flechas arriba y abajo
+  }
 }
 
 #detailBudgetTable {
@@ -853,7 +918,7 @@ p.icon, .p-input-icon, .p-icon {
       
       td {
         border: none !important;
-        padding: 0.5rem 1rem !important;
+        padding: 0.5rem 0.5rem !important;
         font-variant: all-small-caps;
         font-size: 1.1rem;
         color: black;
@@ -875,4 +940,22 @@ p.icon, .p-input-icon, .p-icon {
   .p-datatable-tbody{
     opacity: 0;
   }
+}
+
+.p-dialog-footer {
+
+  &> div .flex.justify-content-start.flex_column {
+    margin: 0 3rem;
+  }
+  .modals-title-amount{
+    font-weight: 400 !important;
+  }
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.p-dropdown.p-component.p-inputwrapper.p-disabled .p-dropdown-trigger {
+  display: none;
 }
