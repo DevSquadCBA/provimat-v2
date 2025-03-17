@@ -193,7 +193,7 @@ export function SaleHistoryModal({sale}:Props) {
             <Dialog className="modal-history" header={headerElement} footer={footerElement}
                 visible={modalHistoryVisible} 
                 style={{ width: '50vw' }} 
-                onHide={() => {if (!modalHistoryVisible) return; dispatch(changeVisibilityModalHistory({modalHistoryVisible: false,modalHistorySale:null})); }}>
+                onHide={() => {if (!modalHistoryVisible) return; dispatch(changeVisibilityModalHistory({modalHistoryVisible: false,modalHistorySale:null})); window.location.reload();}}>
                 <Table columns={columns} data={formattedProducts} minimalQuantity={5} newModalContent={createNewModal}></Table>
             </Dialog>
         </>
