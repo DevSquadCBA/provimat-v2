@@ -61,8 +61,9 @@ export function LogModal(){
             >
             <Column field="id" header="ID" key="id" />
             <Column field="category" header="Categoría" key="category" />
+            <Column field="action" header="Acción" key="action" />
             <Column field="time" header="Tiempo" key="time" />
-            <Column field="userId" header="Usuario" key="userId" />
+            <Column field="user" header="Usuario" key="user" />
             <Column field="role" header="Rol" key="role" />
             <Column field="route" header="Ruta" key="route" />
             <Column field="changes" header="Cambios" key="changes" style={{ maxWidth: '20rem' }} />
