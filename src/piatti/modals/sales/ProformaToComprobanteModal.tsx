@@ -186,7 +186,7 @@ export function ProformaToComprobanteModal(){
             visible={modalProformaToComprobanteVisible} 
             header={headerElement} 
             footer={footerElement}
-            onHide={()=>setConfirmDialogVisible(true)}
+            onHide={()=>{setConfirmDialogVisible(true);window.location.reload();}}
             >
                 <div className="pr-6 pl-6">
                     <div className="flex space-between">

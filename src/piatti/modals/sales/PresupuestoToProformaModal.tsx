@@ -143,7 +143,7 @@ export function PresupuestoToProformaModal(){
             visible={modalPresupuestoToProformaVisible} 
             header={headerElement} 
             footer={footerElement}
-            onHide={()=>{if (!modalPresupuestoToProformaVisible) return; dispatch(changeVisibilityModalPresupuestoToProforma({modalPresupuestoToProformaVisible: false, idSaleForModals: 0})); }}
+            onHide={()=>{if (!modalPresupuestoToProformaVisible) return; dispatch(changeVisibilityModalPresupuestoToProforma({modalPresupuestoToProformaVisible: false, idSaleForModals: 0})); window.location.reload(); }}
             >
                 <div className="pr-6 pl-6">
                     <div className="flex space-between">
